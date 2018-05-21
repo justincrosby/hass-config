@@ -1,0 +1,6 @@
+platform: template
+sensors:
+  sunset_time: 
+    value_template: '{{ as_timestamp(states.sun.sun.attributes.next_setting)  | timestamp_custom("%H:%M") }}'
+    friendly_name: Sunset
+    entity_id: sun.sun

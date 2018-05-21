@@ -1,0 +1,22 @@
+platform: template
+sensors:
+  fish_fed:
+    friendly_name: Are the fish fed?
+    entity_id:
+      - input_boolean.fish_fed_tracker
+    value_template: >-
+      {%- if states.input_boolean.fish_fed_tracker.state == 'on' -%}
+        Yes
+      {%- else -%}
+        No
+      {%- endif -%}
+  plants_watered:
+    friendly_name: Are the plants watered?
+    entity_id:
+      - input_boolean.plants_watered_tracker
+    value_template: >-
+      {%- if states.input_boolean.plants_watered_tracker.state == 'on' -%}
+        Yes
+      {%- else -%}
+        No
+      {%- endif -%}

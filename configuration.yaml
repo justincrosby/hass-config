@@ -39,74 +39,8 @@ logbook:
 # Track the sun
 sun:
 
-# Weather Prediction
-sensor:
-  - platform: yr
-  - platform: darksky
-    api_key: !secret darksky_api_key
-    monitored_conditions:
-      - summary
-      - precip_probability
-      - apparent_temperature
-      - hourly_summary
-      - apparent_temperature_max
-  - platform: pocketcasts
-    username: !secret pocketcasts_username
-    password: !secret pocketcasts_password
-  - platform: template
-    sensors:
-        sunset_time: 
-          value_template: '{{ as_timestamp(states.sun.sun.attributes.next_setting)  | timestamp_custom("%H:%M") }}'
-          friendly_name: Sunset
-          entity_id: sun.sun
-        weekday_alarm:
-          friendly_name: Weekday Alarm
-          entity_id:
-            - input_number.weekday_hours
-            - input_number.weekday_minutes
-          value_template: >-
-            {%- if states.input_number.weekday_minutes.state|int < 10 -%}
-              {{ states.input_number.weekday_hours.state|int ~ ":0" ~ states.input_number.weekday_minutes.state|int}}
-            {%- else -%}
-              {{ states.input_number.weekday_hours.state|int ~ ":" ~ states.input_number.weekday_minutes.state|int}}
-            {%- endif -%}
-        weekend_alarm:
-          friendly_name: Weekend Alarm
-          entity_id:
-            - input_number.weekend_hours
-            - input_number.weekend_minutes
-          value_template: >-
-            {%- if states.input_number.weekend_minutes.state|int < 10 -%}
-               {{ states.input_number.weekend_hours.state|int ~ ":0" ~ states.input_number.weekend_minutes.state|int}}
-            {%- else -%}
-              {{ states.input_number.weekend_hours.state|int ~ ":" ~ states.input_number.weekend_minutes.state|int}}
-            {%- endif -%}
-        denon_source:
-          value_template: '{{ states.media_player.denon_avrx1300w.attributes["source"] }}'
-          friendly_name: 'Denon Source'
-        home_audio_app:
-          value_template: '{{ states.media_player.home_audio.attributes["app_name"] }}'
-          friendly_name: 'Home Audio App'
-        fish_fed:
-          friendly_name: Are the fish fed?
-          entity_id:
-            - input_boolean.fish_fed_tracker
-          value_template: >-
-            {%- if states.input_boolean.fish_fed_tracker.state == 'on' -%}
-              Yes
-            {%- else -%}
-              No
-            {%- endif -%}
-        plants_watered:
-          friendly_name: Are the plants watered?
-          entity_id:
-            - input_boolean.plants_watered_tracker
-          value_template: >-
-            {%- if states.input_boolean.plants_watered_tracker.state == 'on' -%}
-              Yes
-            {%- else -%}
-              No
-            {%- endif -%}
+# Include sensors
+sensor: !include_dir_list sensors/
 
 # Text to speech
 tts:
