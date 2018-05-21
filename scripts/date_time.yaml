@@ -1,0 +1,53 @@
+shutoff:
+  alias: Shutoff All
+  sequence:
+    - service: homeassistant.turn_off
+      entity_id: group.a_lights
+    - service: media_player.turn_off
+      entity_id: media_player.denon_avrx1300w
+    - service: media_player.turn_off
+      entity_id: media_player.vizio_smartcast
+    - service: media_player.turn_off
+      entity_id: media_player.home_audio
+    - service: media_player.media_stop
+      entity_id: media_player.mpd
+    - service: switch.turn_off
+      entity_id: switch.justins_pc
+morning:
+  alias: Morning
+  sequence:
+    - service: switch.turn_on
+      entity_id: switch.justins_pc
+    - service: script.turn_on
+      entity_id: script.switch_to_audio
+    - delay:
+        minutes: 5
+    - service: switch.turn_on
+      entity_id: switch.bedroom_light
+    - service: switch.turn_on
+      entity_id: switch.phone_ringer_on
+    - service: script.turn_on
+      entity_id: script.play_chill_music
+    - condition: state
+      entity_id: device_tracker.justins_phone
+      state: 'not_home'
+    - service: switch.turn_on
+      entity_id: switch.phone_ringer_off
+bedtime:
+  alias: Bedtime
+  sequence:
+    - service: script.turn_on
+      entity_id: script.shutoff
+    - service: switch.turn_on
+      entity_id: switch.phone_bedtime
+    - service: script.turn_on
+      entity_id: script.forgot_to_feed_fish
+    - service: input_boolean.turn_off
+      entity_id: input_boolean.fish_fed_tracker
+    - service: script.turn_on
+      entity_id: script.forgot_to_water_the_plants
+    - service: input_boolean.turn_off
+      entity_id: input_boolean.plants_watered_tracker
+    - delay:
+        hours: 1
+    - service: shell_command.shutdown

@@ -1,0 +1,172 @@
+receiver_on_conditional:
+  alias: Receiver On Conditional
+  sequence:
+    - condition: state
+      entity_id: media_player.denon_avrx1300w
+      state: 'off'
+    - service: media_player.turn_on
+      entity_id: media_player.denon_avrx1300w
+    - delay:
+        seconds: 5
+switch_to_chromecast:
+  alias: Switch to Chromecast
+  sequence:
+    - condition: template
+      value_template: >
+        {% if is_state('sensor.denon_source', 'TV Audio') %}
+          false
+        {% else %}
+          true
+        {% endif %}
+    - service: media_player.turn_off
+      entity_id: media_player.home_audio
+    - service: media_player.media_stop
+      entity_id: media_player.mpd
+    - service: media_player.turn_on
+      entity_id: media_player.vizio_smartcast
+    - service: script.turn_on
+      entity_id: script.receiver_on_conditional
+    - delay:
+        milliseconds: 500
+    - service: media_player.select_source
+      data:
+        entity_id: media_player.denon_avrx1300w
+        source: 'TV Audio'
+    - delay:
+        seconds: 1
+    - service: media_player.volume_set
+      data:
+        entity_id: media_player.denon_avrx1300w
+        volume_level: '0.54'
+switch_to_audio:
+  alias: Switch to Audio
+  sequence:
+    - condition: template
+      value_template: >
+        {% if is_state('sensor.denon_source', 'CastAudio') %}
+          false
+        {% else %}
+          true
+        {% endif %}
+    - service: media_player.turn_off
+      entity_id: media_player.vizio_smartcast
+    - service: script.turn_on
+      entity_id: script.receiver_on_conditional
+    - delay:
+        milliseconds: 500
+    - service: shell_command.switch_to_audio
+    - delay:
+        seconds: 1
+    - service: media_player.volume_set
+      data:
+        entity_id: media_player.denon_avrx1300w
+        volume_level: '0.46'
+volume_up:
+  alias: Volume Up
+  sequence:
+    - service: media_player.volume_set
+      data_template:
+        entity_id: media_player.denon_avrx1300w
+        volume_level: '{{ states.media_player.denon_avrx1300w.attributes.volume_level + 0.05 }}'
+volume_down:
+  alias: Volume Down
+  sequence:
+    - service: media_player.volume_set
+      data_template:
+        entity_id: media_player.denon_avrx1300w
+        volume_level: '{{ states.media_player.denon_avrx1300w.attributes.volume_level - 0.05 }}'
+play_music:
+  alias: Play Music
+  sequence:
+    - service: media_player.media_play
+      entity_id: media_player.mpd
+pause_music:
+  alias: Pause Music
+  sequence:
+    - service: media_player.media_pause
+      entity_id: media_player.mpd
+    - service: media_player.media_pause
+      entity_id: media_player.home_audio
+next_track:
+  alias: Next Track
+  sequence:
+    - service: script.turn_on
+      entity_id: script.next_track_mpd
+    - service: script.turn_on
+      entity_id: script.next_track_home_audio
+next_track_mpd:
+  alias: Next Track MPD
+  sequence:
+    - condition: state
+      entity_id: media_player.mpd
+      state: 'playing'
+    - service: media_player.media_next_track
+      entity_id: media_player.mpd
+next_track_home_audio:
+  alias: Next Track Home Audio
+  sequence:
+    - condition: state
+      entity_id: media_player.mpd
+      state: 'off'
+    - service: media_player.media_next_track
+      entity_id: media_player.home_audio
+stream_mopidy_to_cc:
+  alias: Start Mopidy Stream
+  sequence:
+    - service: media_player.media_stop
+      entity_id: media_player.home_audio
+    - service: media_player.play_media
+      data:
+        entity_id: media_player.home_audio
+        media_content_id: 'http://192.168.0.10:8000/mopidy.mp3'
+        media_content_type: 'audio/mp4'
+restart_mopidy_stream:
+  alias: Restart Mopidy Stream
+  sequence:
+    - condition: state
+      entity_id: media_player.mpd
+      state: 'playing'
+    - service: media_player.play_media
+      data:
+        entity_id: media_player.home_audio
+        media_content_id: 'http://192.168.0.10:8000/mopidy.mp3'
+        media_content_type: 'audio/mp4'
+play_all_music:
+  alias: Play All Music Playlist
+  sequence:
+    - service: media_player.media_stop
+      entity_id: media_player.mpd
+    - service: media_player.shuffle_set
+      data:
+        entity_id: media_player.mpd
+        shuffle: true
+    - service: media_player.play_media
+      data:
+        entity_id: media_player.mpd
+        media_content_type: 'audio/mp4'
+        media_content_id: spotify:user:justinception_:playlist:2xWccvN2oRDJZr3bq3Lk2k
+play_chill_music:
+  alias: Play Chill Music Playlist
+  sequence:
+    - service: media_player.media_stop
+      entity_id: media_player.mpd
+    - service: media_player.shuffle_set
+      data:
+        entity_id: media_player.mpd
+        shuffle: true
+    - service: media_player.play_media
+      data:
+        entity_id: media_player.mpd
+        media_content_type: 'audio/mp4'
+        media_content_id: spotify:user:justinception_:playlist:2A6wCBOUNCoBkEPaUgomX4
+play_all_music_conditional:
+  alias: Play All Music Playlist Before 11pm
+  sequence:
+    - condition: and
+      conditions:
+        - condition: time
+          before: "23:00:00"
+        - condition: time
+          after: "09:00:00"
+    - service: script.turn_on
+      entity_id: script.play_all_music

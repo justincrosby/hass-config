@@ -1,0 +1,46 @@
+arrive_home:
+  alias: Arrive Home
+  sequence:
+    - service: switch.turn_on
+      entity_id: switch.justins_pc
+    - service: script.turn_on
+      entity_id: script.switch_to_audio
+    - service: script.turn_on
+      entity_id: script.play_all_music_conditional
+    - condition: sun
+      after: sunset
+      after_offset: "+00:20:00"
+    - service: switch.turn_on
+      entity_id: switch.living_room_lamp
+    - service: switch.turn_on
+      entity_id: switch.fairy_lights
+arrive_home_justin:
+  alias: Arrive Home Justin
+  sequence:
+    - service: switch.turn_on
+      entity_id: switch.phone_ringer_on
+    - condition: or
+      conditions:
+        - condition: time
+          after: "23:00:00"
+        - condition: time
+          before: "04:00:00"
+    - service: switch.turn_on
+      entity_id: switch.phone_bedtime
+wifi_check:
+  alias: Wifi Check
+  sequence:
+    - service: switch.turn_on
+      entity_id: switch.phone_wifi_check
+    - delay:
+        seconds: 30
+    - condition: state
+      entity_id: device_tracker.justins_phone
+      state: 'not_home'
+    - service: switch.turn_on
+      entity_id: switch.phone_ringer_off
+    - condition: state
+      entity_id: device_tracker.jennis_phone
+      state: 'not_home'
+    - service: script.turn_on
+      entity_id: script.shutoff

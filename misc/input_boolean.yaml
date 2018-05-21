@@ -1,0 +1,12 @@
+weekday_alarm:
+  name: Weekday Alarm
+  icon: mdi:alarm
+weekend_alarm:
+  name: Weekend Alarm
+  icon: mdi:alarm
+fish_fed_tracker:
+  name: Fish Fed Tracker
+  icon: mdi:fish
+plants_watered_tracker:
+  name: Plants Watered Tracker
+  icon: mdi:flower

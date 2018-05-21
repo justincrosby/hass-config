@@ -1,0 +1,24 @@
+weekday_hours:
+  name: Weekday Hours
+  icon: mdi:clock
+  min: 0
+  max: 23
+  step: 1
+weekday_minutes:
+  name: Weekday Minutes
+  icon: mdi:clock
+  min: 0
+  max: 55
+  step: 5
+weekend_hours:
+  name: Weekend Hours
+  icon: mdi:clock
+  min: 0
+  max: 23
+  step: 1
+weekend_minutes:
+  name: Weekend Minutes
+  icon: mdi:clock
+  min: 0
+  max: 55
+  step: 5 
