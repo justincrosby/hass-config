@@ -1,0 +1,385 @@
+homeassistant:
+  # Name of the location where Home Assistant is running
+  name: Home
+  # Location required to calculate the time the sun rises and sets
+  latitude: !secret home_latitude
+  longitude: !secret home_longitude
+  # Impacts weather/sunrise data (altitude above sea level in meters)
+  elevation: !secret home_elevation
+  # metric for Metric, imperial for Imperial
+  unit_system: metric
+  # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  time_zone: America/Vancouver
+  # rename some stuff
+  customize:
+    media_player.living_room_audio:
+      hidden: true
+    media_player.plex_web_chrome:
+      hidden: true
+    media_player.plex_web_chrome_2:
+      hidden: true
+    media_player.home_audio:
+      hidden: false
+    switch.justins_pc:
+      friendly_name: Justins PC
+    sensor.dark_sky_apparent_temperature:
+      friendly_name: Apparent Temperature
+    sensor.dark_sky_precip_probability:
+      friendly_name: Precip Probability
+    sensor.dark_sky_summary:
+      friendly_name: Current Conditions    
+    sensor.dark_sky_hourly_summary:
+      friendly_name: Today's Summary
+    sensor.dark_sky_daily_high_apparent_temperature:
+      friendly_name: Today's Apparent High
+    group.all_automations:
+      hidden: false
+      friendly_name: All Automations
+    group.all_scripts:
+      hidden: false
+      friendly_name: All Scripts
+    switch.bedroom_lamp:
+      friendly_name: Bedroom Lamp
+    switch.betta_light:
+      friendly_name: Betta Light
+    switch.living_room_lamp:
+      friendly_name: Living Room Lamp
+
+# Enables the frontend
+frontend:
+
+# Enables configuration UI
+config:
+
+http:
+  # Uncomment this to add a password (recommended!)
+  # api_password: PASSWORD
+  # Uncomment this if you are using SSL or running in Docker etc
+  # base_url: example.duckdns.org:8123
+
+# Checks for available updates
+# Note: This component will send some information about your system to
+# the developers to assist with development of Home Assistant.
+# For more information, please see:
+# https://home-assistant.io/blog/2016/10/25/explaining-the-updater/
+updater:
+
+# Discover some devices automatically
+discovery:
+
+# Allows you to issue voice commands from the frontend in enabled browsers
+conversation:
+
+# Enables support for tracking state changes over time.
+history:
+
+# View all events in a logbook
+logbook:
+
+# Track the sun
+sun:
+
+# Weather Prediction
+sensor:
+  - platform: yr
+  - platform: darksky
+    api_key: !secret darksky_api_key
+    monitored_conditions:
+      - summary
+      - precip_probability
+      - apparent_temperature
+      - hourly_summary
+      - apparent_temperature_max
+  - platform: pocketcasts
+    username: !secret pocketcasts_username
+    password: !secret pocketcasts_password
+  - platform: template
+    sensors:
+        sunset_time: 
+          value_template: '{{ as_timestamp(states.sun.sun.attributes.next_setting)  | timestamp_custom("%H:%M") }}'
+          friendly_name: Sunset
+          entity_id: sun.sun
+        weekday_alarm:
+          friendly_name: Weekday Alarm
+          entity_id:
+            - input_number.weekday_hours
+            - input_number.weekday_minutes
+          value_template: >-
+            {%- if states.input_number.weekday_minutes.state|int < 10 -%}
+              {{ states.input_number.weekday_hours.state|int ~ ":0" ~ states.input_number.weekday_minutes.state|int}}
+            {%- else -%}
+              {{ states.input_number.weekday_hours.state|int ~ ":" ~ states.input_number.weekday_minutes.state|int}}
+            {%- endif -%}
+        weekend_alarm:
+          friendly_name: Weekend Alarm
+          entity_id:
+            - input_number.weekend_hours
+            - input_number.weekend_minutes
+          value_template: >-
+            {%- if states.input_number.weekend_minutes.state|int < 10 -%}
+               {{ states.input_number.weekend_hours.state|int ~ ":0" ~ states.input_number.weekend_minutes.state|int}}
+            {%- else -%}
+              {{ states.input_number.weekend_hours.state|int ~ ":" ~ states.input_number.weekend_minutes.state|int}}
+            {%- endif -%}
+        denon_source:
+          value_template: '{{ states.media_player.denon_avrx1300w.attributes["source"] }}'
+          friendly_name: 'Denon Source'
+        home_audio_app:
+          value_template: '{{ states.media_player.home_audio.attributes["app_name"] }}'
+          friendly_name: 'Home Audio App'
+        fish_fed:
+          friendly_name: Are the fish fed?
+          entity_id:
+            - input_boolean.fish_fed_tracker
+          value_template: >-
+            {%- if states.input_boolean.fish_fed_tracker.state == 'on' -%}
+              Yes
+            {%- else -%}
+              No
+            {%- endif -%}
+        plants_watered:
+          friendly_name: Are the plants watered?
+          entity_id:
+            - input_boolean.plants_watered_tracker
+          value_template: >-
+            {%- if states.input_boolean.plants_watered_tracker.state == 'on' -%}
+              Yes
+            {%- else -%}
+              No
+            {%- endif -%}
+
+# Text to speech
+tts:
+  platform: google
+
+# Enable iOS app
+ios:
+  push:
+    categories:
+      - name: Forgot to feed fish
+        identifier: 'fish'
+        actions:
+          - identifier: 'FED_FISH'
+            title: 'I actually remembered!'
+            activationMode: 'background'
+            authenticationRequired: yes
+            destructive: no
+            behavior: 'default'
+          - identifier: 'FORGOT_FISH'
+            title: 'Dismiss'
+            activationMode: 'background'
+            destructive: yes
+            behavior: 'default'
+      - name: Forgot to water plants
+        identifier: 'plants'
+        actions:
+          - identifier: 'WATERED_PLANTS'
+            title: 'I actually remembered!'
+            activationMode: 'background'
+            authenticationRequired: yes
+            destructive: no
+            behavior: 'default'
+          - identifier: 'FORGOT_PLANTS'
+            title: 'Dismiss'
+            activationMode: 'background'
+            destructive: yes
+            behavior: 'default'
+
+notify:
+  - name: html5
+    platform: html5
+    gcm_api_key: !secret html5_api_key
+    gcm_sender_id: !secret html5_sender_id
+
+google_assistant:
+  project_id: !secret assistant_project_id
+  client_id: !secret assistant_client_id
+  access_token: !secret assistant_access_token
+  agent_user_id: !secret assistant_user_id
+  api_key: !secret assistant_api_key
+  exposed_domains:
+    - switch
+    - light
+    - script
+    - media_player
+  entity_config:
+    media_player.bedroom_audio:
+      expose: false
+    media_player.living_room_audio:
+      expose: false
+    media_player.plex_web_chrome:
+      expose: false
+    script.morning:
+      name: Good Morning
+    switch.phone_wifi_check:
+      expose: false
+    script.receiver_on_conditional:
+      expose: false
+    script.wifi_check:
+      expose: false
+    script.arrive_home:
+      expose: false
+    script.arrive_home_justin:
+      expose: false
+    switch.justins_pc:
+      name: My PC
+    media_player.vizio_smartcast:
+      name: TV
+    media_player.denon_avrx1300w:
+      name: Receiver
+    media_player.home_audio:
+      expose: false
+    media_player.bedroom_speaker:
+      expose: false
+    media_player.living_room_speaker:
+      expose: false
+    media_player.chromecast:
+      expose: false
+    script.play_all_music_conditional:
+      expose: false
+    script.stream_mopidy_to_cc:
+      expose: false
+    media_player.mpd:
+      expose: false
+    switch.phone_ringer_off:
+      expose: false
+    switch.phone_ringer_on:
+      expose: false
+    switch.phone_bedtime:
+      expose: false
+    script.forgot_to_feed_fish:
+      expose: false
+    fed_the_fish:
+      name: Fish fed
+    media_player.bathroom_speaker:
+      expose: false
+    media_player.vizio:
+      expose: false
+    script.forgot_to_water_the_plants:
+      expose: false
+    script.did_the_things:
+      name: Did the things
+    script.watered_the_plants:
+      name: Watered plants
+    script.play_all_music:
+      name: All music
+    script.play_chill_music:
+      name: Chill music
+
+device_tracker:
+  - platform: ubus
+    host: !secret router_ip
+    username: !secret router_username
+    password: !secret router_password
+    track_new_devices: no
+    consider_home: 60
+
+wemo:
+  static:
+    - !secret wemo_fairy_lights_ip
+    - !secret wemo_fish_light_ip
+    - !secret wemo_bedroom_light_ip
+
+switch:
+  - platform: wake_on_lan
+    mac_address: !secret justins_pc_mac
+    name: justins_pc
+    host: !secret justins_pc_ip
+    turn_off: 
+      service: shell_command.shutdown_pc
+  - platform: tplink
+    host: !secret tplink_bedroom_lamp_ip
+    name: bedroom_lamp
+  - platform: tplink
+    host: !secret tplink_living_room_lamp_ip
+    name: living_room_lamp
+  - platform: tplink
+    host: !secret tplink_betta_light_ip
+    name: betta_light
+  - platform: command_line
+    switches:
+      phone_bedtime:
+        friendly_name: Phone Bedtime
+        command_on: !secret command_phone_bedtime
+      phone_ringer_on:
+        friendly_name: Phone Ringer On
+        command_on: !secret command_phone_ringer_on
+      phone_ringer_off:
+        friendly_name: Phone Ringer Off
+        command_on: !secret command_phone_ringer_off
+      phone_wifi_check:
+        friendly_name: Phone Wifi Check
+        command_on: !secret command_phone_wifi_check
+
+input_number:
+  weekday_hours:
+    name: Weekday Hours
+    icon: mdi:clock
+    min: 0
+    max: 23
+    step: 1
+  weekday_minutes:
+    name: Weekday Minutes
+    icon: mdi:clock
+    min: 0
+    max: 55
+    step: 5
+  weekend_hours:
+    name: Weekend Hours
+    icon: mdi:clock
+    min: 0
+    max: 23
+    step: 1
+  weekend_minutes:
+    name: Weekend Minutes
+    icon: mdi:clock
+    min: 0
+    max: 55
+    step: 5
+
+input_boolean:
+  weekday_alarm:
+    name: Weekday Alarm
+    icon: mdi:alarm
+  weekend_alarm:
+    name: Weekend Alarm
+    icon: mdi:alarm
+  fish_fed_tracker:
+    name: Fish Fed Tracker
+    icon: mdi:fish
+  plants_watered_tracker:
+    name: Plants Watered Tracker
+    icon: mdi:flower
+
+
+media_player:
+  - platform: vizio
+    host: !secret vizio_ip
+    access_token: !secret vizio_access_token
+  - platform: denonavr
+    host: 192.168.0.6
+  - platform: cast
+    host: !secret cast_bedroom_audio_ip
+  - platform: cast
+    host: !secret cast_lving_room_audio_ip
+  - platform: cast
+    host: !secret cast_bedroom_chromecast_ip
+  - platform: cast
+    host: !secret cast_bathroom_home_ip
+  - platform: mpd
+    host: !secret mpd_ip
+
+panel_iframe:
+  iris:
+    title: 'Music'
+    url: !secret iris_url
+    icon: mdi:music
+  plex:
+    title: 'Plex'
+    url: !secret plex_url
+    icon: mdi:plex
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+shell_command: !include shell_command.yaml
