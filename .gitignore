@@ -1,5 +1,6 @@
 secrets.yaml
 html5_push_registrations.conf
 known_devices.yaml
+entity_registry.yaml
 plex.conf
 .DS_Store

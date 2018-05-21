@@ -1,0 +1,3 @@
+shutdown_pc: 'python2.7 /var/www/cmd.justincrosby.ca/public_html/cmdSend.py shutdown'
+switch_to_audio: 'wget http://192.168.0.6/MainZone/index.put.asp?cmd0=PutZone_InputFunction%2FAUX1'
+shutdown: 'sudo shutdown -h now'

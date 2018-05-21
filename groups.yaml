@@ -1,0 +1,90 @@
+default_view:
+  view: true
+  icon: mdi:home
+  entities:
+  - group.a_switches
+  - group.all_media_players
+  - device_tracker.justins_phone
+  - device_tracker.jennis_phone
+  - group.dark_sky
+  - sensor.sunset_time
+  - sensor.weekday_alarm
+  - sensor.weekend_alarm
+  - sensor.fish_fed
+  - sensor.plants_watered
+  name: default_view
+alarms:
+  name: Alarms
+  view: true
+  icon: mdi:alarm
+  entities:
+  - sensor.weekday_alarm
+  - sensor.weekend_alarm
+  - group.weekday_alarm
+  - group.weekend_alarm
+automations:
+  name: Automations
+  view: true
+  icon: mdi:code-braces
+  entities:
+  - group.all_automations
+  - group.all_scripts
+weekday_alarm:
+  view: false
+  name: Weekday Alarm
+  entities:
+  - input_boolean.weekday_alarm
+  - input_number.weekday_hours
+  - input_number.weekday_minutes
+weekend_alarm:
+  view: false
+  name: Weekend Alarm
+  entities:
+  - input_boolean.weekend_alarm
+  - input_number.weekend_hours
+  - input_number.weekend_minutes
+all_media_players:
+  name: Media Players
+  view: false
+  entities:
+  - media_player.vizio_smartcast
+  - media_player.chromecast
+  - media_player.denon_avrx1300w
+  - media_player.home_audio
+  - media_player.mpd
+  - media_player.bedroom_audio
+  - media_player.bedroom_speaker
+  - media_player.bathroom_speaker
+  - media_player.living_room_audio
+  - media_player.living_room_speaker
+a_switches:
+  name: Switches
+  view: false
+  entities:
+  - switch.bedroom_light
+  - switch.fairy_lights
+  - switch.fish_light
+  - switch.betta_light
+  - switch.justins_pc
+  - switch.bedroom_lamp
+  - switch.living_room_lamp
+  - input_boolean.weekday_alarm
+  - input_boolean.weekend_alarm
+  - input_boolean.fish_fed_tracker
+  - input_boolean.plants_watered_tracker
+a_lights:
+  name: All Lights
+  view: false
+  entities:
+  - switch.bedroom_light
+  - switch.fairy_lights
+  - switch.living_room_lamp
+dark_sky:
+  name: Dark Sky
+  view: false
+  entities:
+    - sensor.dark_sky_apparent_temperature
+    - sensor.dark_sky_precip_probability
+    - sensor.dark_sky_summary
+    - sensor.dark_sky_hourly_summary
+    - sensor.dark_sky_daily_high_apparent_temperature
