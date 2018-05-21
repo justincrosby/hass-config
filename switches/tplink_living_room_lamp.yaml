@@ -1,0 +1,3 @@
+platform: tplink
+host: !secret tplink_living_room_lamp_ip
+name: living_room_lamp
