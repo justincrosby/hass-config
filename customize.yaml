@@ -1,0 +1,8 @@
+group.all_media_players:
+  entity_id:
+  - media_player.vizio_smartcast
+  - media_player.chromecast
+  - media_player.denon_avrx1300w
+  - media_player.home_audio
+  - media_player.mpd
+  - media_player.bedroom_audio

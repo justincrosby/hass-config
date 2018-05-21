@@ -10,40 +10,8 @@ homeassistant:
   unit_system: metric
   # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
   time_zone: America/Vancouver
-  # rename some stuff
-  customize:
-    media_player.living_room_audio:
-      hidden: true
-    media_player.plex_web_chrome:
-      hidden: true
-    media_player.plex_web_chrome_2:
-      hidden: true
-    media_player.home_audio:
-      hidden: false
-    switch.justins_pc:
-      friendly_name: Justins PC
-    sensor.dark_sky_apparent_temperature:
-      friendly_name: Apparent Temperature
-    sensor.dark_sky_precip_probability:
-      friendly_name: Precip Probability
-    sensor.dark_sky_summary:
-      friendly_name: Current Conditions    
-    sensor.dark_sky_hourly_summary:
-      friendly_name: Today's Summary
-    sensor.dark_sky_daily_high_apparent_temperature:
-      friendly_name: Today's Apparent High
-    group.all_automations:
-      hidden: false
-      friendly_name: All Automations
-    group.all_scripts:
-      hidden: false
-      friendly_name: All Scripts
-    switch.bedroom_lamp:
-      friendly_name: Bedroom Lamp
-    switch.betta_light:
-      friendly_name: Betta Light
-    switch.living_room_lamp:
-      friendly_name: Living Room Lamp
+
+  customize: !include misc/customize.yaml
 
 # Enables the frontend
 frontend:
@@ -52,16 +20,8 @@ frontend:
 config:
 
 http:
-  # Uncomment this to add a password (recommended!)
-  # api_password: PASSWORD
-  # Uncomment this if you are using SSL or running in Docker etc
-  # base_url: example.duckdns.org:8123
+  # todo: password protect this
 
-# Checks for available updates
-# Note: This component will send some information about your system to
-# the developers to assist with development of Home Assistant.
-# For more information, please see:
-# https://home-assistant.io/blog/2016/10/25/explaining-the-updater/
 updater:
 
 # Discover some devices automatically
