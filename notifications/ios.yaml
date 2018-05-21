@@ -1,0 +1,28 @@
+- name: Forgot to feed fish
+  identifier: 'fish'
+  actions:
+    - identifier: 'FED_FISH'
+      title: 'I actually remembered!'
+      activationMode: 'background'
+      authenticationRequired: yes
+      destructive: no
+      behavior: 'default'
+    - identifier: 'FORGOT_FISH'
+      title: 'Dismiss'
+      activationMode: 'background'
+      destructive: yes
+      behavior: 'default'
+- name: Forgot to water plants
+  identifier: 'plants'
+  actions:
+    - identifier: 'WATERED_PLANTS'
+      title: 'I actually remembered!'
+      activationMode: 'background'
+      authenticationRequired: yes
+      destructive: no
+      behavior: 'default'
+    - identifier: 'FORGOT_PLANTS'
+      title: 'Dismiss'
+      activationMode: 'background'
+      destructive: yes
+      behavior: 'default'
