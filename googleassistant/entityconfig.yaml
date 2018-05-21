@@ -1,0 +1,64 @@
+## Expose these items ##
+# Scripts
+script.play_all_music:
+  name: All music
+  expose: true
+script.are_the_fish_fed:
+  expose: true
+script.bedtime:
+  expose: true
+script.play_chill_music:
+  name: Chill music
+script.did_the_things:
+  name: Did the things
+  expose: true
+script.fed_the_fish:
+  name: Fish fed
+script.morning:
+  name: Good morning
+  expose: true
+script.next_track:
+  expose: true
+script.pause_music:
+  expose: true
+script.play_music:
+  expose: true
+script.restart_mopidy_stream:
+  name: Restart stream
+  expose: true
+script.shutoff:
+  expose: true
+script.switch_to_audio:
+  expose: true
+script.switch_to_chromecast:
+  expose: true
+script.volume_up:
+  expose: true
+script.volume_down:
+  expose: true
+script.watered_the_plants:
+  name: Watered plants
+  expose: true
+# Lights
+switch.bedroom_lamp:
+  expose: true
+switch.bedroom_light:
+  expose: true
+switch.betta_light:
+  expose: true
+switch.fairy_lights:
+  expose: true
+switch.fish_light:
+  expose: true
+switch.living_room_lamp:
+  expose: true
+# Media
+switch.justins_pc:
+  name: My PC
+  expose: true
+media_player.vizio_smartcast:
+  name: TV
+  expose: true
+media_player.denon_avrx1300w:
+  name: Receiver
+  expose: true
