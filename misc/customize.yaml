@@ -1,0 +1,34 @@
+## Hide some stuff ##
+  media_player.living_room_audio:
+    hidden: true
+  media_player.plex_web_chrome:
+    hidden: true
+  media_player.plex_web_chrome_2:
+    hidden: true
+
+## Rename some stuff ##
+# Sensors
+  sensor.dark_sky_apparent_temperature:
+    friendly_name: Apparent Temperature
+  sensor.dark_sky_precip_probability:
+    friendly_name: Precip Probability
+  sensor.dark_sky_summary:
+    friendly_name: Current Conditions    
+  sensor.dark_sky_hourly_summary:
+    friendly_name: Today's Summary
+  sensor.dark_sky_daily_high_apparent_temperature:
+    friendly_name: Today's Apparent High
+# Switches
+  switch.justins_pc:
+    friendly_name: Justins PC
+  switch.bedroom_lamp:
+    friendly_name: Bedroom Lamp
+  switch.betta_light:
+    friendly_name: Betta Light
+  switch.living_room_lamp:
+    friendly_name: Living Room Lamp
+# Groups
+  group.all_automations:
+    friendly_name: All Automations
+  group.all_scripts:
+    friendly_name: All Scripts
