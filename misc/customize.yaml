@@ -5,6 +5,73 @@
     hidden: true
   media_player.plex_web_chrome_2:
     hidden: true
+# Hide these scripts/automations from the main UI, not necessary to see there
+# fish.yaml
+  script.fed_the_fish:
+    hidden: true
+  script.forgot_to_feed_fish:
+    hidden: true
+  script.are_the_fish_fed:
+    hidden: true
+  script.watered_the_plants:
+    hidden: true
+  script.forgot_to_water_the_plants:
+    hidden: true
+  script.did_the_things:
+    hidden: true
+  automation.check_if_plants_watered_and_fish_fed:
+    hidden: true
+  automation.fish_off:
+    hidden: true
+  automation.fish_on:
+    hidden: true
+# media.yaml
+  script.receiver_on_conditional:
+    hidden: true
+  script.next_track_mpd:
+    hidden: true
+  script.next_track_home_audio:
+    hidden: true
+  script.stream_mopidy_to_cc:
+    hidden: true
+  script.play_all_music_conditional:
+    hidden: true
+# presence.yaml
+  script.arrive_home:
+    hidden: true
+  script.arrive_home_justin:
+    hidden: true
+  script.wifi_check:
+    hidden: true
+# alarms.yaml
+  automation.alarm_weekday:
+    hidden: true
+  automation.alarm_weekend:
+    hidden: true
+# bedroom.yaml
+  automation.bedroom_off:
+    hidden: true
+  automation.bedroom_on:
+    hidden: true
+# notifications.yaml
+  automation.html5__actually_fed_the_fish:
+    hidden: true
+  automation.html5__actually_watered_the_plants:
+    hidden: true
+  automation.ios__actually_fed_the_fish:
+    hidden: true
+  automation.ios__actually_watered_the_plants:
+    hidden: true
+
+## Prevent these things from hiding ##
+  group.all_automations:
+    hidden: false
+    friendly_name: All Automations
+  group.all_scripts:
+    hidden: false
+    friendly_name: All Scripts
+  media_player.home_audio:
+    hidden: false
 
 ## Rename some stuff ##
 # Sensors
@@ -27,8 +94,4 @@
     friendly_name: Betta Light
   switch.living_room_lamp:
     friendly_name: Living Room Lamp
-# Groups
-  group.all_automations:
-    friendly_name: All Automations
-  group.all_scripts:
-    friendly_name: All Scripts
+    
