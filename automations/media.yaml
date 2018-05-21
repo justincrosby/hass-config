@@ -1,0 +1,64 @@
+- alias: Music Started 1
+  trigger:
+    platform: state
+    entity_id: sensor.denon_source
+    to: 'AUX1'
+  action:
+    - service: script.turn_on
+      entity_id: script.switch_to_audio
+
+- alias: Music Started 2
+  trigger:
+    platform: state
+    entity_id: media_player.home_audio
+    to: 'playing'
+  action:
+    - service: script.turn_on
+      entity_id: script.switch_to_audio
+
+- alias: Casting Started 1
+  trigger:
+    platform: state
+    entity_id: media_player.vizio_smartcast
+    to: 'on'
+  action:
+    - service: script.turn_on
+      entity_id: script.switch_to_chromecast
+
+- alias: Casting Started 2
+  trigger:
+    platform: state
+    entity_id: media_player.vizio_smartcast
+    to: 'playing'
+  action:
+    - service: script.turn_on
+      entity_id: script.switch_to_chromecast
+
+- alias: Cast music when playing from MPD
+  trigger:
+    platform: state
+    entity_id: media_player.mpd
+    from: 'off'
+    to: 'playing'
+  action:
+    - service: script.turn_on
+      entity_id: script.stream_mopidy_to_cc
+
+- alias: Restart stream
+  trigger:
+    platform: state
+    entity_id: media_player.home_audio
+    from: 'playing'
+    to: 'idle'
+  action:
+    - service: script.turn_on
+      entity_id: script.restart_mopidy_stream
+
+- alias: Stop MPD when other device casting
+  trigger:
+    platform: state
+    entity_id: sensor.home_audio_app
+    to: 'Spotify'
+  action:
+    - service: media_player.media_stop
+      entity_id: media_player.mpd

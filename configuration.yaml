@@ -87,46 +87,9 @@ wemo:
 
 switch: !include_dir_list switches/
 
-input_number:
-  weekday_hours:
-    name: Weekday Hours
-    icon: mdi:clock
-    min: 0
-    max: 23
-    step: 1
-  weekday_minutes:
-    name: Weekday Minutes
-    icon: mdi:clock
-    min: 0
-    max: 55
-    step: 5
-  weekend_hours:
-    name: Weekend Hours
-    icon: mdi:clock
-    min: 0
-    max: 23
-    step: 1
-  weekend_minutes:
-    name: Weekend Minutes
-    icon: mdi:clock
-    min: 0
-    max: 55
-    step: 5
+input_number: !include misc/input_number.yaml
 
-input_boolean:
-  weekday_alarm:
-    name: Weekday Alarm
-    icon: mdi:alarm
-  weekend_alarm:
-    name: Weekend Alarm
-    icon: mdi:alarm
-  fish_fed_tracker:
-    name: Fish Fed Tracker
-    icon: mdi:fish
-  plants_watered_tracker:
-    name: Plants Watered Tracker
-    icon: mdi:flower
-
+input_boolean: !include misc/input_boolean.yaml
 
 media_player:
   - platform: vizio
@@ -156,6 +119,6 @@ panel_iframe:
     icon: mdi:plex
 
 group: !include groups.yaml
-automation: !include automations.yaml
+automation: !include_dir_merge_list automations/
 script: !include scripts.yaml
 shell_command: !include shell_command.yaml

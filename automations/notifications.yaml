@@ -1,0 +1,39 @@
+- alias: iOS - Actually fed the fish
+  trigger:
+    platform: event
+    event_type: ios.notification_action_fired
+    event_data:
+      actionName: FED_FISH
+  action:
+    - service: input_boolean.turn_on
+      entity_id: input_boolean.fish_fed_tracker
+
+- alias: iOS - Actually watered the plants
+  trigger:
+    platform: event
+    event_type: ios.notification_action_fired
+    event_data:
+      actionName: WATERED_PLANTS
+  action:
+    - service: input_boolean.turn_on
+      entity_id: input_boolean.plants_watered_tracker
+
+- alias: HTML5 - Actually fed the fish
+  trigger:
+    platform: event
+    event_type: html5_notification.clicked
+    event_data:
+      action: fish
+  action:
+    - service: input_boolean.turn_on
+      entity_id: input_boolean.fish_fed_tracker
+
+- alias: HTML5 - Actually watered the plants
+  trigger:
+    platform: event
+    event_type: html5_notification.clicked
+    event_data:
+      action: plants
+  action:
+    - service: input_boolean.turn_on
+      entity_id: input_boolean.plants_watered_tracker

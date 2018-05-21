@@ -1,0 +1,53 @@
+- alias: Leave Home Justin
+  trigger:
+    platform: state
+    entity_id: device_tracker.justins_phone
+    from: 'home'
+    to: 'not_home'
+  action:
+    service: script.turn_on
+    entity_id: script.wifi_check
+
+- alias: Leave Home Jenni
+  trigger:
+    platform: state
+    entity_id: device_tracker.jennis_phone
+    from: 'home'
+    to: 'not_home'
+  condition:
+    condition: state
+    entity_id: device_tracker.justins_phone
+    state: 'not_home'
+  action:
+    service: script.turn_on
+    entity_id: script.shutoff
+
+- alias: Arrive Home Justin
+  trigger:
+    platform: state
+    entity_id: device_tracker.justins_phone
+    from: 'not_home'
+    to: 'home'
+  condition:
+    condition: state
+    entity_id: device_tracker.jennis_phone
+    state: 'not_home'
+  action:
+    - service: script.turn_on
+      entity_id: script.arrive_home
+    - service: script.turn_on
+      entity_id: script.arrive_home_justin
+
+- alias: Arrive Home Jenni
+  trigger:
+    platform: state
+    entity_id: device_tracker.jennis_phone
+    from: 'not_home'
+    to: 'home'
+  condition:
+    condition: state
+    entity_id: device_tracker.justins_phone
+    state: 'not_home'
+  action:
+    service: script.turn_on
+    entity_id: script.arrive_home

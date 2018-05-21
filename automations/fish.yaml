@@ -1,0 +1,33 @@
+- alias: Fish On
+  trigger:
+    - platform: time
+      at: "08:00:00"
+    - platform: time
+      at: "17:00:00"
+  action:
+    - service: switch.turn_on
+      entity_id: switch.fish_light
+    - service: switch.turn_on
+      entity_id: switch.betta_light
+
+- alias: Fish Off
+  trigger:
+    - platform: time
+      at: "12:00:00"
+    - platform: time
+      at: "23:00:00"
+  action:
+    - service: switch.turn_off
+      entity_id: switch.fish_light
+    - service: switch.turn_off
+      entity_id: switch.betta_light
+
+- alias: Check if plants watered and fish fed
+  trigger:
+    - platform: time
+      at: "12:00:00"
+  action:
+    - service: script.turn_on
+      entity_id: script.forgot_to_water_the_plants
+    - service: script.turn_on
+      entity_id: script.forgot_to_feed_fish
