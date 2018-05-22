@@ -88,3 +88,4 @@
 # Switches
   switch.justins_pc:
     friendly_name: Justins PC
+    icon: mdi:desktop-classic
