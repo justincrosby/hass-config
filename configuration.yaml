@@ -81,11 +81,12 @@ device_tracker:
 
 wemo:
   static:
-    - !secret wemo_fairy_lights_ip
-    - !secret wemo_fish_light_ip
-    - !secret wemo_bedroom_light_ip
+    - !secret wemo_fairy_lights_switch_ip
+    - !secret wemo_fish_light_switch_ip
+    - !secret wemo_bedroom_light_switch_ip
 
 switch: !include_dir_list switches/
+light: !include_dir_list lights/
 
 input_number: !include misc/input_number.yaml
 

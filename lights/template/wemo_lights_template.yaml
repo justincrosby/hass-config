@@ -1,0 +1,29 @@
+platform: template
+lights:
+  fish_light:
+    friendly_name: "Fish Light"
+    value_template: "{{ states.switch.fish_light_switch['state'] == 'on' }}"
+    turn_on:
+      service: switch.turn_on
+      entity_id: switch.fish_light_switch
+    turn_off:
+      service: switch.turn_off
+      entity_id: switch.fish_light_switch
+  bedroom_light:
+    friendly_name: "Bedroom Light"
+    value_template: "{{ states.switch.bedroom_light_switch['state'] == 'on' }}"
+    turn_on:
+      service: switch.turn_on
+      entity_id: switch.bedroom_light_switch
+    turn_off:
+      service: switch.turn_off
+      entity_id: switch.bedroom_light_switch
+  fairy_lights:
+    friendly_name: "Fairy Lights"
+    value_template: "{{ states.switch.fairy_lights_switch['state'] == 'on' }}"
+    turn_on:
+      service: switch.turn_on
+      entity_id: switch.fairy_lights_switch
+    turn_off:
+      service: switch.turn_off
+      entity_id: switch.fairy_lights_switch

@@ -88,10 +88,3 @@
 # Switches
   switch.justins_pc:
     friendly_name: Justins PC
-  switch.bedroom_lamp:
-    friendly_name: Bedroom Lamp
-  switch.betta_light:
-    friendly_name: Betta Light
-  switch.living_room_lamp:
-    friendly_name: Living Room Lamp
-    

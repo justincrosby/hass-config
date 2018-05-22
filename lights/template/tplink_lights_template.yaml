@@ -1,0 +1,29 @@
+platform: template
+lights:
+  bedroom_lamp:
+    friendly_name: "Bedroom Lamp"
+    value_template: "{{ states.switch.bedroom_lamp_switch['state'] == 'on' }}"
+    turn_on:
+      service: switch.turn_on
+      entity_id: switch.bedroom_lamp_switch
+    turn_off:
+      service: switch.turn_off
+      entity_id: switch.bedroom_lamp_switch
+  betta_light:
+    friendly_name: "Betta Light"
+    value_template: "{{ states.switch.betta_light_switch['state'] == 'on' }}"
+    turn_on:
+      service: switch.turn_on
+      entity_id: switch.betta_light_switch
+    turn_off:
+      service: switch.turn_off
+      entity_id: switch.betta_light_switch
+  living_room_lamp:
+    friendly_name: "Living Room Lamp"
+    value_template: "{{ states.switch.living_room_lamp_switch['state'] == 'on' }}"
+    turn_on:
+      service: switch.turn_on
+      entity_id: switch.living_room_lamp_switch
+    turn_off:
+      service: switch.turn_off
+      entity_id: switch.living_room_lamp_switch

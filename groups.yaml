@@ -61,13 +61,13 @@ a_switches:
   name: Switches
   view: false
   entities:
-  - switch.bedroom_light
-  - switch.fairy_lights
-  - switch.fish_light
-  - switch.betta_light
+  - light.bedroom_light
+  - light.fairy_lights
+  - light.fish_light
+  - light.betta_light
   - switch.justins_pc
-  - switch.bedroom_lamp
-  - switch.living_room_lamp
+  - light.bedroom_lamp
+  - light.living_room_lamp
   - input_boolean.weekday_alarm
   - input_boolean.weekend_alarm
   - input_boolean.fish_fed_tracker
@@ -76,9 +76,9 @@ a_lights:
   name: All Lights
   view: false
   entities:
-  - switch.bedroom_light
-  - switch.fairy_lights
-  - switch.living_room_lamp
+  - light.bedroom_light
+  - light.fairy_lights
+  - light.living_room_lamp
 dark_sky:
   name: Dark Sky
   view: false

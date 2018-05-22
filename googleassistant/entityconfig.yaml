@@ -40,17 +40,17 @@ script.watered_the_plants:
   name: Watered plants
   expose: true
 # Lights
-switch.bedroom_lamp:
+light.bedroom_lamp:
   expose: true
-switch.bedroom_light:
+light.bedroom_light:
   expose: true
-switch.betta_light:
+light.betta_light:
   expose: true
-switch.fairy_lights:
+light.fairy_lights:
   expose: true
-switch.fish_light:
+light.fish_light:
   expose: true
-switch.living_room_lamp:
+light.living_room_lamp:
   expose: true
 # Media
 switch.justins_pc:
