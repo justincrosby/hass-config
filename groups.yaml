@@ -27,8 +27,8 @@ automations:
   view: true
   icon: mdi:code-braces
   entities:
-  - group.all_automations
-  - group.all_scripts
+  - group.a_automations
+  - group.a_scripts
 weekday_alarm:
   view: false
   name: Weekday Alarm
@@ -79,6 +79,41 @@ a_lights:
   - light.bedroom_light
   - light.fairy_lights
   - light.living_room_lamp
+a_automations:
+  name: All Automations
+  view: false
+  entities:
+  - automation.arrive_home_jenni
+  - automation.arrive_home_justin
+  - automation.cast_music_when_playing_from_mpd
+  - automation.casting_started_1
+  - automation.casting_started_2
+  - automation.leave_home_jenni
+  - automation.leave_home_justin
+  - automation.music_started_1
+  - automation.music_started_2
+  - automation.night_no_one_home
+  - automation.restart_stream
+  - automation.stop_mpd_when_other_device_casting
+  - automation.sunset
+  - automation.update_google_assistant
+a_scripts:
+  name: All Scripts
+  view: false
+  entities:
+  - script.bedtime
+  - script.morning
+  - script.next_track
+  - script.pause_music
+  - script.play_all_music
+  - script.play_chill_music
+  - script.play_music
+  - script.restart_mopidy_stream
+  - script.shutoff
+  - script.switch_to_audio
+  - script.switch_to_chromecast
+  - script.volume_down
+  - script.volume_up
 dark_sky:
   name: Dark Sky
   view: false

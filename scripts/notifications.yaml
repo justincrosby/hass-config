@@ -1,0 +1,71 @@
+notify_fish_fed:
+  sequence:
+    - condition: or
+      conditions:
+        - condition: state
+          entity_id: device_tracker.justins_phone
+          state: 'not_home'
+        - condition: state
+          entity_id: device_tracker.jennis_phone
+          state: 'not_home'
+    - service: script.turn_on
+      entity_id: script.notify_fish_fed_justin
+    - service: script.turn_on
+      entity_id: script.notify_fish_fed_jenni
+
+notify_fish_fed_justin:
+  sequence: 
+    - condition: state
+      entity_id: device_tracker.justins_phone
+      state: 'not_home'
+    - service: notify.html5
+      data:
+        title: Home Assistant
+        message: 'Friend fed the fish!'
+        target: justins_phone
+
+notify_fish_fed_jenni:
+  sequence:
+    - condition: state
+      entity_id: device_tracker.jennis_phone
+      state: 'not_home'
+    - service: notify.ios_jennis_iphone
+      data:
+        message: "Friend fed the fish!"
+
+notify_plants_watered:
+  sequence:
+    - condition: or
+      conditions:
+        - condition: state
+          entity_id: device_tracker.justins_phone
+          state: 'not_home'
+        - condition: state
+          entity_id: device_tracker.jennis_phone
+          state: 'not_home'
+    - service: script.turn_on
+      entity_id: script.notify_plants_watered_justin
+    - service: script.turn_on
+      entity_id: script.notify_plants_watered_jenni
+
+notify_plants_watered_justin:
+  sequence: 
+    - condition: state
+      entity_id: device_tracker.justins_phone
+      state: 'not_home'
+    - service: notify.html5
+      data:
+        title: Home Assistant
+        message: 'Friend watered the plants!'
+        target: justins_phone
+
+notify_plants_watered_jenni:
+  sequence:
+    - condition: state
+      entity_id: device_tracker.jennis_phone
+      state: 'not_home'
+    - service: notify.ios_jennis_iphone
+      data:
+        message: "Friend watered the plants!"
+
+

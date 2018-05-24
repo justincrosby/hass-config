@@ -31,3 +31,27 @@
       entity_id: script.forgot_to_water_the_plants
     - service: script.turn_on
       entity_id: script.forgot_to_feed_fish
+
+- alias: Notify when fish have been fed
+  trigger:
+    - platform: state
+      entity_id: input_boolean.fish_fed_tracker
+      to: 'on'
+  condition:
+    condition: time
+    after: "12:00:00"
+  action:
+    - service: script.turn_on
+      entity_id: script.notify_fish_fed
+
+- alias: Notify when plants have been watered
+  trigger:
+    - platform: state
+      entity_id: input_boolean.plants_watered_tracker
+      to: 'on'
+  condition:
+    condition: time
+    after: "12:00:00"
+  action:
+    - service: script.turn_on
+      entity_id: script.notify_plants_watered
