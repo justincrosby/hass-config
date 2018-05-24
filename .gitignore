@@ -4,3 +4,10 @@ known_devices.yaml
 entity_registry.yaml
 plex.conf
 .DS_Store
+.HA_VERSION
+.ios.conf
+.uuid
+home-assistant.log
+home-assistant_v2.db
+tts/
+www/
