@@ -9,11 +9,13 @@ script.bedtime:
   expose: true
 script.play_chill_music:
   name: Chill music
+  expose: true
 script.did_the_things:
   name: Did the things
   expose: true
 script.fed_the_fish:
   name: Fish fed
+  expose: true
 script.morning:
   name: Good morning
   expose: true
