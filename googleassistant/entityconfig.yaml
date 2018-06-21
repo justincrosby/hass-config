@@ -41,6 +41,8 @@ script.volume_down:
 script.watered_the_plants:
   name: Watered plants
   expose: true
+script.be_right_back:
+  expose: true
 # Lights
 light.bedroom_lamp:
   expose: true

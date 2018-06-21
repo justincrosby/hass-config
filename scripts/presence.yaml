@@ -27,6 +27,19 @@ arrive_home_justin:
           before: "04:00:00"
     - service: switch.turn_on
       entity_id: switch.phone_bedtime
+be_right_back:
+  alias: Be Right Back
+  sequence:
+    - service: automation.turn_off
+      entity_id: automation.arrive_home_jenni
+    - service: automation.turn_off
+      entity_id: automation.arrive_home_justin
+    - delay:
+        minutes: 15
+    - service: automation.turn_on
+      entity_id: automation.arrive_home_jenni
+    - service: automation.turn_on
+      entity_id: automation.arrive_home_justin
 wifi_check:
   alias: Wifi Check
   sequence:
