@@ -13,12 +13,6 @@
           - wed
           - thu
           - fri
-      - condition: state
-        entity_id: device_tracker.justins_phone
-        state: 'home'
-      - condition: state
-        entity_id: input_boolean.weekday_alarm
-        state: 'on'
       - condition: template
         value_template: >-
           {% set now_minutes = now().strftime("%H")|int * 60 + now().strftime("%M")|int %}
@@ -40,12 +34,6 @@
         weekday:
           - sat
           - sun
-      - condition: state
-        entity_id: device_tracker.justins_phone
-        state: 'home'
-      - condition: state
-        entity_id: input_boolean.weekend_alarm
-        state: 'on'
       - condition: template
         value_template: >-
           {% set now_minutes = now().strftime("%H")|int * 60 + now().strftime("%M")|int %}

@@ -16,10 +16,43 @@ shutoff:
 morning:
   alias: Morning
   sequence:
+    - service: script.turn_on
+      entity_id: script.ringer_on_conditional
+    - condition: or
+      conditions:
+        - condition: state
+          entity_id: device_tracker.justins_phone
+          state: 'home'
+        - condition: state
+          entity_id: device_tracker.jennis_phone
+          state: 'home'
     - service: switch.turn_on
       entity_id: switch.justins_pc
     - service: script.turn_on
       entity_id: script.switch_to_audio
+    - condition: or
+      conditions:
+        - condition: and
+          conditions:
+            - condition: time
+              weekday:
+                - mon
+                - tue
+                - wed
+                - thu
+                - fri
+            - condition: state
+              entity_id: input_boolean.weekday_alarm
+              state: 'on'
+        - condition: and
+          conditions:
+            - condition: time
+              weekday:
+                - sat
+                - sun
+            - condition: state
+              entity_id: input_boolean.weekend_alarm
+              state: 'on'
     - delay:
         minutes: 5
     - service: light.turn_on
@@ -28,11 +61,14 @@ morning:
       entity_id: switch.phone_ringer_on
     - service: script.turn_on
       entity_id: script.play_chill_music
+ringer_on_conditional:
+  alias: Phone Ringer On Conditional
+  sequence:
     - condition: state
       entity_id: device_tracker.justins_phone
-      state: 'not_home'
+      state: 'home'
     - service: switch.turn_on
-      entity_id: switch.phone_ringer_off
+      entity_id: switch.phone_ringer_on
 bedtime:
   alias: Bedtime
   sequence:
