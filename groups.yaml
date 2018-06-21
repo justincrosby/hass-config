@@ -101,6 +101,7 @@ a_scripts:
   name: All Scripts
   view: false
   entities:
+  - script.be_right_back
   - script.bedtime
   - script.morning
   - script.next_track
