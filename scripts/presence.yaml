@@ -34,12 +34,20 @@ be_right_back:
       entity_id: automation.arrive_home_jenni
     - service: automation.turn_off
       entity_id: automation.arrive_home_justin
+    - service: automation.turn_off
+      entity_id: automation.leave_home_jenni
+    - service: automation.turn_off
+      entity_id: automation.leave_home_justin
     - delay:
         minutes: 15
     - service: automation.turn_on
       entity_id: automation.arrive_home_jenni
     - service: automation.turn_on
       entity_id: automation.arrive_home_justin
+    - service: automation.turn_on
+      entity_id: automation.leave_home_jenni
+    - service: automation.turn_on
+      entity_id: automation.leave_home_justin
 wifi_check:
   alias: Wifi Check
   sequence:
