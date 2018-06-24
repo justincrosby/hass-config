@@ -140,11 +140,12 @@ play_all_music:
       data:
         entity_id: media_player.mpd
         shuffle: true
-    - service: media_player.play_media
-      data:
-        entity_id: media_player.mpd
-        media_content_type: 'audio/mp4'
-        media_content_id: spotify:user:justinception_:playlist:2xWccvN2oRDJZr3bq3Lk2k
+    #- service: media_player.play_media
+    #  data:
+    #    entity_id: media_player.mpd
+    #    media_content_type: 'audio/mp4'
+    #    media_content_id: 'spt://spotify:user:justinception_:playlist:2xWccvN2oRDJZr3bq3Lk2k'
+    - service: shell_command.play_all_music
 play_chill_music:
   alias: Play Chill Music Playlist
   sequence:
@@ -154,11 +155,12 @@ play_chill_music:
       data:
         entity_id: media_player.mpd
         shuffle: true
-    - service: media_player.play_media
-      data:
-        entity_id: media_player.mpd
-        media_content_type: 'audio/mp4'
-        media_content_id: spotify:user:justinception_:playlist:2A6wCBOUNCoBkEPaUgomX4
+    #- service: media_player.play_media
+    #  data:
+    #   entity_id: media_player.mpd
+    #    media_content_type: 'audio/mp4'
+    #    media_content_id: 'spotify:user:justinception_:playlist:2A6wCBOUNCoBkEPaUgomX4'
+    - service: shell_command.play_chill_music
 play_all_music_conditional:
   alias: Play All Music Playlist Before 11pm
   sequence:
@@ -170,3 +172,14 @@ play_all_music_conditional:
           after: "09:00:00"
     - service: script.turn_on
       entity_id: script.play_all_music
+play_music_callback:
+  alias: Play MDP Music Callback
+  sequence:
+    - service: media_player.media_next_track
+      entity_id: media_player.mpd
+    - service: script.turn_on
+      entity_id: script.stream_mopidy_to_cc
+    - delay:
+        seconds: 5
+    - service: automation.turn_on
+      entity_id: automation.cast_music_when_playing_from_mpd
