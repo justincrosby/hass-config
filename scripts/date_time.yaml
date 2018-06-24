@@ -61,6 +61,12 @@ morning:
       entity_id: switch.phone_ringer_on
     - service: script.turn_on
       entity_id: script.play_chill_music
+    - service: media_player.volume_set
+      data:
+        entity_id: media_player.home_audio
+        volume_level: '0.0'
+    - service: script.turn_on
+      entity_id: script.increase_volume
 ringer_on_conditional:
   alias: Phone Ringer On Conditional
   sequence:

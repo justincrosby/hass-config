@@ -183,3 +183,28 @@ play_music_callback:
         seconds: 5
     - service: automation.turn_on
       entity_id: automation.cast_music_when_playing_from_mpd
+increase_volume:
+  alias: Slowly increase the audio level
+  sequence:
+    - service: media_player.volume_up
+      entity_id: media_player.home_audio
+    - service: script.turn_on
+      entity_id: script.increase_volume_pause
+increase_volume_pause:
+  alias: Script to loop volume increase script
+  sequence:
+    - condition: template
+      value_template: '{{ states.media_player.home_audio.attributes["volume_level"] < 0.78 }}'
+    - delay:
+        seconds: 2
+    - service: script.turn_on
+      entity_id: script.increase_volume
+shower_time:
+  alias: Increase the Volume During Shower
+  sequence:
+    - service: media_player.volume_up
+      entity_id: media_player.bathroom_speaker
+    - delay:
+        minutes: 15
+    - service: media_player.volume_down
+      entity_id: media_player.bathroom_speaker
