@@ -22,9 +22,6 @@ config:
 http:
   # todo: password protect this
 
-# Enable RESTful API
-api:
-
 updater:
 
 # Discover some devices automatically
