@@ -44,6 +44,7 @@ script.watered_the_plants:
 script.be_right_back:
   expose: true
 script.shower_time:
+  name: Shower Time
   expose: true
 # Lights
 light.bedroom_lamp:
