@@ -118,7 +118,7 @@ stream_mopidy_to_cc:
     - service: media_player.play_media
       data:
         entity_id: media_player.home_audio
-        media_content_id: 'http://192.168.0.10:8000/mopidy.mp3'
+        media_content_id: !secret icecast_url
         media_content_type: 'audio/mp4'
 restart_mopidy_stream:
   alias: Restart Mopidy Stream
@@ -129,7 +129,7 @@ restart_mopidy_stream:
     - service: media_player.play_media
       data:
         entity_id: media_player.home_audio
-        media_content_id: 'http://192.168.0.10:8000/mopidy.mp3'
+        media_content_id: !secret icecast_url
         media_content_type: 'audio/mp4'
 play_all_music:
   alias: Play All Music Playlist

@@ -20,7 +20,11 @@ frontend:
 config:
 
 http:
+  base_url: http://192.168.0.10:8123
   # todo: password protect this
+
+# Enable python scripts
+python_script:
 
 updater:
 
@@ -108,6 +112,9 @@ media_player:
     host: !secret cast_bathroom_home_ip
   - platform: mpd
     host: !secret mpd_ip
+  - platform: spotify
+    client_id: !secret spotify_client_id
+    client_secret: !secret spotify_client_secret
 
 panel_iframe:
   iris:
