@@ -96,20 +96,19 @@ input_number: !include misc/input_number.yaml
 
 input_boolean: !include misc/input_boolean.yaml
 
+cast:
+  media_player:
+    - host: !secret cast_bedroom_audio_ip
+    - host: !secret cast_lving_room_audio_ip
+    - host: !secret cast_bedroom_chromecast_ip
+    - host: !secret cast_bathroom_home_ip
+
 media_player:
   - platform: vizio
     host: !secret vizio_ip
     access_token: !secret vizio_access_token
   - platform: denonavr
     host: 192.168.0.6
-  - platform: cast
-    host: !secret cast_bedroom_audio_ip
-  - platform: cast
-    host: !secret cast_lving_room_audio_ip
-  - platform: cast
-    host: !secret cast_bedroom_chromecast_ip
-  - platform: cast
-    host: !secret cast_bathroom_home_ip
   - platform: mpd
     host: !secret mpd_ip
   - platform: spotify

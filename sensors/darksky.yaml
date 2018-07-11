@@ -5,4 +5,4 @@ monitored_conditions:
   - precip_probability
   - apparent_temperature
   - hourly_summary
-  - apparent_temperature_max
+  - apparent_temperature_high
