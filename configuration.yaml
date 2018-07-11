@@ -129,3 +129,4 @@ group: !include groups.yaml
 automation: !include_dir_merge_list automations/
 script: !include_dir_merge_named scripts/
 shell_command: !include shell_command.yaml
+rest_command: !include_dir_merge_named rest/

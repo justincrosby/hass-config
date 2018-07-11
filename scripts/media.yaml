@@ -115,6 +115,8 @@ stream_mopidy_to_cc:
   sequence:
     - service: media_player.media_stop
       entity_id: media_player.home_audio
+    - delay:
+        seconds: 1
     - service: media_player.play_media
       data:
         entity_id: media_player.home_audio
@@ -134,8 +136,7 @@ restart_mopidy_stream:
 play_all_music:
   alias: Play All Music Playlist
   sequence:
-    - service: media_player.media_stop
-      entity_id: media_player.home_audio
+    - service: rest_command.clear_track_list
     - service: media_player.media_stop
       entity_id: media_player.mpd
     - service: media_player.shuffle_set
@@ -152,8 +153,7 @@ play_all_music:
 play_chill_music:
   alias: Play Chill Music Playlist
   sequence:
-    - service: media_player.media_stop
-      entity_id: media_player.home_audio
+    - service: rest_command.clear_track_list
     - service: media_player.media_stop
       entity_id: media_player.mpd
     - service: media_player.shuffle_set
