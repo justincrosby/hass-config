@@ -135,6 +135,8 @@ play_all_music:
   alias: Play All Music Playlist
   sequence:
     - service: media_player.media_stop
+      entity_id: media_player.home_audio
+    - service: media_player.media_stop
       entity_id: media_player.mpd
     - service: media_player.shuffle_set
       data:
@@ -150,6 +152,8 @@ play_all_music:
 play_chill_music:
   alias: Play Chill Music Playlist
   sequence:
+    - service: media_player.media_stop
+      entity_id: media_player.home_audio
     - service: media_player.media_stop
       entity_id: media_player.mpd
     - service: media_player.shuffle_set
@@ -218,3 +222,7 @@ morning_music:
       timeout: '00:05:00'
     - service: light.turn_on
       entity_id: light.bedroom_light
+    - delay:
+        minutes: 15
+    - service: script.turn_on
+      entity_id: script.play_all_music

@@ -62,3 +62,13 @@
   action:
     - service: media_player.media_stop
       entity_id: media_player.mpd
+
+- alias: All music unavailable for 15 minutes
+  trigger:
+    platform: state
+    entity_id: media_player.home_audio
+    to: 'unavailable'
+    for:
+      minutes: 15
+  action:
+    service: homeassistant.restart
