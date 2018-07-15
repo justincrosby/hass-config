@@ -29,6 +29,14 @@ automations:
   entities:
   - group.a_automations
   - group.a_scripts
+media_control:
+  name: Media
+  view: true
+  icon: mdi:music
+  entities:
+  - input_number.living_room_audio_volume
+  - input_number.bedroom_audio_volume
+  - input_number.bathroom_audio_volume
 weekday_alarm:
   view: false
   name: Weekday Alarm
