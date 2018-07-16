@@ -205,12 +205,16 @@ increase_volume_pause:
 shower_time:
   alias: Increase the Volume During Shower
   sequence:
-    - service: media_player.volume_up
-      entity_id: media_player.bathroom_speaker
+    - service: input_number.set_value
+      data:
+        entity_id: input_number.bathroom_audio_volume
+        value: 0.7
     - delay:
         minutes: 15
-    - service: media_player.volume_down
-      entity_id: media_player.bathroom_speaker
+    - service: input_number.set_value
+      data:
+        entity_id: input_number.bathroom_audio_volume
+        value: !secret default_bathroom_audio_volume
 morning_music:
   alias: Start music quietly in the morning
   sequence:
