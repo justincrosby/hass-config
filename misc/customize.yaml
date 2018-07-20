@@ -26,3 +26,8 @@
   switch.justins_pc:
     friendly_name: Justins PC
     icon: mdi:desktop-classic
+# Lights
+  light.bedroom:
+    friendly_name: Bedroom Lights
+  light.living_room:
+    friendly_name: Living Room Lights

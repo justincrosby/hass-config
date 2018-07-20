@@ -7,6 +7,15 @@ arrive_home:
       entity_id: script.switch_to_audio
     - service: script.turn_on
       entity_id: script.play_all_music_conditional
+    - service: light.turn_on
+      data_template:
+        entity_id: light.living_room
+        brightness: >-
+            {% if now().strftime("%H")|int > 23 -%}
+              100
+            {%- else -%}
+              250
+            {%- endif %}
     - condition: sun
       after: sunset
       after_offset: "+00:20:00"
