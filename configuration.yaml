@@ -89,6 +89,17 @@ wemo:
     - !secret wemo_fish_light_switch_ip
     - !secret wemo_bedroom_light_switch_ip
 
+hue:
+  bridges:
+    - host: !secret hue_bridge_ip
+      allow_unreachable: true
+      allow_hue_groups: true
+
+august:
+  login_method: email
+  username: !secret august_username
+  password: !secret august_password
+
 switch: !include_dir_list switches/
 light: !include_dir_list lights/
 

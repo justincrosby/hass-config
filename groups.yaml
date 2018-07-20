@@ -76,6 +76,7 @@ a_switches:
   - switch.justins_pc
   - light.bedroom_lamp
   - light.living_room_lamp
+  - lock.front_door
   - input_boolean.weekday_alarm
   - input_boolean.weekend_alarm
   - input_boolean.fish_fed_tracker
