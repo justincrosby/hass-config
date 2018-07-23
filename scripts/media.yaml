@@ -240,7 +240,9 @@ morning_music:
     - delay:
         minutes: 5
     - service: light.turn_on
-      entity_id: light.bedroom
+      data:
+        entity_id: light.bedroom
+        transition: 60
     # automations can be restored now
     - service: automation.turn_on
       entity_id: automation.music_started_1

@@ -77,6 +77,8 @@ a_switches:
   - light.living_room_lamp
   - light.living_room
   - lock.front_door
+  - switch.bedroom_air_purifier
+  - switch.bedroom_fan
   - input_boolean.weekday_alarm
   - input_boolean.weekend_alarm
   - input_boolean.fish_fed_tracker

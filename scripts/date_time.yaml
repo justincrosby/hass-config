@@ -57,6 +57,10 @@ morning:
         minutes: 5
     - service: switch.turn_on
       entity_id: switch.phone_ringer_on
+    - service: switch.turn_off
+      entity_id: switch.bedroom_fan
+    - service: switch.turn_off
+      entity_id: switch.bedroom_air_purifier
     - service: script.turn_on
       entity_id: script.morning_music
 ringer_on_conditional:
@@ -82,6 +86,14 @@ bedtime:
       entity_id: script.forgot_to_water_the_plants
     - service: input_boolean.turn_off
       entity_id: input_boolean.plants_watered_tracker
+    - service: switch.turn_on
+      data_template:
+        entity_id: >
+          {% if states('sensor.dark_sky_daytime_high_apparent_temperature')|int > 18 %}
+            switch.bedroom_fan
+          {% else %}
+            switch.bedroom_air_purifier
+          {% endif %}
     - delay:
         hours: 1
     - service: shell_command.shutdown

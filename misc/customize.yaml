@@ -26,6 +26,12 @@
   switch.justins_pc:
     friendly_name: Justins PC
     icon: mdi:desktop-classic
+  switch.bedroom_fan:
+    friendly_name: Bedroom Fan
+    icon: mdi:fan
+  switch.bedroom_air_purifier:
+    friendly_name: Bedroom Air Purifier
+    icon: mdi:fan
 # Lights
   light.bedroom:
     friendly_name: Bedroom Lights
