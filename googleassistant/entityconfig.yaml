@@ -47,7 +47,7 @@ script.shower_time:
   name: Shower Time
   expose: true
 # Lights
-light.bedroom_light:
+light.bedroom:
   name: Bedroom Lights
   expose: true
 light.betta_light:
@@ -58,7 +58,7 @@ light.fish_light:
   expose: true
 light.living_room_lamp:
   expose: true
-light.living_room_light:
+light.living_room:
   name: Living Room Lights
   expose: true
 # Media
@@ -75,4 +75,7 @@ media_player.denon_avrx1300w:
 switch.bedroom_air_purifier:
   expose: true
 switch.bedroom_fan:
+  expose: true
+# Lock
+lock.front_door:
   expose: true

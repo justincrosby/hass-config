@@ -13,6 +13,14 @@ shutoff:
       entity_id: media_player.mpd
     - service: switch.turn_off
       entity_id: switch.justins_pc
+    - service: lock.lock
+      entity_id: lock.front_door
+    - condition: template
+      value_template: '{{ bedtime == false }}'
+    - service: switch.turn_off
+      entity_id: switch.bedroom_fan
+    - service: switch.turn_off
+      entity_id: switch.bedroom_air_purifier
 morning:
   alias: Morning
   sequence:
@@ -55,14 +63,28 @@ morning:
               state: 'on'
     - delay:
         minutes: 5
-    - service: switch.turn_on
-      entity_id: switch.phone_ringer_on
-    - service: switch.turn_off
-      entity_id: switch.bedroom_fan
-    - service: switch.turn_off
-      entity_id: switch.bedroom_air_purifier
     - service: script.turn_on
       entity_id: script.morning_music
+    - wait_template: '{{ is_state("automation.music_started_1", "off") }}'
+      timeout: '00:05:00'
+    - wait_template: '{{ is_state("automation.music_started_1", "on") }}'
+      timeout: '00:20:00'
+    - delay:
+        minutes: 5
+    - service: light.turn_on
+      data:
+        entity_id: light.bedroom
+        transition: 60
+    - delay:
+        minutes: 15
+    - service: script.turn_on
+      entity_id: script.play_all_music
+    - delay:
+        minutes: 5
+    - service: switch.turn_on
+      entity_id: switch.phone_ringer_on
+    - service: lock.unlock
+      entity_id: lock.front_door
 ringer_on_conditional:
   alias: Phone Ringer On Conditional
   sequence:
@@ -76,6 +98,9 @@ bedtime:
   sequence:
     - service: script.turn_on
       entity_id: script.shutoff
+      data:
+        variables:
+          bedtime: true
     - service: switch.turn_on
       entity_id: switch.phone_bedtime
     - service: script.turn_on
@@ -94,6 +119,14 @@ bedtime:
           {% else %}
             switch.bedroom_air_purifier
           {% endif %}
+    - service: switch.turn_off
+      data_template:
+        entity_id: >
+          {% if states('sensor.dark_sky_daytime_high_apparent_temperature')|int > 18 %}
+            switch.bedroom_air_purifier
+          {% else %}
+            switch.bedroom_fan
+          {% endif %}
     - delay:
-        hours: 1
+        minutes: 30
     - service: shell_command.shutdown

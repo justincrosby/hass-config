@@ -21,6 +21,9 @@
   action:
     service: script.turn_on
     entity_id: script.shutoff
+    data:
+      variables:
+        bedtime: false
 
 - alias: Arrive Home Justin
   trigger:

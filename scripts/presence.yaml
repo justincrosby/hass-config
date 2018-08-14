@@ -1,6 +1,8 @@
 arrive_home:
   alias: Arrive Home
   sequence:
+    - service: lock.unlock
+      entity_id: lock.front_door
     - service: switch.turn_on
       entity_id: switch.justins_pc
     - service: script.turn_on
@@ -74,3 +76,6 @@ wifi_check:
       state: 'not_home'
     - service: script.turn_on
       entity_id: script.shutoff
+      data:
+        variables:
+          bedtime: false
