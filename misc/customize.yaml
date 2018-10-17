@@ -1,6 +1,4 @@
 ## Hide some stuff ##
-  media_player.living_room_audio:
-    hidden: true
   media_player.plex_web_chrome:
     hidden: true
   media_player.plex_web_chrome_2:
@@ -35,5 +33,5 @@
 # Lights
   light.bedroom:
     friendly_name: Bedroom Lights
-  light.living_room:
-    friendly_name: Living Room Lights
+  light.kitchen:
+    friendly_name: Kitchen Lights

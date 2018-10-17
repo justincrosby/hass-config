@@ -134,15 +134,17 @@ restart_mopidy_stream:
 play_all_music:
   alias: Play All Music Playlist
   sequence:
-    - service: rest_command.clear_track_list
+    #- service: rest_command.clear_track_list
     - service: media_player.media_stop
       entity_id: media_player.mpd
+    - wait_template: '{{ is_state("switch.ubuntu_vm", "on") }}'
+      timeout: '00:05:00'
+    - wait_template: '{{ not is_state("media_player.mpd", "unavailable") }}'
+      timeout: '00:05:00'
     - service: media_player.shuffle_set
       data:
         entity_id: media_player.mpd
         shuffle: true
-    - wait_template: '{{ is_state("switch.ubuntu_vm", "on") }}'
-      timeout: '00:05:00'
     - service: media_player.play_media
       data:
         entity_id: media_player.mpd
@@ -151,15 +153,17 @@ play_all_music:
 play_chill_music:
   alias: Play Chill Music Playlist
   sequence:
-    - service: rest_command.clear_track_list
+    #- service: rest_command.clear_track_list
     - service: media_player.media_stop
       entity_id: media_player.mpd
+    - wait_template: '{{ is_state("switch.ubuntu_vm", "on") }}'
+      timeout: '00:05:00'
+    - wait_template: '{{ not is_state("media_player.mpd", "unavailable") }}'
+      timeout: '00:05:00'
     - service: media_player.shuffle_set
       data:
         entity_id: media_player.mpd
         shuffle: true
-    - wait_template: '{{ is_state("switch.ubuntu_vm", "on") }}'
-      timeout: '00:05:00'
     - service: media_player.play_media
       data:
         entity_id: media_player.mpd
@@ -226,6 +230,8 @@ morning_music:
     - delay:
         minutes: 5
     - wait_template: '{{ is_state("switch.ubuntu_vm", "on") }}'
+      timeout: '00:05:00'
+    - wait_template: '{{ not is_state("media_player.mpd", "unavailable") }}'
       timeout: '00:05:00'
     - service: script.turn_on
       entity_id: script.play_chill_music

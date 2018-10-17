@@ -20,8 +20,15 @@ frontend:
 config:
 
 http:
+  api_password: !secret api_password
   base_url: http://192.168.0.10:8123
-  # todo: password protect this
+
+mqtt:
+  password: !secret api_password
+
+# Enable RESTful API
+api:
+  api_password: !secret api_password
 
 # Enable python scripts
 python_script:
@@ -63,9 +70,6 @@ notify:
 
 google_assistant:
   project_id: !secret assistant_project_id
-  client_id: !secret assistant_client_id
-  access_token: !secret assistant_access_token
-  agent_user_id: !secret assistant_user_id
   api_key: !secret assistant_api_key
   exposed_domains:
     - switch
@@ -80,8 +84,6 @@ device_tracker:
     host: !secret router_ip
     username: !secret router_username
     password: !secret router_password
-    track_new_devices: no
-    consider_home: 60
 
 wemo:
   static:
@@ -113,14 +115,6 @@ media_player:
     access_token: !secret vizio_access_token
   - platform: denonavr
     host: 192.168.0.6
-  - platform: cast
-    host: !secret cast_bedroom_audio_ip
-  - platform: cast
-    host: !secret cast_lving_room_audio_ip
-  - platform: cast
-    host: !secret cast_bedroom_chromecast_ip
-  - platform: cast
-    host: !secret cast_bathroom_home_ip
   - platform: mpd
     host: !secret mpd_ip
   - platform: spotify

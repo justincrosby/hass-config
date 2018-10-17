@@ -61,7 +61,7 @@ all_media_players:
   view: false
   entities:
   - media_player.vizio_smartcast
-  - media_player.chromecast
+  - media_player.chromecast9275
   - media_player.denon_avrx1300w
   - media_player.home_audio
   - media_player.mpd
@@ -75,7 +75,7 @@ a_switches:
   - light.betta_light
   - switch.justins_pc
   - light.living_room_lamp
-  - light.living_room
+  - light.kitchen
   - lock.front_door
   - switch.bedroom_air_purifier
   - switch.bedroom_fan
@@ -89,7 +89,7 @@ a_lights:
   entities:
   - light.bedroom
   - light.fairy_lights
-  - light.living_room
+  - light.kitchen
   - light.living_room_lamp
 a_automations:
   name: All Automations
