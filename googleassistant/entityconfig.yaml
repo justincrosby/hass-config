@@ -58,8 +58,7 @@ light.fish_light:
   expose: true
 light.living_room_lamp:
   expose: true
-light.living_room:
-  name: Living Room Lights
+light.kitchen:
   expose: true
 # Media
 switch.justins_pc:

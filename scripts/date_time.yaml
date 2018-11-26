@@ -1,6 +1,14 @@
 shutoff:
   alias: Shutoff All
   sequence:
+    - service: light.turn_on
+      data:
+        entity_id: light.bedroom
+        brightness: 0
+        transition: 30
+    - delay:
+        seconds:
+          30
     - service: homeassistant.turn_off
       entity_id: group.a_lights
     - service: media_player.turn_off
@@ -69,22 +77,49 @@ morning:
       timeout: '00:05:00'
     - wait_template: '{{ is_state("automation.music_started_1", "on") }}'
       timeout: '00:20:00'
+    - service: light.turn_on
+      data:
+        entity_id: light.bedroom
+        brightness: 0
+    - delay:
+        seconds: 1
+    - service: light.turn_on
+      data:
+        entity_id: light.bedroom
+        brightness_pct: 80
+        transition: 300
+    - delay:
+        minutes: 20
+    - service: script.turn_on
+      entity_id: script.fade_in_music
+      data:
+        variables:
+          step_size: -0.05
+          stop_volume: 0
+    - wait_template: '{{ states("input_number.living_room_audio_volume")|float == 0 }}'
+      timeout: '00:10:00'
+    - service: script.turn_on
+      entity_id: script.play_all_music
+    - service: script.turn_on
+      entity_id: script.fade_in_music
+      data:
+        variables:
+          step_size: 0.05
+          stop_volume: 0.8
+    - wait_template: '{{ states("input_number.living_room_audio_volume")|float == 0.8 }}'
+      timeout: '00:10:00'
     - delay:
         minutes: 5
     - service: light.turn_on
       data:
         entity_id: light.bedroom
-        transition: 60
-    - delay:
-        minutes: 15
-    - service: script.turn_on
-      entity_id: script.play_all_music
-    - delay:
-        minutes: 5
+        brightness_pct: 100
     - service: switch.turn_on
       entity_id: switch.phone_ringer_on
     - service: lock.unlock
       entity_id: lock.front_door
+    - service: light.turn_on
+      entity_id: light.kitchen_light
 ringer_on_conditional:
   alias: Phone Ringer On Conditional
   sequence:
