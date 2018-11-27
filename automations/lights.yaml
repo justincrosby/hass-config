@@ -1,0 +1,30 @@
+- alias: Hue Red Value Changed
+  trigger:
+    platform: state
+    entity_id: sensor.hue_r
+  action:
+    service: light.turn_on
+    data_template:
+      entity_id: light.led_strip
+      brightness: '{{ states.light.kitchen.attributes["brightness"] }}'
+      rgb_color: ['{{ states.light.kitchen.attributes["rgb_color"][0] }}', '{{ states.light.kitchen.attributes["rgb_color"][1] }}', '{{ states.light.kitchen.attributes["rgb_color"][2] }}']
+- alias: Hue Green Value Changed
+  trigger:
+    platform: state
+    entity_id: sensor.hue_g
+  action:
+    service: light.turn_on
+    data_template:
+      entity_id: light.led_strip
+      brightness: '{{ states.light.kitchen.attributes["brightness"] }}'
+      rgb_color: ['{{ states.light.kitchen.attributes["rgb_color"][0] }}', '{{ states.light.kitchen.attributes["rgb_color"][1] }}', '{{ states.light.kitchen.attributes["rgb_color"][2] }}']
+- alias: Hue Blue Value Changed
+  trigger:
+    platform: state
+    entity_id: sensor.hue_b
+  action:
+    service: light.turn_on
+    data_template:
+      entity_id: light.led_strip
+      brightness: '{{ states.light.kitchen.attributes["brightness"] }}'
+      rgb_color: ['{{ states.light.kitchen.attributes["rgb_color"][0] }}', '{{ states.light.kitchen.attributes["rgb_color"][1] }}', '{{ states.light.kitchen.attributes["rgb_color"][2] }}']

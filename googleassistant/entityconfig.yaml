@@ -60,6 +60,8 @@ light.living_room_lamp:
   expose: true
 light.kitchen:
   expose: true
+light.led_strip:
+  expose: true
 # Media
 switch.justins_pc:
   name: My PC

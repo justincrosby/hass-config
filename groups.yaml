@@ -76,6 +76,7 @@ a_switches:
   - switch.justins_pc
   - light.living_room_lamp
   - light.kitchen
+  - light.led_strip
   - lock.front_door
   - switch.bedroom_air_purifier
   - switch.bedroom_fan
@@ -91,6 +92,7 @@ a_lights:
   - light.fairy_lights
   - light.kitchen
   - light.living_room_lamp
+  - light.led_strip
 a_automations:
   name: All Automations
   view: false
