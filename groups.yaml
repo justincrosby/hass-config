@@ -61,7 +61,7 @@ all_media_players:
   view: false
   entities:
   - media_player.vizio_smartcast
-  - media_player.chromecast9275
+  - media_player.bedroom_tv
   - media_player.denon_avrx1300w
   - media_player.home_audio
   - media_player.mpd
@@ -111,6 +111,7 @@ a_automations:
   - automation.stop_mpd_when_other_device_casting
   - automation.sunset
   - automation.update_google_assistant
+  - automation.update_led_strip_colour_when_hue_colour_changed
 a_scripts:
   name: All Scripts
   view: false

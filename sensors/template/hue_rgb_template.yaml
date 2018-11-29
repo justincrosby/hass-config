@@ -1,11 +1,5 @@
 platform: template
 sensors:
-  hue_r:
-    value_template: '{{ states.light.kitchen.attributes["rgb_color"][0] }}'
-    friendly_name: 'Hue Red Component'
-  hue_g:
-    value_template: '{{ states.light.kitchen.attributes["rgb_color"][1] }}'
-    friendly_name: 'Hue Green Component'
-  hue_b:
-    value_template: '{{ states.light.kitchen.attributes["rgb_color"][2] }}'
-    friendly_name: 'Hue Blue Component'
+  hue_colour:
+    value_template: '{{ states.light.kitchen.attributes["rgb_color"] }}'
+    friendly_name: 'Hue Colour Sensor'

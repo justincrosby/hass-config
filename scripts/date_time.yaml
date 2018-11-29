@@ -119,7 +119,7 @@ morning:
     - service: lock.unlock
       entity_id: lock.front_door
     - service: light.turn_on
-      entity_id: light.kitchen_light
+      entity_id: light.kitchen
 ringer_on_conditional:
   alias: Phone Ringer On Conditional
   sequence:
