@@ -7,11 +7,11 @@
     condition: or
     conditions:
       - condition: state
-        entity_id: device_tracker.justins_phone
-        state: 'home'
+        entity_id: binary_sensor.justin_presence
+        state: 'on'
       - condition: state
-        entity_id: device_tracker.jennis_phone
-        state: 'home'
+        entity_id: binary_sensor.jenni_presence
+        state: 'on'
   action:
     - service: light.turn_on
       entity_id: light.fairy_lights
@@ -26,11 +26,11 @@
     condition: and
     conditions:
       - condition: state
-        entity_id: device_tracker.justins_phone
-        state: 'not_home'
+        entity_id: binary_sensor.justin_presence
+        state: 'off'
       - condition: state
-        entity_id: device_tracker.jennis_phone
-        state: 'not_home'
+        entity_id: binary_sensor.jenni_presence
+        state: 'off'
   action:
     - service: script.turn_on
       entity_id: script.shutoff

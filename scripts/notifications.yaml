@@ -3,11 +3,11 @@ notify_fish_fed:
     - condition: or
       conditions:
         - condition: state
-          entity_id: device_tracker.justins_phone
-          state: 'not_home'
+          entity_id: binary_sensor.justin_presence
+          state: 'off'
         - condition: state
-          entity_id: device_tracker.jennis_phone
-          state: 'not_home'
+          entity_id: binary_sensor.jenni_presence
+          state: 'off'
     - service: script.turn_on
       entity_id: script.notify_fish_fed_justin
     - service: script.turn_on
@@ -16,8 +16,8 @@ notify_fish_fed:
 notify_fish_fed_justin:
   sequence: 
     - condition: state
-      entity_id: device_tracker.justins_phone
-      state: 'not_home'
+      entity_id: binary_sensor.justin_presence
+      state: 'off'
     - service: notify.html5
       data:
         title: Home Assistant
@@ -27,8 +27,8 @@ notify_fish_fed_justin:
 notify_fish_fed_jenni:
   sequence:
     - condition: state
-      entity_id: device_tracker.jennis_phone
-      state: 'not_home'
+      entity_id: binary_sensor.jenni_presence
+      state: 'off'
     - service: notify.ios_jennis_iphone
       data:
         message: "Friend fed the fish!"
@@ -38,11 +38,11 @@ notify_plants_watered:
     - condition: or
       conditions:
         - condition: state
-          entity_id: device_tracker.justins_phone
-          state: 'not_home'
+          entity_id: binary_sensor.justin_presence
+          state: 'off'
         - condition: state
-          entity_id: device_tracker.jennis_phone
-          state: 'not_home'
+          entity_id: binary_sensor.jenni_presence
+          state: 'off'
     - service: script.turn_on
       entity_id: script.notify_plants_watered_justin
     - service: script.turn_on
@@ -51,8 +51,8 @@ notify_plants_watered:
 notify_plants_watered_justin:
   sequence: 
     - condition: state
-      entity_id: device_tracker.justins_phone
-      state: 'not_home'
+      entity_id: binary_sensor.justin_presence
+      state: 'off'
     - service: notify.html5
       data:
         title: Home Assistant
@@ -62,8 +62,8 @@ notify_plants_watered_justin:
 notify_plants_watered_jenni:
   sequence:
     - condition: state
-      entity_id: device_tracker.jennis_phone
-      state: 'not_home'
+      entity_id: binary_sensor.jenni_presence
+      state: 'off'
     - service: notify.ios_jennis_iphone
       data:
         message: "Friend watered the plants!"

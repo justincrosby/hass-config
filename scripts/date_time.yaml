@@ -39,11 +39,11 @@ morning:
     - condition: or
       conditions:
         - condition: state
-          entity_id: device_tracker.justins_phone
-          state: 'home'
+          entity_id: binary_sensor.justin_presence
+          state: 'on'
         - condition: state
-          entity_id: device_tracker.jennis_phone
-          state: 'home'
+          entity_id: binary_sensor.jenni_presence
+          state: 'on'
     - service: switch.turn_on
       entity_id: switch.justins_pc
     - service: script.turn_on
@@ -126,8 +126,8 @@ ringer_on_conditional:
   alias: Phone Ringer On Conditional
   sequence:
     - condition: state
-      entity_id: device_tracker.justins_phone
-      state: 'home'
+      entity_id: binary_sensor.justin_presence
+      state: 'on'
     - service: switch.turn_on
       entity_id: switch.phone_ringer_on
 bedtime:

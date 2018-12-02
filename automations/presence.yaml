@@ -1,9 +1,9 @@
 - alias: Leave Home Justin
   trigger:
     platform: state
-    entity_id: device_tracker.justins_phone
-    from: 'home'
-    to: 'not_home'
+    entity_id: binary_sensor.justin_presence
+    from: 'on'
+    to: 'off'
   action:
     service: script.turn_on
     entity_id: script.wifi_check
@@ -11,13 +11,13 @@
 - alias: Leave Home Jenni
   trigger:
     platform: state
-    entity_id: device_tracker.jennis_phone
-    from: 'home'
-    to: 'not_home'
+    entity_id: binary_sensor.jenni_presence
+    from: 'on'
+    to: 'off'
   condition:
     condition: state
-    entity_id: device_tracker.justins_phone
-    state: 'not_home'
+    entity_id: binary_sensor.justin_presence
+    state: 'off'
   action:
     service: script.turn_on
     entity_id: script.shutoff
@@ -28,13 +28,13 @@
 - alias: Arrive Home Justin
   trigger:
     platform: state
-    entity_id: device_tracker.justins_phone
-    from: 'not_home'
-    to: 'home'
+    entity_id: binary_sensor.justin_presence
+    from: 'off'
+    to: 'on'
   condition:
     condition: state
-    entity_id: device_tracker.jennis_phone
-    state: 'not_home'
+    entity_id: binary_sensor.jenni_presence
+    state: 'off'
   action:
     - service: script.turn_on
       entity_id: script.arrive_home
@@ -44,13 +44,13 @@
 - alias: Arrive Home Jenni
   trigger:
     platform: state
-    entity_id: device_tracker.jennis_phone
-    from: 'not_home'
-    to: 'home'
+    entity_id: binary_sensor.jenni_presence
+    from: 'off'
+    to: 'on'
   condition:
     condition: state
-    entity_id: device_tracker.justins_phone
-    state: 'not_home'
+    entity_id: binary_sensor.justin_presence
+    state: 'off'
   action:
     service: script.turn_on
     entity_id: script.arrive_home
