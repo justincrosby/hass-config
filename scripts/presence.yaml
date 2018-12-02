@@ -5,8 +5,8 @@ arrive_home:
       entity_id: lock.front_door
     - service: switch.turn_on
       entity_id: switch.justins_pc
-    - service: script.turn_on
-      entity_id: script.led_strip_turn_on
+    - service: switch.turn_on
+      entity_id: switch.led_strip_switch
     - service: script.turn_on
       entity_id: script.switch_to_audio
     - service: script.turn_on
@@ -35,6 +35,8 @@ arrive_home:
       entity_id: light.living_room_lamp
     - service: light.turn_on
       entity_id: light.fairy_lights
+    - service: script.turn_on
+      entity_id: script.led_strip_turn_on
 arrive_home_justin:
   alias: Arrive Home Justin
   sequence:
