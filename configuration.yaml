@@ -57,6 +57,7 @@ sun:
 
 # Include sensors
 sensor: !include_dir_list sensors/
+binary_sensor: !include_dir_list binary_sensors/
 
 # Text to speech
 tts:

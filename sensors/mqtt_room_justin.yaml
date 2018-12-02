@@ -1,0 +1,5 @@
+platform: mqtt
+state_topic: !secret justins_phone_bluetooth_mac
+value_template: '{{ value_json.confidence }}'
+unit_of_measurement: '%'
+name: 'Justin Home Percent'
