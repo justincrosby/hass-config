@@ -1,0 +1,3 @@
+platform: tplink
+host: !secret tplink_led_strip_switch_ip
+name: led_strip_switch

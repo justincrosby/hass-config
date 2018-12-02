@@ -5,10 +5,10 @@ shutoff:
       data:
         entity_id: light.bedroom
         brightness: 0
-        transition: 30
+        transition: 15
     - delay:
         seconds:
-          30
+          15
     - service: homeassistant.turn_off
       entity_id: group.a_lights
     - service: media_player.turn_off
@@ -23,6 +23,8 @@ shutoff:
       entity_id: switch.justins_pc
     - service: lock.lock
       entity_id: lock.front_door
+    - service: switch.turn_off
+      entity_id: switch.led_strip_switch
     - condition: template
       value_template: '{{ bedtime == false }}'
     - service: switch.turn_off

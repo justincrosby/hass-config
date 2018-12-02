@@ -112,12 +112,14 @@ a_automations:
   - automation.sunset
   - automation.update_google_assistant
   - automation.update_led_strip_colour_when_hue_colour_changed
+  - automation.periodically_change_the_led_strip_to_a_random_colour
 a_scripts:
   name: All Scripts
   view: false
   entities:
   - script.be_right_back
   - script.bedtime
+  - script.led_strip_turn_on
   - script.morning
   - script.next_track
   - script.pause_music

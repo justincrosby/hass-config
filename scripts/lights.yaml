@@ -1,0 +1,17 @@
+led_strip_turn_on:
+  alias: Turn on LED Switch and LED Strip
+  sequence:
+    - service: switch.turn_on
+      entity_id: switch.led_strip_switch
+    - wait_template: '{{ not is_state("light.led_strip", "unavailable") }}'
+      timeout: '00:10:00'
+    - service: script.turn_on
+      entity_id: script.led_strip_set_random_colour
+led_strip_set_random_colour:
+  alias: Set the LED Strip to a Random Colour
+  sequence:
+    - service: light.turn_on
+      data_template:
+        entity_id: light.led_strip
+        brightness_pct: 80
+        rgb_color: ['{{ (range(0, 255)|random) }}','{{ (range(0, 255)|random) }}','{{ (range(0, 255)|random) }}']
