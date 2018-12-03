@@ -130,6 +130,17 @@ ringer_on_conditional:
       state: 'on'
     - service: switch.turn_on
       entity_id: switch.phone_ringer_on
+sunset:
+  alias: Sunset
+  sequence:
+    - service: light.turn_on
+      entity_id: light.fairy_lights
+    - service: light.turn_on
+      entity_id: light.living_room_lamp
+    - service: switch.turn_on
+      entity_id: switch.christmas_wreath
+    - service: script.turn_on
+      entity_id: script.led_strip_turn_on
 bedtime:
   alias: Bedtime
   sequence:
@@ -138,6 +149,8 @@ bedtime:
       data:
         variables:
           bedtime: true
+    - service: switch.turn_off
+      entity_id: switch.christmas_wreath
     - service: switch.turn_on
       entity_id: switch.phone_bedtime
     - service: script.turn_on

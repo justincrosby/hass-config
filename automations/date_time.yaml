@@ -13,13 +13,8 @@
         entity_id: binary_sensor.jenni_presence
         state: 'on'
   action:
-    - service: light.turn_on
-      entity_id: light.fairy_lights
-    - service: light.turn_on
-      entity_id: light.living_room_lamp
     - service: script.turn_on
-      entity_id: script.led_strip_turn_on
-
+      entity_id: script.sunset
 - alias: Night No One Home
   trigger:
     platform: time

@@ -30,6 +30,9 @@
   switch.bedroom_air_purifier:
     friendly_name: Bedroom Air Purifier
     icon: mdi:fan
+  switch.christmas_wreath:
+    friendly_name: Christmas Wreath
+    icon: mdi:pine-tree
 # Lights
   light.bedroom:
     friendly_name: Bedroom Lights

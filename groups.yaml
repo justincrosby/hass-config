@@ -77,6 +77,7 @@ a_switches:
   - light.living_room_lamp
   - light.kitchen
   - light.led_strip
+  - switch.christmas_wreath
   - lock.front_door
   - switch.bedroom_air_purifier
   - switch.bedroom_fan
