@@ -87,3 +87,32 @@ wifi_check:
       data:
         variables:
           bedtime: false
+disable_presence:
+  alias: Disable Presence
+  sequence:
+    - service: automation.turn_off
+      entity_id: automation.arrive_home_jenni
+    - service: automation.turn_off
+      entity_id: automation.arrive_home_justin
+    - service: automation.turn_off
+      entity_id: automation.leave_home_jenni
+    - service: automation.turn_off
+      entity_id: automation.leave_home_justin
+enable_presence:
+  alias: Enable Presence
+  sequence:
+    - service: automation.turn_on
+      entity_id: automation.arrive_home_jenni
+    - service: automation.turn_on
+      entity_id: automation.arrive_home_justin
+    - service: automation.turn_on
+      entity_id: automation.leave_home_jenni
+    - service: automation.turn_on
+      entity_id: automation.leave_home_justin
+enable_presence_on_boot:
+  alias: Enable Presence on Boot After Some Time
+  sequence:
+    - delay:
+        minutes: 5
+    - service: script.turn_on
+      entity_id: script.enable_presence

@@ -47,7 +47,7 @@ morning:
     - service: switch.turn_on
       entity_id: switch.justins_pc
     - service: script.turn_on
-      entity_id: script.switch_to_audio
+      entity_id: script.enable_presence
     - condition: or
       conditions:
         - condition: and
@@ -71,6 +71,8 @@ morning:
             - condition: state
               entity_id: input_boolean.weekend_alarm
               state: 'on'
+    - service: script.turn_on
+      entity_id: script.switch_to_audio
     - delay:
         minutes: 5
     - service: script.turn_on
@@ -177,6 +179,8 @@ bedtime:
           {% else %}
             switch.bedroom_fan
           {% endif %}
+    - service: script.turn_on
+      entity_id: script.disable_presence
     - delay:
         minutes: 30
     - service: shell_command.shutdown

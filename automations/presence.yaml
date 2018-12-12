@@ -1,4 +1,5 @@
 - alias: Leave Home Justin
+  initial_state: false
   trigger:
     platform: state
     entity_id: binary_sensor.justin_presence
@@ -9,6 +10,7 @@
     entity_id: script.wifi_check
 
 - alias: Leave Home Jenni
+  initial_state: false
   trigger:
     platform: state
     entity_id: binary_sensor.jenni_presence
@@ -26,6 +28,7 @@
         bedtime: false
 
 - alias: Arrive Home Justin
+  initial_state: false
   trigger:
     platform: state
     entity_id: binary_sensor.justin_presence
@@ -42,6 +45,7 @@
       entity_id: script.arrive_home_justin
 
 - alias: Arrive Home Jenni
+  initial_state: false
   trigger:
     platform: state
     entity_id: binary_sensor.jenni_presence
