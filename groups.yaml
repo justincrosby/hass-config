@@ -114,6 +114,7 @@ a_automations:
   - automation.update_google_assistant
   - automation.update_led_strip_colour_when_hue_colour_changed
   - automation.periodically_change_the_led_strip_to_a_random_colour
+  - automation.its_christmas
 a_scripts:
   name: All Scripts
   view: false

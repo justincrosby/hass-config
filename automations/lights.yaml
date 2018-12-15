@@ -25,3 +25,11 @@
   action:
     service: script.turn_on
     entity_id: script.led_strip_set_random_colour
+- alias: It's Christmas
+  initial_state: false
+  trigger:
+    platform: time
+    seconds: '/2'
+  action:
+    service: script.turn_on
+    entity_id: script.led_strip_christmas

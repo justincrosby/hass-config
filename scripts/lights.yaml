@@ -15,3 +15,30 @@ led_strip_set_random_colour:
         entity_id: light.led_strip
         brightness_pct: 80
         rgb_color: ['{{ (range(0, 255)|random) }}','{{ (range(0, 255)|random) }}','{{ (range(0, 255)|random) }}']
+led_strip_christmas:
+  alias: Alternate LED from red to green
+  sequence:
+    - service: script.turn_on
+      data_template:
+        entity_id: >
+          {% if states.light.led_strip.attributes["rgb_color"][1] == 255 %}
+            script.led_strip_red
+          {% else %}
+            script.led_strip_green
+          {% endif %}
+led_strip_red:
+  alias: Switch to red if the colour is green
+  sequence:
+    - service: light.turn_on
+      data:
+        entity_id: light.led_strip
+        brightness_pct: 80
+        rgb_color: ['255', '0', '0']
+led_strip_green:
+  alias: Switch to green if the colour is red
+  sequence:
+    - service: light.turn_on
+      data:
+        entity_id: light.led_strip
+        brightness_pct: 80
+        rgb_color: ['0', '255', '0']
