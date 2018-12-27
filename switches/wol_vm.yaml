@@ -1,4 +1,0 @@
-platform: wake_on_lan
-mac_address: !secret ubuntu_vm_mac
-name: ubuntu_vm
-host: !secret ubuntu_vm_ip

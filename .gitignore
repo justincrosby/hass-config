@@ -7,6 +7,9 @@ plex.conf
 .HA_VERSION
 .ios.conf
 .uuid
+.storage
+.spotify-token-cache
+.august.conf
 home-assistant.log
 home-assistant_v2.db
 tts/
