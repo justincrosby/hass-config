@@ -33,3 +33,10 @@
   action:
     service: script.turn_on
     entity_id: script.led_strip_christmas
+- alias: Hue Remote Button Press
+  trigger:
+    platform: state
+    entity_id: sensor.hue_remote_last_update
+  action:
+    service: script.turn_on
+    entity_id: script.hue_remote

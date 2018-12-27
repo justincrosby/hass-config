@@ -40,7 +40,7 @@ api:
   api_password: !secret api_password
 
 # Enable python scripts
-python_script:
+# python_script:
 
 updater:
 

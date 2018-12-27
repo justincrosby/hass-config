@@ -42,3 +42,61 @@ led_strip_green:
         entity_id: light.led_strip
         brightness_pct: 80
         rgb_color: ['0', '255', '0']
+hue_remote:
+  alias: Take action based on the last button pressed
+  sequence:
+    - service: script.turn_on
+      data_template:
+        entity_id: >
+          {% if is_state("sensor.kitchen_switch", "1_click_up") %}
+            script.remote_button_1
+          {% elif is_state("sensor.kitchen_switch", "1_hold_up") %}
+            script.remote_button_1_long
+          {% elif is_state("sensor.kitchen_switch", "2_click_up") %}
+          {% elif is_state("sensor.kitchen_switch", "2_hold_up") %}
+          {% elif is_state("sensor.kitchen_switch", "3_click_up") %}
+          {% elif is_state("sensor.kitchen_switch", "3_hold_up") %}
+          {% elif is_state("sensor.kitchen_switch", "4_click_up") %}
+          {% elif is_state("sensor.kitchen_switch", "4_hold_up") %}
+          {% else %}
+          {% endif %}
+remote_button_1:
+  alias: Rmote button 1 pressed
+  sequence:
+    - service_template: >
+        {% if is_state("light.kitchen", "off") %}
+          light.turn_on
+        {% else %}
+          light.turn_off
+        {% endif %}
+      entity_id: light.kitchen
+remote_button_1_long:
+  alias: Rmote button 1 long pressed
+  sequence:
+    - service_template: >
+        {% if is_state("light.kitchen", "off") or is_state("light.living_room_lamp", "off") %}
+          homeassistant.turn_on
+        {% else %}
+          homeassistant.turn_off
+        {% endif %}
+      entity_id: group.living_room_lights
+#remote_button_2:
+#  alias: Rmote button 2 pressed
+#  sequence:
+#emote_button_2_long:
+#  alias: Rmote button 2 long pressed
+#  sequence:
+#remote_button_3:
+#  alias: Rmote button 3 pressed
+#  sequence:
+#remote_button_3_long:
+#  alias: Rmote button 3 long pressed
+#  sequence:
+#remote_button_4:
+#  alias: Rmote button 4 pressed
+#  sequence:
+#remote_button_4_long:
+#  alias: Rmote button 4 long pressed
+#  sequence:
+
+

@@ -143,3 +143,9 @@ dark_sky:
     - sensor.dark_sky_summary
     - sensor.dark_sky_hourly_summary
     - sensor.dark_sky_daytime_high_apparent_temperature
+living_room_lights:
+  name: Living Room Lights
+  view: false
+  entities:
+    - light.kitchen
+    - light.living_room_lamp
