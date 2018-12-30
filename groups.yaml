@@ -7,6 +7,7 @@ default_view:
   - device_tracker.justins_phone
   - device_tracker.jennis_phone
   - group.dark_sky
+  - group.media_input_control
   - sensor.sunset_time
   - sensor.weekday_alarm
   - sensor.weekend_alarm
@@ -149,3 +150,9 @@ living_room_lights:
   entities:
     - light.kitchen
     - light.living_room_lamp
+media_input_control:
+  name: Media Control
+  view: false
+  entities:
+    - input_select.media_select
+    - input_number.media_audio_volume

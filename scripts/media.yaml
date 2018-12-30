@@ -329,3 +329,161 @@ set_audio_levels_0:
       data:
         entity_id: input_number.bathroom_audio_volume
         value: 0
+disable_automatic_input_select:
+  alias: Disables Input Select Automations
+  sequence:
+    - service: automation.turn_off
+      entity_id: automation.casting_started_1
+    - service: automation.turn_off
+      entity_id: automation.casting_started_2
+    - service: automation.turn_off
+      entity_id: automation.music_started_1
+    - service: automation.turn_off
+      entity_id: automation.music_started_2
+    - service: automation.turn_off
+      entity_id: automation.denon_source_changed
+    - service: automation.turn_off
+      entity_id: automation.media_input_select_changed
+    - service: automation.turn_off
+      entity_id: automation.media_volume_slider_moved
+enable_automatic_input_select:
+  alias: Disables Input Select Automations
+  sequence:
+    - service: automation.turn_on
+      entity_id: automation.casting_started_1
+    - service: automation.turn_on
+      entity_id: automation.casting_started_2
+    - service: automation.turn_on
+      entity_id: automation.music_started_1
+    - service: automation.turn_on
+      entity_id: automation.music_started_2
+    - service: automation.turn_on
+      entity_id: automation.denon_source_changed
+    - service: automation.turn_on
+      entity_id: automation.media_input_select_changed
+    - service: automation.turn_on
+      entity_id: automation.media_volume_slider_moved
+media_input_select:
+  alias: Change the home theatre settings depending on the input selection
+  sequence:
+    - service: script.turn_on
+      entity_id: script.disable_automatic_input_select
+    - service: script.turn_on
+      entity_id: script.turn_on_tv_conditional
+    - service: media_player.turn_on
+      entity_id: media_player.denon_avrx1300w
+    - delay:
+        seconds: 1
+    - service: media_player.select_source
+      data_template:
+        entity_id: media_player.denon_avrx1300w
+        source: >
+          {% if is_state('input_select.media_select', 'Cast Audio') %}
+            CastAudio
+          {% elif is_state('input_select.media_select', 'Cast Video') %}
+            TV Audio
+          {% elif is_state('input_select.media_select', 'PS3') %}
+            PS3
+          {% elif is_state('input_select.media_select', 'Record Player') %}
+            RecordPlayer
+          {% elif is_state('input_select.media_select', 'Steam') %}
+            NUC
+          {% elif is_state('input_select.media_select', 'Switch') %}
+            Switch
+          {% elif is_state('input_select.media_select', 'WiiU') %}
+            WiiU
+          {% else %}
+            TV Audio
+          {% endif %}
+    - service: media_player.select_source
+      data_template:
+        entity_id: media_player.vizio_smartcast
+        source: >
+          {% if is_state('input_select.media_select', 'Cast Video') %}
+            CAST
+          {% else %}
+            HDMI-1
+          {% endif %}
+    - service: script.turn_on
+      data_template:
+        entity_id: >
+          {% if is_state('input_select.media_select', 'Cast Audio') %}
+            script.set_default_audio_levels
+          {% else %}
+            script.set_audio_levels_0
+          {% endif %}
+    - service: script.turn_on
+      entity_id: script.update_media_volume_slider
+    - service: script.turn_on
+      entity_id: script.enable_automatic_input_select
+turn_on_tv_conditional:
+  alias: Turn on the TV if it is needed for the current input setting
+  sequence:
+    - condition: template
+      value_template: >
+        {% if is_state('input_select.media_select', 'Cast Audio')  %}
+          false
+        {% else %}
+          true
+        {% endif %}
+    - service: media_player.turn_on
+      entity_id: media_player.vizio_smartcast
+media_volume_changed:
+  alias: Change the home theatre settings depending on the slider selection
+  sequence:
+    - service: script.turn_on
+      entity_id: script.disable_automatic_input_select
+    - service: media_player.volume_set
+      data_template:
+        entity_id: >
+          {% if is_state('input_select.media_select', 'Cast Audio') %}
+            media_player.home_audio
+          {% else %}
+            media_player.denon_avrx1300w
+          {% endif %}
+        volume_level: >
+          {% if is_state('input_select.media_select', 'Cast Audio') %}
+            {{ states("input_number.media_audio_volume")|float / 100 }}
+          {% else %}
+            {{ states("input_number.media_audio_volume")|float / 100 * 0.7 }}
+          {% endif %}
+    - service: script.turn_on
+      entity_id: script.enable_automatic_input_select
+update_media_select_source:
+  alias: When the receiver source is changed manually, update the input select
+  sequence:
+    - service: input_select.select_option
+      data_template:
+        entity_id: input_select.media_select
+        option: >
+          {% if is_state('sensor.denon_source', 'CastAudio') %}
+            Cast Audio
+          {% elif is_state('sensor.denon_source', 'TV Audio') %}
+            Cast Video
+          {% elif is_state('sensor.denon_source', 'PS3') %}
+            PS3
+          {% elif is_state('sensor.denon_source', 'RecordPlayer') %}
+            Record Player
+          {% elif is_state('sensor.denon_source', 'NUC') %}
+            Steam
+          {% elif is_state('sensor.denon_source', 'Switch') %}
+            Switch
+          {% elif is_state('sensor.denon_source', 'WiiU') %}
+            WiiU
+          {% else %}
+            Cast Audio
+          {% endif %}
+    - service: script.turn_on
+      entity_id: script.update_media_volume_slider
+update_media_volume_slider:
+  alias: When the volume is changed manually, update the media volume
+  sequence:
+    - service: input_number.set_value
+      data_template:
+        entity_id: input_number.media_audio_volume
+        value: >
+          {% if is_state('input_select.media_select', 'Cast Audio') %}
+            {{ states.media_player.home_audio.attributes.volume_level * 100 }}
+          {% else %}
+            {{ states.media_player.denon_avrx1300w.attributes.volume_level / 0.7 * 100 }}
+          {% endif %}

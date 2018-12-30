@@ -1,0 +1,12 @@
+media_select:
+  name: Media Select
+  icon: mdi:television
+  options:
+    - Cast Audio
+    - Cast Video
+    - PS3
+    - Record Player
+    - Steam
+    - Switch
+    - WiiU
+  initial: Cast Audio

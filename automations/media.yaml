@@ -2,7 +2,7 @@
   trigger:
     platform: state
     entity_id: sensor.denon_source
-    to: 'AUX1'
+    to: 'CastAudio'
   action:
     - service: script.turn_on
       entity_id: script.switch_to_audio
@@ -33,6 +33,14 @@
   action:
     - service: script.turn_on
       entity_id: script.switch_to_chromecast
+
+- alias: Denon Source Changed
+  trigger:
+    platform: state
+    entity_id: sensor.denon_source
+  action:
+    - service: script.turn_on
+      entity_id: script.update_media_select_source
 
 - alias: Cast music when playing from MPD
   trigger:
@@ -102,3 +110,19 @@
     data_template:
       entity_id: media_player.bathroom_speaker
       volume_level: '{{ states("input_number.bathroom_audio_volume")|float }}'
+
+- alias: Media Input Select Changed
+  trigger:
+    platform: state
+    entity_id: input_select.media_select
+  action:
+    service: script.turn_on
+    entity_id: script.media_input_select
+
+- alias: Media Volume Slider Moved
+  trigger:
+    platform: state
+    entity_id: input_number.media_audio_volume
+  action:
+    service: script.turn_on
+    entity_id: script.media_volume_changed
