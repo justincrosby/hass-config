@@ -99,7 +99,6 @@ wemo:
   static:
     - !secret wemo_fairy_lights_switch_ip
     - !secret wemo_fish_light_switch_ip
-    - !secret wemo_bedroom_light_switch_ip
 
 hue:
   bridges:
