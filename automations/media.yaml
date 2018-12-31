@@ -1,7 +1,7 @@
 - alias: Music Started 1
   trigger:
     platform: state
-    entity_id: sensor.denon_source
+    entity_id: sensor.media_source
     to: 'CastAudio'
   action:
     - service: script.turn_on
@@ -33,14 +33,6 @@
   action:
     - service: script.turn_on
       entity_id: script.switch_to_chromecast
-
-- alias: Denon Source Changed
-  trigger:
-    platform: state
-    entity_id: sensor.denon_source
-  action:
-    - service: script.turn_on
-      entity_id: script.update_media_select_source
 
 - alias: Cast music when playing from MPD
   trigger:
@@ -126,3 +118,19 @@
   action:
     service: script.turn_on
     entity_id: script.media_volume_changed
+
+- alias: Media Source Changed
+  trigger:
+    platform: state
+    entity_id: sensor.media_source
+  action:
+    - service: script.turn_on
+      entity_id: script.update_media_select_source
+
+- alias: Media Volume Changed
+  trigger:
+    platform: state
+    entity_id: sensor.media_volume
+  action:
+    - service: script.turn_on
+      entity_id: script.update_media_volume_slider

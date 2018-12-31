@@ -1,8 +1,8 @@
 platform: template
 sensors:
-  denon_source:
+  media_source:
     value_template: '{{ states.media_player.denon_avrx1300w.attributes["source"] }}'
-    friendly_name: 'Denon Source'
+    friendly_name: 'Media Source'
   home_audio_app:
     value_template: '{{ states.media_player.home_audio.attributes["app_name"] }}'
     friendly_name: 'Home Audio App'

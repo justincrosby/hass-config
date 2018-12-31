@@ -1,0 +1,10 @@
+platform: template
+sensors:
+  media_volume:
+    value_template: >
+      {% if is_state('sensor.media_source', 'CastAudio') %}
+        {{ states.media_player.home_audio.attributes.volume_level * 100 }}
+      {% else %}
+        {{ states.media_player.denon_avrx1300w.attributes.volume_level / 0.7 * 100 }}
+      {% endif %}
+    friendly_name: 'Media Volume'
