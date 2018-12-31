@@ -6,8 +6,10 @@
     from: 'on'
     to: 'off'
   action:
-    service: script.turn_on
-    entity_id: script.wifi_check
+    - service: script.turn_on
+      entity_id: script.leave_home_justin
+    - service: script.turn_on
+      entity_id: script.leave_home
 
 - alias: Leave Home Jenni
   initial_state: false
@@ -16,16 +18,9 @@
     entity_id: binary_sensor.jenni_presence
     from: 'on'
     to: 'off'
-  condition:
-    condition: state
-    entity_id: binary_sensor.justin_presence
-    state: 'off'
   action:
     service: script.turn_on
-    entity_id: script.shutoff
-    data:
-      variables:
-        bedtime: false
+    entity_id: script.leave_home
 
 - alias: Arrive Home Justin
   initial_state: false
@@ -34,15 +29,11 @@
     entity_id: binary_sensor.justin_presence
     from: 'off'
     to: 'on'
-  condition:
-    condition: state
-    entity_id: binary_sensor.jenni_presence
-    state: 'off'
   action:
     - service: script.turn_on
-      entity_id: script.arrive_home
-    - service: script.turn_on
       entity_id: script.arrive_home_justin
+    - service: script.turn_on
+      entity_id: script.arrive_home
 
 - alias: Arrive Home Jenni
   initial_state: false
@@ -51,10 +42,6 @@
     entity_id: binary_sensor.jenni_presence
     from: 'off'
     to: 'on'
-  condition:
-    condition: state
-    entity_id: binary_sensor.justin_presence
-    state: 'off'
   action:
     service: script.turn_on
     entity_id: script.arrive_home

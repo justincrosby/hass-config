@@ -2,6 +2,7 @@ platform: bayesian
 prior: 0.5
 name: Jenni Presence
 probability_threshold: 0.9
+device_class: presence
 observations:
   - entity_id: sensor.jenni_home_binary
     prob_given_true: 0.9

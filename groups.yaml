@@ -4,8 +4,8 @@ default_view:
   entities:
   - group.a_switches
   - group.all_media_players
-  - device_tracker.justins_phone
-  - device_tracker.jennis_phone
+  - binary_sensor.justin_presence
+  - binary_sensor.jenni_presence
   - group.dark_sky
   - group.media_input_control
   - sensor.sunset_time
@@ -106,6 +106,8 @@ a_automations:
   - automation.casting_started_2
   - automation.leave_home_jenni
   - automation.leave_home_justin
+  - automation.media_input_select_changed
+  - automation.media_volume_slider_moved
   - automation.music_started_1
   - automation.music_started_2
   - automation.night_no_one_home
