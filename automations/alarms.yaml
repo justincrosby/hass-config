@@ -1,46 +1,8 @@
-- alias: Alarm Weekday
+- alias: Alarm
   trigger:
-    platform: time
-    minutes: '/5'
-    seconds: 00
-  condition:
-    condition: and
-    conditions:
-      - condition: time
-        weekday:
-          - mon
-          - tue
-          - wed
-          - thu
-          - fri
-      - condition: template
-        value_template: >-
-          {% set now_minutes = now().strftime("%H")|int * 60 + now().strftime("%M")|int %}
-          {% set alarm_minutes = states.input_number.weekday_hours.state|int * 60 + states.input_number.weekday_minutes.state|int %}
-          {{now_minutes > (alarm_minutes - 10) and now_minutes <= (alarm_minutes - 5)}}
+    platform: state
+    entity_id: sensor.alarm_time
+    to: 'on'
   action:
     - service: script.turn_on
       entity_id: script.morning
-
-- alias: Alarm Weekend
-  trigger:
-    platform: time
-    minutes: '/5'
-    seconds: 00
-  condition:
-    condition: and
-    conditions:
-      - condition: time
-        weekday:
-          - sat
-          - sun
-      - condition: template
-        value_template: >-
-          {% set now_minutes = now().strftime("%H")|int * 60 + now().strftime("%M")|int %}
-          {% set alarm_minutes = states.input_number.weekend_hours.state|int * 60 + states.input_number.weekend_minutes.state|int %}
-          {{now_minutes > (alarm_minutes - 10) and now_minutes <= (alarm_minutes - 5)}}
-  action:
-    - service: script.turn_on
-      entity_id: script.morning
-    - service: switch.turn_on
-      entity_id: switch.phone_ringer_on

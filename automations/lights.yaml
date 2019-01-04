@@ -40,3 +40,11 @@
   action:
     service: script.turn_on
     entity_id: script.hue_remote
+- alias: Ensure all bedroom lights turn on
+  trigger:
+    platform: state
+    entity_id: light.hue_white_lamp_1
+    to: 'on'
+  action:
+    service: light.turn_on
+    entity_id: light.hue_white_lamp_2

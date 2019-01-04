@@ -1,0 +1,10 @@
+platform: template
+sensors:
+  alarm_time:
+    value_template: >
+      {% if states("binary_sensor.workday_sensor") %}
+        {{ (now().strftime("%H")|int == states("input_number.workday_hours")|int) and (now().strftime("%M")|int == states("input_number.workday_minutes")|int) and states("input_boolean.workday_alarm") }}
+      {% else %}
+        {{ (now().strftime("%H")|int == states("input_number.weekend_hours")|int) and (now().strftime("%M")|int == states("input_number.weekend_minutes")|int) and states("input_boolean.weekend_alarm") }}
+      {% endif %}
+    friendly_name: Alarm Time

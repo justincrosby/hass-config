@@ -1,5 +1,5 @@
-weekday_alarm:
-  name: Weekday Alarm
+workday_alarm:
+  name: Workday Alarm
   icon: mdi:alarm
 weekend_alarm:
   name: Weekend Alarm

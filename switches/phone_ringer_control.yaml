@@ -9,6 +9,3 @@ switches:
   phone_ringer_off:
     friendly_name: Phone Ringer Off
     command_on: !secret command_phone_ringer_off
-  phone_wifi_check:
-    friendly_name: Phone Wifi Check
-    command_on: !secret command_phone_wifi_check

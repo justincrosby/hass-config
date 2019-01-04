@@ -9,7 +9,7 @@ default_view:
   - group.dark_sky
   - group.media_input_control
   - sensor.sunset_time
-  - sensor.weekday_alarm
+  - sensor.workday_alarm
   - sensor.weekend_alarm
   - sensor.fish_fed
   - sensor.plants_watered
@@ -19,9 +19,9 @@ alarms:
   view: true
   icon: mdi:alarm
   entities:
-  - sensor.weekday_alarm
+  - sensor.workday_alarm
   - sensor.weekend_alarm
-  - group.weekday_alarm
+  - group.workday_alarm
   - group.weekend_alarm
 automations:
   name: Automations
@@ -43,13 +43,13 @@ media_control:
   - media_player.bathroom_speaker
   - media_player.living_room_audio
   - media_player.living_room_speaker
-weekday_alarm:
+workday_alarm:
   view: false
-  name: Weekday Alarm
+  name: Workday Alarm
   entities:
-  - input_boolean.weekday_alarm
-  - input_number.weekday_hours
-  - input_number.weekday_minutes
+  - input_boolean.workday_alarm
+  - input_number.workday_hours
+  - input_number.workday_minutes
 weekend_alarm:
   view: false
   name: Weekend Alarm
@@ -82,7 +82,7 @@ a_switches:
   - lock.front_door
   - switch.bedroom_air_purifier
   - switch.bedroom_fan
-  - input_boolean.weekday_alarm
+  - input_boolean.workday_alarm
   - input_boolean.weekend_alarm
   - input_boolean.fish_fed_tracker
   - input_boolean.plants_watered_tracker

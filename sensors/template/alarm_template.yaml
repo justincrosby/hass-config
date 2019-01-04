@@ -1,15 +1,15 @@
 platform: template
 sensors:
-  weekday_alarm:
-    friendly_name: Weekday Alarm
+  workday_alarm:
+    friendly_name: Workday Alarm
     entity_id:
-      - input_number.weekday_hours
-      - input_number.weekday_minutes
+      - input_number.workday_hours
+      - input_number.workday_minutes
     value_template: >-
-      {%- if states.input_number.weekday_minutes.state|int < 10 -%}
-        {{ states.input_number.weekday_hours.state|int ~ ":0" ~ states.input_number.weekday_minutes.state|int}}
+      {%- if states.input_number.workday_minutes.state|int < 10 -%}
+        {{ states.input_number.workday_hours.state|int ~ ":0" ~ states.input_number.workday_minutes.state|int}}
       {%- else -%}
-        {{ states.input_number.weekday_hours.state|int ~ ":" ~ states.input_number.weekday_minutes.state|int}}
+        {{ states.input_number.workday_hours.state|int ~ ":" ~ states.input_number.workday_minutes.state|int}}
       {%- endif -%}
   weekend_alarm:
     friendly_name: Weekend Alarm

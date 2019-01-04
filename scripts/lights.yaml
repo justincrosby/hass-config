@@ -53,6 +53,7 @@ hue_remote:
           {% elif is_state("sensor.kitchen_switch", "1_hold_up") %}
             script.remote_button_1_long
           {% elif is_state("sensor.kitchen_switch", "2_click_up") %}
+            script.remote_button_2
           {% elif is_state("sensor.kitchen_switch", "2_hold_up") %}
           {% elif is_state("sensor.kitchen_switch", "3_click_up") %}
           {% elif is_state("sensor.kitchen_switch", "3_hold_up") %}
@@ -80,9 +81,16 @@ remote_button_1_long:
           homeassistant.turn_off
         {% endif %}
       entity_id: group.living_room_lights
-#remote_button_2:
-#  alias: Rmote button 2 pressed
-#  sequence:
+remote_button_2:
+  alias: Rmote button 2 pressed
+  sequence:
+    - service_template: >
+        {% if is_state("light.bedroom", "off") %}
+          light.turn_on
+        {% else %}
+          light.turn_off
+        {% endif %}
+      entity_id: light.bedroom
 #emote_button_2_long:
 #  alias: Rmote button 2 long pressed
 #  sequence:

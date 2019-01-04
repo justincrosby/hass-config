@@ -1,11 +1,11 @@
-weekday_hours:
-  name: Weekday Hours
+workday_hours:
+  name: Workday Hours
   icon: mdi:clock
   min: 0
   max: 23
   step: 1
-weekday_minutes:
-  name: Weekday Minutes
+workday_minutes:
+  name: Workday Minutes
   icon: mdi:clock
   min: 0
   max: 55

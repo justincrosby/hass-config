@@ -56,29 +56,6 @@ morning:
           state: 'on'
     - service: switch.turn_on
       entity_id: switch.justins_pc
-    - condition: or
-      conditions:
-        - condition: and
-          conditions:
-            - condition: time
-              weekday:
-                - mon
-                - tue
-                - wed
-                - thu
-                - fri
-            - condition: state
-              entity_id: input_boolean.weekday_alarm
-              state: 'on'
-        - condition: and
-          conditions:
-            - condition: time
-              weekday:
-                - sat
-                - sun
-            - condition: state
-              entity_id: input_boolean.weekend_alarm
-              state: 'on'
     - service: script.turn_on
       entity_id: script.switch_to_audio
     - delay:
