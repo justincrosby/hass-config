@@ -67,6 +67,11 @@ binary_sensor: !include_dir_list binary_sensors/
 tts:
   platform: google
 
+# Calendar
+google:
+  client_id: !secret google_client_id
+  client_secret: !secret google_client_secret
+
 # Enable iOS app
 ios:
   push:
