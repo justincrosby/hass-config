@@ -54,8 +54,6 @@ morning:
         - condition: state
           entity_id: binary_sensor.jenni_presence
           state: 'on'
-    - service: switch.turn_on
-      entity_id: switch.justins_pc
     - service: script.turn_on
       entity_id: script.switch_to_audio
     - delay:

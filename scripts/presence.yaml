@@ -6,8 +6,8 @@ arrive_home:
       state: 'off'
     - service: lock.unlock
       entity_id: lock.front_door
-    - service: switch.turn_on
-      entity_id: switch.justins_pc
+    - service: script.turn_on
+      entity_id: script.turn_on_pc_conditional
     - service: switch.turn_on
       entity_id: switch.led_strip_switch
     - service: script.turn_on
@@ -36,6 +36,13 @@ arrive_home:
       after_offset: "+00:20:00"
     - service: script.turn_on
       entity_id: script.sunset
+turn_on_pc_conditional:
+  alias: Turn On the PC In the Evening
+  sequence:
+    - condition: time
+      after: "17:00:00"
+    - service: switch.turn_on
+      entity_id: switch.justins_pc
 arrive_home_justin:
   alias: Arrive Home Justin
   sequence:
