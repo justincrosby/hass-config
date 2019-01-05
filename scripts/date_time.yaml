@@ -46,14 +46,9 @@ morning:
       entity_id: script.ringer_on_conditional
     - service: script.turn_on
       entity_id: script.enable_presence
-    - condition: or
-      conditions:
-        - condition: state
-          entity_id: binary_sensor.justin_presence
-          state: 'on'
-        - condition: state
-          entity_id: binary_sensor.jenni_presence
-          state: 'on'
+    - condition: state
+      entity_id: binary_sensor.alarm_full
+      state: 'on'
     - service: script.turn_on
       entity_id: script.switch_to_audio
     - delay:
@@ -101,8 +96,6 @@ morning:
       data:
         entity_id: light.bedroom
         brightness_pct: 100
-    - service: switch.turn_on
-      entity_id: switch.phone_ringer_on
     - service: lock.unlock
       entity_id: lock.front_door
     - service: light.turn_on

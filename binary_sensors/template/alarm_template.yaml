@@ -2,9 +2,17 @@ platform: template
 sensors:
   alarm_time:
     value_template: >
-      {% if states("binary_sensor.workday_sensor") %}
-        {{ (now().strftime("%H")|int == states("input_number.workday_hours")|int) and (now().strftime("%M")|int == states("input_number.workday_minutes")|int) and states("input_boolean.workday_alarm") and is_state("binary_sensor.vacation_time", "off") }}
+      {% if is_state("binary_sensor.workday_sensor", "on") %}
+        {{ (now().strftime("%H")|int == states("input_number.workday_hours")|int) and (now().strftime("%M")|int >= states("input_number.workday_minutes")|int) and (now().strftime("%M")|int < states("input_number.workday_minutes")|int + 5) }}
       {% else %}
-        {{ (now().strftime("%H")|int == states("input_number.weekend_hours")|int) and (now().strftime("%M")|int == states("input_number.weekend_minutes")|int) and states("input_boolean.weekend_alarm") and is_state("binary_sensor.vacation_time", "off") }}
+        {{ (now().strftime("%H")|int == states("input_number.weekend_hours")|int) and (now().strftime("%M")|int >= states("input_number.weekend_minutes")|int) and (now().strftime("%M")|int < states("input_number.weekend_minutes")|int + 5) }}
       {% endif %}
     friendly_name: Alarm Time
+  alarm_full:
+    value_template: >
+      {% if is_state("binary_sensor.workday_sensor", "on") %}
+        {{ is_state("input_boolean.workday_alarm", "on") and is_state("binary_sensor.vacation_time", "off") and is_state("binary_sensor.presence_anyone_home", "on") }}
+      {% else %}
+        {{ is_state("input_boolean.weekend_alarm", "on") and is_state("binary_sensor.vacation_time", "off") and is_state("binary_sensor.presence_anyone_home", "on") }}
+      {% endif %}
+    friendly_name: Execute Full Alarm
