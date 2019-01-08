@@ -1,6 +1,6 @@
 platform: bayesian
 prior: 0.5
-name: Jenni Presence
+name: Jenni
 probability_threshold: 0.9
 device_class: presence
 observations:

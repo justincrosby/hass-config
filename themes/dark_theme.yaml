@@ -11,6 +11,18 @@ dark_theme:
   divider-color: "rgba(255, 255, 255, 0.12)" # Divider colour
   paper-card-header-color: "#FFFFFF" # Card header text colour
 
+  # States #
+  state-icon-active-color: "#CCF2FF"
+
+  # Badges #
+  label-badge-background-color: "#303030"
+  label-badge-text-color: "#FFFFFF"
+  label-badge-red: "#1ABA92"
+  label-badge-blue: "#1ABA92"
+  label-badge-green: "#1ABA92"
+  label-badge-yellow: "#1ABA92"
+  label-badge-grey: "#1ABA92"
+
   # Nav Menu #
   paper-listbox-background-color: "#424242" # Listbox background colour
   paper-listbox-color: "#FFFFFF" # Listbox text colour

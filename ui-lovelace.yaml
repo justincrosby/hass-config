@@ -4,7 +4,14 @@ views:
   - path: default_view
     title: Home
     icon: 'mdi:home'
-    badges: []
+    badges:
+      - binary_sensor.justin_presence
+      - binary_sensor.jenni_presence
+      - sensor.sunset_time
+      - sensor.workday_alarm
+      - sensor.weekend_alarm
+      - sensor.fish_fed
+      - sensor.plants_watered
     cards:
       - type: glance
         entities:
@@ -39,14 +46,6 @@ views:
               - input_number.media_audio_volume
           - type: conditional
             conditions:
-              - entity: media_player.home_audio
-                state: 'playing'
-            card:
-              type: entities
-              entities:
-                - sensor.album_art
-          - type: conditional
-            conditions:
               - entity: media_player.vizio_smartcast
                 state: 'on'
             card:
@@ -69,14 +68,24 @@ views:
               type: entities
               entities:
                 - media_player.bedroom_tv
-          - type: conditional
-            conditions:
-              - entity: media_player.mpd
-                state: 'playing'
-            card:
-              type: entities
-              entities:
-                - media_player.mpd
+          - type: vertical-stack
+            cards:
+              - type: conditional
+                conditions:
+                  - entity: media_player.home_audio
+                    state: 'playing'
+                card:
+                  type: entities
+                  entities:
+                    - sensor.album_art
+              - type: conditional
+                conditions:
+                  - entity: media_player.mpd
+                    state: 'playing'
+                card:
+                  type: entities
+                  entities:
+                    - media_player.mpd
           - type: conditional
             conditions:
               - entity: media_player.home_audio
@@ -101,3 +110,83 @@ views:
                 entity: light.bedroom
               - type: light
                 entity: light.led_strip
+  - path: alarms
+    title: Alarms
+    icon: mdi:alarm
+    badges:
+      - sensor.workday_alarm
+      - sensor.weekend_alarm
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: entities
+            entities:
+              - input_boolean.workday_alarm
+              - input_number.workday_hours
+              - input_number.workday_minutes
+          - type: entities
+            entities:
+              - input_boolean.weekend_alarm
+              - input_number.weekend_hours
+              - input_number.weekend_minutes
+  - path: automations
+    title: Automations
+    icon: mdi:code-braces
+    cards:
+      - type: entities
+        entities:
+          - automation.arrive_home_jenni
+          - automation.arrive_home_justin
+          - automation.cast_music_when_playing_from_mpd
+          - automation.casting_started_1
+          - automation.casting_started_2
+          - automation.leave_home_jenni
+          - automation.leave_home_justin
+          - automation.media_input_select_changed
+          - automation.media_volume_slider_moved
+          - automation.music_started_1
+          - automation.music_started_2
+          - automation.night_no_one_home
+          - automation.restart_stream
+          - automation.stop_mpd_when_other_device_casting
+          - automation.sunset
+          #- automation.update_google_assistant
+          - automation.update_led_strip_colour_when_hue_colour_changed
+          - automation.periodically_change_the_led_strip_to_a_random_colour
+          - automation.its_christmas
+      - type: entities
+        entities:
+          - script.be_right_back
+          - script.bedtime
+          - script.led_strip_turn_on
+          - script.morning
+          - script.next_track
+          - script.pause_music
+          - script.play_all_music
+          - script.play_chill_music
+          - script.play_music
+          - script.restart_mopidy_stream
+          - script.shutoff
+          - script.switch_to_audio
+          - script.switch_to_chromecast
+          - script.volume_down
+          - script.volume_up
+  - path: media
+    title: Media Control
+    icon: mdi:music
+    cards:
+      - type: entities
+        entities:
+          - input_number.living_room_audio_volume
+          - input_number.bedroom_audio_volume
+          - input_number.bathroom_audio_volume
+      - type: media-control
+        entity: media_player.bedroom_audio
+      - type: media-control
+        entity: media_player.bedroom_speaker
+      - type: media-control
+        entity: media_player.bathroom_speaker
+      - type: media-control
+        entity: media_player.living_room_audio
+      - type: media-control
+        entity: media_player.living_room_speaker
