@@ -1,0 +1,103 @@
+title: Home
+
+views:
+  - path: default_view
+    title: Home
+    icon: 'mdi:home'
+    badges: []
+    cards:
+      - type: glance
+        entities:
+          - entity: light.fairy_lights
+            tap_action: toggle
+          - entity: light.fish_light
+            tap_action: toggle
+          - entity: light.betta_light
+            tap_action: toggle
+          - entity: switch.justins_pc
+            tap_action: toggle
+          - entity: switch.christmas_wreath
+            name: Wreath
+            tap_action: toggle
+          - entity: lock.front_door
+            tap_action: toggle
+          - entity: switch.bedroom_air_purifier
+            name: Air Purifier
+            tap_action: toggle
+          - entity: switch.bedroom_fan
+            name: Fan
+            tap_action: toggle
+          - entity: media_player.vizio_smartcast
+            tap_action: toggle
+          - entity: media_player.denon_avrx1300w
+            tap_action: toggle
+      - type: vertical-stack
+        cards:
+          - type: entities
+            entities:
+              - input_select.media_select
+              - input_number.media_audio_volume
+          - type: conditional
+            conditions:
+              - entity: media_player.home_audio
+                state: 'playing'
+            card:
+              type: entities
+              entities:
+                - sensor.album_art
+          - type: conditional
+            conditions:
+              - entity: media_player.vizio_smartcast
+                state: 'on'
+            card:
+              type: media-control
+              entities:
+                - media_player.vizio_smartcast
+          - type: conditional
+            conditions:
+              - entity: media_player.vizio_smartcast
+                state: 'playing'
+            card:
+              type: media-control
+              entities:
+                - media_player.vizio_smartcast
+          - type: conditional
+            conditions:
+              - entity: media_player.bedroom_tv
+                state: 'playing'
+            card:
+              type: entities
+              entities:
+                - media_player.bedroom_tv
+          - type: conditional
+            conditions:
+              - entity: media_player.mpd
+                state: 'playing'
+            card:
+              type: entities
+              entities:
+                - media_player.mpd
+          - type: conditional
+            conditions:
+              - entity: media_player.home_audio
+                state: 'playing'
+            card:
+              type: entities
+              entities:
+                - media_player.home_audio
+      - type: weather-forecast
+        entity: weather.dark_sky
+      - type: vertical-stack
+        cards:
+          - type: horizontal-stack
+            cards:
+              - type: light
+                entity: light.kitchen
+              - type: light
+                entity: light.living_room_lamp
+          - type: horizontal-stack
+            cards:
+              - type: light
+                entity: light.bedroom
+              - type: light
+                entity: light.led_strip

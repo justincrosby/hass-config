@@ -134,3 +134,10 @@
   action:
     - service: script.turn_on
       entity_id: script.update_media_volume_slider
+
+- alias: Media Track Changed
+  trigger:
+    platform: state
+    entity_id: sensor.media_track
+  action:
+    - service: shell_command.update_album_art

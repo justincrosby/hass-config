@@ -1,0 +1,6 @@
+platform: template
+sensors:
+  album_art:
+    friendly_name: Currently Playing
+    value_template: '{{ states.media_player.mpd.attributes["media_artist"] ~ " - " ~  states.media_player.mpd.attributes["media_title"] }}'
+    entity_picture_template: '{{ states("sensor.mopidy_album_art_url") }}'

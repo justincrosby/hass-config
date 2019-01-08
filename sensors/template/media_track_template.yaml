@@ -1,0 +1,5 @@
+platform: template
+sensors:
+  media_track:
+    friendly_name: Media Track
+    value_template: '{{ states.media_player.mpd.attributes["media_title"] }}'

@@ -4,10 +4,6 @@
   media_player.plex_web_chrome_2:
     hidden: true
 
-## Prevent these things from hiding ##
-  media_player.home_audio:
-    hidden: false
-
 ## Rename some stuff ##
 # Sensors
   sensor.dark_sky_apparent_temperature:
@@ -36,5 +32,23 @@
 # Lights
   light.bedroom:
     friendly_name: Bedroom Lights
+    icon: mdi:hotel
   light.kitchen:
     friendly_name: Kitchen Lights
+    icon: mdi:fridge-outline
+  light.living_room_lamp:
+    icon: mdi:floor-lamp
+  light.led_strip:
+    icon: mdi:led-strip
+# Media
+  media_player.denon_avrx1300w:
+    friendly_name: Denon AVR
+    icon: mdi:audio-video
+  media_player.vizio_smartcast:
+    friendly_name: Vizio
+    icon: mdi:television
+  media_player.mpd:
+    icon: mdi:music
+  media_player.home_audio:
+    hidden: false
+    icon: mdi:music
