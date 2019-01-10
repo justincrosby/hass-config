@@ -1,8 +1,9 @@
 platform: template
 lights:
   fish_light:
-    friendly_name: "Fish Light"
-    value_template: "{{ states.switch.fish_light_switch['state'] == 'on' }}"
+    friendly_name: Fish Light
+    icon_template: mdi:fish
+    value_template: '{{ is_state("switch.fish_light_switch", "on") }}'
     turn_on:
       service: switch.turn_on
       entity_id: switch.fish_light_switch
@@ -10,8 +11,8 @@ lights:
       service: switch.turn_off
       entity_id: switch.fish_light_switch
   fairy_lights:
-    friendly_name: "Fairy Lights"
-    value_template: "{{ states.switch.fairy_lights_switch['state'] == 'on' }}"
+    friendly_name: Fairy Lights
+    value_template: '{{ is_state("switch.fairy_lights_switch", "on") }}'
     turn_on:
       service: switch.turn_on
       entity_id: switch.fairy_lights_switch

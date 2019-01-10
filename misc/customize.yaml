@@ -36,8 +36,6 @@
   light.kitchen:
     friendly_name: Kitchen Lights
     icon: mdi:fridge-outline
-  light.living_room_lamp:
-    icon: mdi:floor-lamp
   light.led_strip:
     icon: mdi:led-strip
 # Media

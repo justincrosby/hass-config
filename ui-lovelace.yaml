@@ -10,34 +10,56 @@ views:
       - sensor.sunset_time
       - sensor.workday_alarm
       - sensor.weekend_alarm
-      - sensor.fish_fed
-      - sensor.plants_watered
     cards:
       - type: glance
         entities:
           - entity: light.fairy_lights
-            tap_action: toggle
+            tap_action:
+              action: toggle
           - entity: light.fish_light
-            tap_action: toggle
+            tap_action:
+              action: toggle
           - entity: light.betta_light
-            tap_action: toggle
+            tap_action:
+              action: toggle
           - entity: switch.justins_pc
-            tap_action: toggle
+            tap_action:
+              action: toggle
           - entity: switch.christmas_wreath
             name: Wreath
-            tap_action: toggle
+            tap_action:
+              action: toggle
           - entity: lock.front_door
-            tap_action: toggle
+            tap_action:
+              action: toggle
           - entity: switch.bedroom_air_purifier
             name: Air Purifier
-            tap_action: toggle
+            tap_action:
+              action: toggle
           - entity: switch.bedroom_fan
             name: Fan
-            tap_action: toggle
+            tap_action:
+              action: toggle
           - entity: media_player.vizio_smartcast
-            tap_action: toggle
+            tap_action:
+              action: toggle
           - entity: media_player.denon_avrx1300w
-            tap_action: toggle
+            tap_action:
+              action: toggle
+      - type: glance
+        entities:
+          - entity: sensor.fish_fed
+            tap_action:
+              action: call-service
+              service: input_boolean.toggle
+              service_data:
+                entity_id: input_boolean.fish_fed_tracker
+          - entity: sensor.plants_watered
+            tap_action:
+              action: call-service
+              service: input_boolean.toggle
+              service_data:
+                entity_id: input_boolean.plants_watered_tracker
       ## Media Control ##
       - type: vertical-stack
         cards:
