@@ -1,7 +1,7 @@
 - alias: Alarm
   trigger:
     platform: state
-    entity_id: sensor.alarm_time
+    entity_id: binary_sensor.alarm_time
     to: 'on'
   action:
     - service: script.turn_on
