@@ -63,7 +63,7 @@ all_media_players:
   entities:
   - media_player.vizio_smartcast
   - media_player.bedroom_tv
-  - media_player.denon_avrx1300w
+  - media_player.denon_avr_x1300w
   - media_player.home_audio
   - media_player.mpd
 a_switches:

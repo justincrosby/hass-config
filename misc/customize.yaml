@@ -43,7 +43,7 @@
   light.led_strip:
     icon: mdi:led-strip
 # Media
-  media_player.denon_avrx1300w:
+  media_player.denon_avr_x1300w:
     friendly_name: Denon AVR
     icon: mdi:audio-video
   media_player.vizio_smartcast:

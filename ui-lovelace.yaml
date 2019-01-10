@@ -43,7 +43,7 @@ views:
           - entity: media_player.vizio_smartcast
             tap_action:
               action: toggle
-          - entity: media_player.denon_avrx1300w
+          - entity: media_player.denon_avr_x1300w
             tap_action:
               action: toggle
       - type: glance

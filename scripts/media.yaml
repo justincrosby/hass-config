@@ -15,18 +15,18 @@ switch_to_chromecast:
     - service: media_player.turn_on
       entity_id: media_player.vizio_smartcast
     - service: media_player.turn_on
-      entity_id: media_player.denon_avrx1300w
-    - wait_template: '{{ is_state("media_player.denon_avrx1300w", "on") }}'
+      entity_id: media_player.denon_avr_x1300w
+    - wait_template: '{{ is_state("media_player.denon_avr_x1300w", "on") }}'
       timeout: '00:1:00'
     - service: media_player.select_source
       data:
-        entity_id: media_player.denon_avrx1300w
+        entity_id: media_player.denon_avr_x1300w
         source: 'TV Audio'
     - delay:
         seconds: 1
     - service: media_player.volume_set
       data:
-        entity_id: media_player.denon_avrx1300w
+        entity_id: media_player.denon_avr_x1300w
         volume_level: !secret default_receiver_cast_volume
 switch_to_audio:
   alias: Switch to Audio
@@ -41,8 +41,8 @@ switch_to_audio:
     - service: media_player.turn_off
       entity_id: media_player.vizio_smartcast
     - service: media_player.turn_on
-      entity_id: media_player.denon_avrx1300w
-    - wait_template: '{{ is_state("media_player.denon_avrx1300w", "on") }}'
+      entity_id: media_player.denon_avr_x1300w
+    - wait_template: '{{ is_state("media_player.denon_avr_x1300w", "on") }}'
       timeout: '00:1:00'
     - service: shell_command.switch_to_audio
     - delay:
@@ -54,15 +54,15 @@ volume_up:
   sequence:
     - service: media_player.volume_set
       data_template:
-        entity_id: media_player.denon_avrx1300w
-        volume_level: '{{ states.media_player.denon_avrx1300w.attributes.volume_level + 0.05 }}'
+        entity_id: media_player.denon_avr_x1300w
+        volume_level: '{{ states.media_player.denon_avr_x1300w.attributes.volume_level + 0.05 }}'
 volume_down:
   alias: Volume Down
   sequence:
     - service: media_player.volume_set
       data_template:
-        entity_id: media_player.denon_avrx1300w
-        volume_level: '{{ states.media_player.denon_avrx1300w.attributes.volume_level - 0.05 }}'
+        entity_id: media_player.denon_avr_x1300w
+        volume_level: '{{ states.media_player.denon_avr_x1300w.attributes.volume_level - 0.05 }}'
 play_music:
   alias: Play Music
   sequence:
@@ -288,7 +288,7 @@ set_default_audio_levels:
   sequence:
     - service: media_player.volume_set
       data:
-        entity_id: media_player.denon_avrx1300w
+        entity_id: media_player.denon_avr_x1300w
         volume_level: !secret default_receiver_volume
     - service: media_player.volume_set
       data:
@@ -367,13 +367,13 @@ media_input_select:
     - service: script.turn_on
       entity_id: script.turn_on_tv_conditional
     - service: media_player.turn_on
-      entity_id: media_player.denon_avrx1300w
+      entity_id: media_player.denon_avr_x1300w
       # Ensure all state changes have taken effect
     - delay:
         seconds: 1
     - service: media_player.select_source
       data_template:
-        entity_id: media_player.denon_avrx1300w
+        entity_id: media_player.denon_avr_x1300w
         source: >
           {% if is_state('input_select.media_select', 'Cast Audio') %}
             CastAudio
@@ -457,7 +457,7 @@ media_volume_changed:
           {% if is_state('input_select.media_select', 'Cast Audio') %}
             media_player.home_audio
           {% else %}
-            media_player.denon_avrx1300w
+            media_player.denon_avr_x1300w
           {% endif %}
         volume_level: >
           {% if is_state('input_select.media_select', 'Cast Audio') %}
