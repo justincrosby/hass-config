@@ -16,6 +16,10 @@
     friendly_name: Today's Summary
   sensor.dark_sky_daytime_high_apparent_temperature:
     friendly_name: Today's Apparent High
+  binary_sensor.justin_presence:
+    friendly_name: Justin
+  binary_sensor.jenni_presence:
+    friendly_name: Jenni
 # Switches
   switch.justins_pc:
     friendly_name: Justins PC
