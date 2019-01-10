@@ -133,7 +133,7 @@ views:
               - type: light
                 entity: light.bedroom
               - type: light
-                entity: light.led_strip
+                entity: light.led_strip_display
       - type: weather-forecast
         entity: weather.dark_sky
   - path: alarms
