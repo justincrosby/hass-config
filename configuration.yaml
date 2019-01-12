@@ -16,6 +16,7 @@ homeassistant:
 # Enables the frontend
 frontend:
   themes: !include_dir_merge_named themes/
+  javascript_version: latest
 
 # Enable lovelace
 lovelace:
@@ -47,6 +48,11 @@ api:
 # python_script:
 
 updater:
+
+custom_updater:
+  track:
+    - cards
+    - components
 
 # Discover some devices automatically
 discovery:

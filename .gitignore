@@ -16,3 +16,5 @@ home-assistant.log
 home-assistant_v2.db
 tts/
 www/
+*.pyc
+__pycache__

@@ -1,5 +1,9 @@
 title: Home
 
+resources:
+  - url: /local/custom-lovelace/upcoming-media-card/upcoming-media-card.js?v=0.1.2
+    type: js
+
 views:
   - path: default_view
     title: Home
@@ -216,3 +220,9 @@ views:
         entity: media_player.living_room_audio
       - type: media-control
         entity: media_player.living_room_speaker
+  - path: video
+    title: TV
+    icon: mdi:youtube
+    cards:
+      - type: custom:upcoming-media-card
+        entity: sensor.sonarr_upcoming_media
