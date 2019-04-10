@@ -1,3 +1,0 @@
-platform: tplink
-host: !secret tplink_betta_light_switch_ip
-name: betta_light_switch

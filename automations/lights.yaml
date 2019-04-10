@@ -15,9 +15,8 @@
       rgb_color: ['{{ states.light.kitchen.attributes["rgb_color"][0] }}', '{{ states.light.kitchen.attributes["rgb_color"][1] }}', '{{ states.light.kitchen.attributes["rgb_color"][2] }}']
 - alias: Periodically Change the LED Strip to a Random Colour
   trigger:
-    platform: time
+    platform: time_pattern
     minutes: '/5'
-    seconds: 00
   condition:
     condition: state
     entity_id: light.led_strip
@@ -28,7 +27,7 @@
 - alias: It's Christmas
   initial_state: false
   trigger:
-    platform: time
+    platform: time_pattern
     seconds: '/2'
   action:
     service: script.turn_on

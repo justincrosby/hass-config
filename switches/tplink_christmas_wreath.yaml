@@ -1,3 +1,0 @@
-platform: tplink
-host: !secret tplink_christmas_wreath_switch_ip
-name: christmas_wreath

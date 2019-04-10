@@ -1,3 +1,0 @@
-platform: tplink
-host: !secret tplink_bedroom_air_purifier_switch_ip
-name: bedroom_air_purifier
