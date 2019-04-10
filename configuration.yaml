@@ -96,10 +96,11 @@ ios:
     categories: !include notifications/ios.yaml
 
 notify:
-  - name: html5
-    platform: html5
-    gcm_api_key: !secret html5_api_key
-    gcm_sender_id: !secret html5_sender_id
+    - platform: html5
+      name: html5
+      vapid_pub_key: !secret html5_pub_key
+      vapid_prv_key: !secret html5_priv_key
+      vapid_email: !secret html5_email
 
 google_assistant:
   project_id: !secret assistant_project_id
