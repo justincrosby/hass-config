@@ -57,6 +57,8 @@ morning:
       timeout: '00:05:00'
     - wait_template: '{{ is_state("automation.music_started_1", "on") }}'
       timeout: '00:20:00'
+    - delay:
+        minutes: 4
     - service: light.turn_on
       data:
         entity_id: light.bedroom

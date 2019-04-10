@@ -174,7 +174,7 @@ fade_in_music:
     - wait_template: '{{ is_state("media_player.home_audio", "playing") }}'
       timeout: '00:10:00'
     - delay:
-        seconds: 30
+        minutes: 2
     - service: script.turn_on
       entity_id: script.increase_volume
       data_template:
@@ -265,11 +265,11 @@ morning_music:
     - service: automation.turn_off
       entity_id: automation.music_started_2
     - service: script.turn_on
-      entity_id: script.play_chill_music
-    - service: script.turn_on
       entity_id: script.set_audio_levels_0
+    - service: script.turn_on
+      entity_id: script.play_chill_music
     - delay:
-        seconds: 30
+        seconds: 1
     - service: script.turn_on
       entity_id: script.fade_in_music
       data:

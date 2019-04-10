@@ -34,6 +34,17 @@
     - service: script.turn_on
       entity_id: script.switch_to_chromecast
 
+- alias: Casting Started 3
+  trigger:
+    platform: state
+    entity_id: media_player.bedroom_tv
+    to: 'playing'
+  action:
+    - service: media_player.turn_off
+      entity_id: media_player.home_audio
+    - service: media_player.turn_off
+      entity_id: media_player.mpd
+
 - alias: Cast music when playing from MPD
   trigger:
     platform: state
