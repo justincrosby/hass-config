@@ -5,6 +5,6 @@ sensors:
       {% if is_state('sensor.media_source', 'CastAudio') %}
         {{ states.media_player.home_audio.attributes.volume_level * 100 }}
       {% else %}
-        {{ states.media_player.denon_avr_x1300w.attributes.volume_level / 0.7 * 100 }}
+        {{ states.media_player.denon_avr_x1300w.attributes.volume_level * 100 }}
       {% endif %}
     friendly_name: 'Media Volume'

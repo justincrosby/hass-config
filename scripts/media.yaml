@@ -363,8 +363,6 @@ media_input_select:
   alias: Change the home theatre settings depending on the input selection
   sequence:
     - service: script.turn_on
-      entity_id: script.disable_automatic_input_select
-    - service: script.turn_on
       entity_id: script.turn_on_tv_conditional
     - service: media_player.turn_on
       entity_id: media_player.denon_avr_x1300w
@@ -395,21 +393,16 @@ media_input_select:
     - service: script.turn_on
       entity_id: script.change_tv_input_conditional
     - service: script.turn_on
-      data_template:
-        entity_id: >
-          {% if is_state('input_select.media_select', 'Cast Audio') %}
-            script.set_default_audio_levels
-          {% else %}
-            script.set_audio_levels_0
-          {% endif %}
-    # Wait for all the input changes to occur before re-enabling the source automations
-    - delay:
-        seconds: 30
+      entity_id: script.set_default_audio_levels
+    - condition: template
+      value_template: >
+        {% if not is_state('input_select.media_select', 'Cast Audio') %}
+          true
+        {% else %}
+          false
+        {% endif %}
     - service: script.turn_on
-      entity_id: script.enable_automatic_input_select
-      # After doing the source update make sure the volume slider is up to date
-    - service: script.turn_on
-      entity_id: script.update_media_volume_slider
+      entity_id: script.set_audio_levels_0
 turn_on_tv_conditional:
   alias: Turn on the TV if it is needed for the current input setting
   sequence:
@@ -432,6 +425,13 @@ change_tv_input_conditional:
         {% else %}
           true
         {% endif %}
+    - condition: template
+      value_template: >
+        {% if is_state('input_select.media_select', 'Cast Video') %}
+          {{ states.media_player.vizio_smartcast.attributes.source != "SMARTCAST" }}
+        {% else %}
+          {{ states.media_player.vizio_smartcast.attributes.source != "HDMI-1" }}
+        {% endif %}
     - wait_template: '{{ is_state("media_player.vizio_smartcast", "on") }}'
       timeout: '00:1:00'
     - service: media_player.select_source
@@ -446,11 +446,6 @@ change_tv_input_conditional:
 media_volume_changed:
   alias: Change the home theatre settings depending on the slider selection
   sequence:
-    - service: script.turn_on
-      entity_id: script.disable_automatic_input_select
-      # Ensure all state changes have taken effect
-    - delay:
-        seconds: 1
     - service: media_player.volume_set
       data_template:
         entity_id: >
@@ -459,14 +454,7 @@ media_volume_changed:
           {% else %}
             media_player.denon_avr_x1300w
           {% endif %}
-        volume_level: >
-          {% if is_state('input_select.media_select', 'Cast Audio') %}
-            {{ states("input_number.media_audio_volume")|float / 100 }}
-          {% else %}
-            {{ states("input_number.media_audio_volume")|float / 100 * 0.7 }}
-          {% endif %}
-    - service: script.turn_on
-      entity_id: script.enable_automatic_input_select
+        volume_level: '{{ states("input_number.media_audio_volume")|float / 100 }}'
 update_media_select_source:
   alias: When the receiver source is changed manually, update the input select
   sequence:
@@ -491,8 +479,6 @@ update_media_select_source:
           {% else %}
             Cast Audio
           {% endif %}
-    - service: script.turn_on
-      entity_id: script.update_media_volume_slider
 update_media_volume_slider:
   alias: When the volume is changed manually, update the media volume
   sequence:

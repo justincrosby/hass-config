@@ -126,6 +126,10 @@
   trigger:
     platform: state
     entity_id: input_number.media_audio_volume
+  # Prevent recursive calls
+  condition:
+    condition: template
+    value_template: '{{ states("sensor.media_volume") != states("input_number.media_audio_volume") }}'
   action:
     service: script.turn_on
     entity_id: script.media_volume_changed
