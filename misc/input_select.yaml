@@ -2,6 +2,7 @@ media_select:
   name: Media Select
   icon: mdi:television
   options:
+    - Shutdown
     - Cast Audio
     - Cast Video
     - PS3

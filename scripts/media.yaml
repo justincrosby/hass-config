@@ -55,14 +55,14 @@ volume_up:
     - service: media_player.volume_set
       data_template:
         entity_id: media_player.denon_avr_x1300w
-        volume_level: '{{ states.media_player.denon_avr_x1300w.attributes.volume_level + 0.05 }}'
+        volume_level: '{{ state_attr("media_player.denon_avr_x1300w", "volume_level") + 0.05 }}'
 volume_down:
   alias: Volume Down
   sequence:
     - service: media_player.volume_set
       data_template:
         entity_id: media_player.denon_avr_x1300w
-        volume_level: '{{ states.media_player.denon_avr_x1300w.attributes.volume_level - 0.05 }}'
+        volume_level: '{{ state_attr("media_player.denon_avr_x1300w", "volume_level") - 0.05 }}'
 play_music:
   alias: Play Music
   sequence:
@@ -173,6 +173,10 @@ fade_in_music:
   sequence:
     - wait_template: '{{ is_state("media_player.home_audio", "playing") }}'
       timeout: '00:10:00'
+    - service: media_player.volume_set
+      data:
+        entity_id: media_player.home_audio
+        volume_level: !secret default_home_audio_volume
     - delay:
         minutes: 2
     - service: script.turn_on
@@ -246,6 +250,8 @@ increase_volume_pause:
 shower_time:
   alias: Increase the Volume During Shower
   sequence:
+    - delay:
+        seconds: 2
     - service: input_number.set_value
       data:
         entity_id: input_number.bathroom_audio_volume
@@ -264,6 +270,8 @@ morning_music:
       entity_id: automation.music_started_1
     - service: automation.turn_off
       entity_id: automation.music_started_2
+    - service: automation.turn_off
+      entity_id: automation.media_input_select_changed
     - service: script.turn_on
       entity_id: script.set_audio_levels_0
     - service: script.turn_on
@@ -278,11 +286,19 @@ morning_music:
           stop_volume: 0.8
     - wait_template: '{{ states("input_number.living_room_audio_volume")|float == 0.8 }}'
       timeout: '00:05:00'
+    - service: media_player.turn_on
+      entity_id: media_player.denon_avr_x1300w
+    - service: media_player.select_source
+      data:
+        entity_id: denon_avr_x1300w
+        source: CastAudio
     # automations can be restored now
     - service: automation.turn_on
       entity_id: automation.music_started_1
     - service: automation.turn_on
       entity_id: automation.music_started_2
+    - service: automation.turn_on
+      entity_id: automation.media_input_select_changed
 set_default_audio_levels:
   alias: Sets a good audio level throughout the house
   sequence:
@@ -321,54 +337,38 @@ set_audio_levels_0:
       data:
         entity_id: input_number.bathroom_audio_volume
         value: 0
-disable_automatic_input_select:
-  alias: Disable Input Select Automations
-  sequence:
-    - service: automation.turn_off
-      entity_id: automation.casting_started_1
-    - service: automation.turn_off
-      entity_id: automation.casting_started_2
-    - service: automation.turn_off
-      entity_id: automation.music_started_1
-    - service: automation.turn_off
-      entity_id: automation.music_started_2
-    - service: automation.turn_off
-      entity_id: automation.media_input_select_changed
-    - service: automation.turn_off
-      entity_id: automation.media_volume_slider_moved
-    - service: automation.turn_off
-      entity_id: automation.media_source_changed
-    - service: automation.turn_off
-      entity_id: automation.media_volume_changed
-enable_automatic_input_select:
-  alias: Disable Input Select Automations
-  sequence:
-    - service: automation.turn_on
-      entity_id: automation.casting_started_1
-    - service: automation.turn_on
-      entity_id: automation.casting_started_2
-    - service: automation.turn_on
-      entity_id: automation.music_started_1
-    - service: automation.turn_on
-      entity_id: automation.music_started_2
-    - service: automation.turn_on
-      entity_id: automation.media_input_select_changed
-    - service: automation.turn_on
-      entity_id: automation.media_volume_slider_moved
-    - service: automation.turn_on
-      entity_id: automation.media_source_changed
-    - service: automation.turn_on
-      entity_id: automation.media_volume_changed
 media_input_select:
   alias: Change the home theatre settings depending on the input selection
   sequence:
-    - service: script.turn_on
-      entity_id: script.turn_on_tv_conditional
-    - service: media_player.turn_on
+    - service_template: >
+        {% if is_state('input_select.media_select', 'Cast Audio') or is_state('input_select.media_select', 'Shutdown') %}
+          media_player.turn_off
+        {% else %}
+          media_player.turn_on
+        {% endif %}
+      entity_id: media_player.vizio_smartcast
+    - service_template: >
+        {% if is_state('input_select.media_select', 'Shutdown') %}
+          media_player.turn_off
+        {% else %}
+          media_player.turn_on
+        {% endif %}
       entity_id: media_player.denon_avr_x1300w
+    - service: script.turn_on
+      entity_id: script.shutdown_conditional
+    - condition: template
+      value_template: >
+        {% if not is_state('input_select.media_select', 'Shutdown') %}
+          true
+        {% else %}
+          false
+        {% endif %}
       # Ensure all state changes have taken effect
     - delay:
         seconds: 1
+    # Set audio levels first to ensure they take
+    - service: script.turn_on
+      entity_id: script.set_default_audio_levels
     - service: media_player.select_source
       data_template:
         entity_id: media_player.denon_avr_x1300w
@@ -392,8 +392,6 @@ media_input_select:
           {% endif %}
     - service: script.turn_on
       entity_id: script.change_tv_input_conditional
-    - service: script.turn_on
-      entity_id: script.set_default_audio_levels
     - condition: template
       value_template: >
         {% if not is_state('input_select.media_select', 'Cast Audio') %}
@@ -401,22 +399,30 @@ media_input_select:
         {% else %}
           false
         {% endif %}
-    - service: script.turn_on
-      entity_id: script.set_audio_levels_0
-turn_on_tv_conditional:
-  alias: Turn on the TV if it is needed for the current input setting
+    - delay:
+        milliseconds: 500
+    - service: media_player.volume_set
+      data:
+        entity_id: media_player.home_audio
+        volume_level: 0
+shutdown_conditional:
+  alias: Shutdown routine
   sequence:
     - condition: template
       value_template: >
-        {% if is_state('input_select.media_select', 'Cast Audio')  %}
-          false
-        {% else %}
+        {% if is_state('input_select.media_select', 'Shutdown') %}
           true
+        {% else %}
+          false
         {% endif %}
-    - service: media_player.turn_on
+    - service: media_player.turn_off
+      entity_id: media_player.home_audio
+    - service: media_player.media_stop
+      entity_id: media_player.mpd
+    - service: media_player.turn_off
       entity_id: media_player.vizio_smartcast
 change_tv_input_conditional:
-  alias: Changet the TV input if it is needed for the current input setting
+  alias: Changes the TV input if it is needed for the current input setting
   sequence:
     - condition: template
       value_template: >
@@ -428,9 +434,9 @@ change_tv_input_conditional:
     - condition: template
       value_template: >
         {% if is_state('input_select.media_select', 'Cast Video') %}
-          {{ states.media_player.vizio_smartcast.attributes.source != "SMARTCAST" }}
+          {{ state_attr("media_player.vizio_smartcast", "source") != "SMARTCAST" }}
         {% else %}
-          {{ states.media_player.vizio_smartcast.attributes.source != "HDMI-1" }}
+          {{ state_attr("media_player.vizio_smartcast", "source") != "HDMI-1" }}
         {% endif %}
     - wait_template: '{{ is_state("media_player.vizio_smartcast", "on") }}'
       timeout: '00:1:00'
@@ -477,7 +483,7 @@ update_media_select_source:
           {% elif is_state('sensor.media_source', 'WiiU') %}
             WiiU
           {% else %}
-            Cast Audio
+            Shutdown
           {% endif %}
 update_media_volume_slider:
   alias: When the volume is changed manually, update the media volume
