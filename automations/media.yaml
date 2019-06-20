@@ -144,6 +144,14 @@
     service: script.turn_on
     entity_id: script.receiver_volume_changed
 
+- alias: Receiver Volume Changed
+  trigger:
+    platform: state
+    entity_id: sensor.receiver_volume
+  action:
+    - service: script.turn_on
+      entity_id: script.update_receiver_volume_slider
+
 - alias: Chromecast Volume Slider Moved
   trigger:
     platform: state
@@ -156,6 +164,14 @@
     service: script.turn_on
     entity_id: script.chromecast_volume_changed
 
+- alias: Chromecast Volume Changed
+  trigger:
+    platform: state
+    entity_id: sensor.chromecast_volume
+  action:
+    - service: script.turn_on
+      entity_id: script.update_chromecast_volume_slider
+
 - alias: Media Source Changed
   trigger:
     platform: state
@@ -163,14 +179,6 @@
   action:
     - service: script.turn_on
       entity_id: script.update_media_select_source
-
-- alias: Media Volume Changed
-  trigger:
-    platform: state
-    entity_id: sensor.media_volume
-  action:
-    - service: script.turn_on
-      entity_id: script.update_media_volume_slider
 
 - alias: Media Track Changed
   trigger:
