@@ -71,8 +71,10 @@ views:
             entities:
               - entity: input_select.media_select
                 name: Input
-              - entity: input_number.media_audio_volume
-                name: Volume
+              - entity: input_number.receiver_audio_volume
+                name: Receive Volume
+              - entity: input_number.chromecast_audio_volume
+                name: Chromecast Volume
           - type: conditional
             conditions:
               - entity: media_player.vizio_smartcast

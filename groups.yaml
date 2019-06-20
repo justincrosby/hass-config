@@ -38,6 +38,7 @@ media_control:
   - input_number.living_room_audio_volume
   - input_number.bedroom_audio_volume
   - input_number.bathroom_audio_volume
+  - input_number.main_bathroom_audio_volume
   - media_player.bedroom_audio
   - media_player.bedroom_speaker
   - media_player.bathroom_speaker
@@ -107,7 +108,8 @@ a_automations:
   - automation.leave_home_jenni
   - automation.leave_home_justin
   - automation.media_input_select_changed
-  - automation.media_volume_slider_moved
+  - automation.receiver_volume_slider_moved
+  - automation.chromecast_volume_slider_moved
   - automation.music_started_1
   - automation.music_started_2
   - automation.night_no_one_home

@@ -40,8 +40,20 @@ bathroom_audio_volume:
   min: 0
   max: 1
   step: 0.01
-media_audio_volume:
-  name:  Media Audio Level
+main_bathroom_audio_volume:
+  name: Main Bathroom Audio Level
+  icon: mdi:volume-high
+  min: 0
+  max: 1
+  step: 0.01
+receiver_audio_volume:
+  name:  Receiver Audio Level
+  icon: mdi:volume-high
+  min: 0
+  max: 100
+  step: 1
+chromecast_audio_volume:
+  name:  Chromecast Audio Level
   icon: mdi:volume-high
   min: 0
   max: 100

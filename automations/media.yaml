@@ -114,6 +114,16 @@
       entity_id: media_player.bathroom_speaker
       volume_level: '{{ states("input_number.bathroom_audio_volume")|float }}'
 
+- alias: Main Bathroom Audio Slider Moved
+  trigger:
+    platform: state
+    entity_id: input_number.main_bathroom_audio_volume
+  action:
+    service: media_player.volume_set
+    data_template:
+      entity_id: media_player.main_bathroom_speaker
+      volume_level: '{{ states("input_number.main_bathroom_audio_volume")|float }}'
+
 - alias: Media Input Select Changed
   trigger:
     platform: state
@@ -122,17 +132,29 @@
     service: script.turn_on
     entity_id: script.media_input_select
 
-- alias: Media Volume Slider Moved
+- alias: Receiver Volume Slider Moved
   trigger:
     platform: state
     entity_id: input_number.media_audio_volume
   # Prevent recursive calls
   condition:
     condition: template
-    value_template: '{{ states("sensor.media_volume") != states("input_number.media_audio_volume") }}'
+    value_template: '{{ states("sensor.receiver_volume") != states("input_number.receiver_audio_volume") }}'
   action:
     service: script.turn_on
-    entity_id: script.media_volume_changed
+    entity_id: script.receiver_volume_changed
+
+- alias: Chromecast Volume Slider Moved
+  trigger:
+    platform: state
+    entity_id: input_number.chromecast_audio_volume
+  # Prevent recursive calls
+  condition:
+    condition: template
+    value_template: '{{ states("sensor.chromecast_volume") != states("input_number.chromecast_audio_volume") }}'
+  action:
+    service: script.turn_on
+    entity_id: script.chromecast_volume_changed
 
 - alias: Media Source Changed
   trigger:
