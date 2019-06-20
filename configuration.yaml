@@ -83,7 +83,7 @@ binary_sensor: !include_dir_list binary_sensors/
 
 # Text to speech
 tts:
-  platform: google
+  platform: google_translate
 
 # Calendar
 google:
@@ -131,8 +131,8 @@ tplink:
     - host: !secret tplink_bedroom_air_purifier_switch_ip
     - host: !secret tplink_bedroom_fan_switch_ip
     - host: !secret tplink_betta_light_switch_ip
-    - host: !secret tplink_christmas_wreath_switch_ip
-    - host: !secret tplink_led_strip_switch_ip
+#    - host: !secret tplink_christmas_wreath_switch_ip
+#    - host: !secret tplink_led_strip_switch_ip
     - host: !secret tplink_living_room_lamp_switch_ip
 
 hue:
