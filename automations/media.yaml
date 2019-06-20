@@ -135,7 +135,7 @@
 - alias: Receiver Volume Slider Moved
   trigger:
     platform: state
-    entity_id: input_number.media_audio_volume
+    entity_id: input_number.receiver_audio_volume
   # Prevent recursive calls
   condition:
     condition: template
