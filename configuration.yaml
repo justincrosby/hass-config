@@ -123,15 +123,15 @@ wemo:
   discovery: false
   static:
     - !secret wemo_fairy_lights_switch_ip
-    - !secret wemo_fish_light_switch_ip
+#    - !secret wemo_fish_light_switch_ip
 
 tplink:
   discovery: false
   switch:
     - host: !secret tplink_bedroom_air_purifier_switch_ip
-    - host: !secret tplink_bedroom_fan_switch_ip
+#    - host: !secret tplink_bedroom_fan_switch_ip
     - host: !secret tplink_betta_light_switch_ip
-#    - host: !secret tplink_christmas_wreath_switch_ip
+    - host: !secret tplink_fish_light_switch_ip
 #    - host: !secret tplink_led_strip_switch_ip
     - host: !secret tplink_living_room_lamp_switch_ip
 

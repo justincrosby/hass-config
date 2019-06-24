@@ -11,7 +11,7 @@ sensors:
   chromecast_volume:
     value_template: >
       {% if is_state("media_player.home_audio", "off") %}
-        0
+        off
       {% else %}
         {{ (state_attr("media_player.home_audio", "volume_level") * 100)|int }}
       {% endif %}

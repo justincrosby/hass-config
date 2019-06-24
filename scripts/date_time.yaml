@@ -14,8 +14,8 @@ shutoff:
         option: Shutdown
     - service: switch.turn_off
       entity_id: switch.justins_pc
-    - service: lock.lock
-      entity_id: lock.front_door
+#    - service: lock.lock
+#      entity_id: lock.front_door
     - service: switch.turn_off
       entity_id: switch.led_strip_switch
     - condition: template
@@ -72,7 +72,8 @@ morning:
       entity_id: script.fade_in_music
       data:
         variables:
-          step_size: -0.05
+          step_size: -5
+          start_volume: !secret default_home_audio_volume
           stop_volume: 0
     - wait_template: '{{ states("input_number.living_room_audio_volume")|float == 0 }}'
       timeout: '00:10:00'
@@ -82,9 +83,10 @@ morning:
       entity_id: script.fade_in_music
       data:
         variables:
-          step_size: 0.05
-          stop_volume: 0.8
-    - wait_template: '{{ states("input_number.living_room_audio_volume")|float == 0.8 }}'
+          step_size: 5
+          start_volume: 0
+          stop_volume: !secret default_home_audio_volume
+    - wait_template: '{{ states("input_number.living_room_audio_volume")|float >= 0.7 }}'
       timeout: '00:10:00'
     - delay:
         minutes: 5
@@ -92,8 +94,8 @@ morning:
       data:
         entity_id: light.bedroom
         brightness_pct: 100
-    - service: lock.unlock
-      entity_id: lock.front_door
+#    - service: lock.unlock
+#      entity_id: lock.front_door
     - service: light.turn_on
       entity_id: light.kitchen
 ringer_on_conditional:
