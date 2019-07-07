@@ -2,6 +2,12 @@ platform: template
 sensors:
   album_art:
     friendly_name: Currently Playing
+    entity_id:
+      - sensor.media_output
+      - media_player.home_audio
+      - media_player.fake_home_audio
+      - media_player.master_suite_audio
+      - media_player.mpd
     value_template: >
       {% if is_state("sensor.home_audio_app", "Spotify") %}
         {{ state_attr(states("sensor.media_output"), "media_artist")  ~ " - " ~  state_attr(states("sensor.media_output"), "media_title")}}

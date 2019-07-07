@@ -202,12 +202,8 @@
     entity_id: input_number.chromecast_audio_volume
   # Prevent recursive calls
   condition:
-    condition: and
-    conditions:
-      - condition: template
-        value_template: '{{ states("sensor.chromecast_volume") != states("input_number.chromecast_audio_volume") }}'
-      - condition: template
-        value_template: '{{ states("sensor.chromecast_volume") != "off" }}'
+    condition: template
+    value_template: '{{ states("sensor.chromecast_volume") != states("input_number.chromecast_audio_volume") }}'
   action:
     service: script.turn_on
     entity_id: script.chromecast_volume_changed

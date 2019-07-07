@@ -23,7 +23,17 @@ sensors:
       {% endif %}
     friendly_name: 'Media Source'
   home_audio_app:
-    value_template: '{{ state_attr(states("sensor.media_output"), "app_name") }}'
+    entity_id:
+      - sensor.media_output
+      - media_player.home_audio
+      - media_player.fake_home_audio
+      - media_player.master_suite_audio
+    value_template: >
+      {% if is_state("sensor.media_output", "unknown") %}
+        Default Media Receiver
+      {% else %}
+        {{ state_attr(states("sensor.media_output"), "app_name") }}
+      {% endif %}
     friendly_name: 'Home Audio App'
   media_output:
     value_template: >
@@ -38,5 +48,15 @@ sensors:
       {% endif %}
     friendly_name: 'Media Output'
   media_status:
-    value_template: '{{ states(states("sensor.media_output")) }}'
+    entity_id:
+      - sensor.media_output
+      - media_player.home_audio
+      - media_player.fake_home_audio
+      - media_player.master_suite_audio
+    value_template: >
+      {% if is_state("sensor.media_output", "unknown") %}
+        off
+      {% else %}
+        {{ states(states("sensor.media_output")) }}
+      {% endif %}
     friendly_name: 'Media Status'

@@ -27,7 +27,7 @@ frontend:
 
 # Enable logging
 logger:
-  default: info
+  default: warn
 
 # Enable lovelace
 lovelace:

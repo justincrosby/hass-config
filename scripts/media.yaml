@@ -175,7 +175,7 @@ play_all_music_conditional:
 fade_in_music:
   alias: Wrapper for volume increase
   sequence:
-    - wait_template: '{{ is_state(states("sensor.media_output"), "playing") }}'
+    - wait_template: '{{ is_state("sensor.media_status", "playing") }}'
       timeout: '00:10:00'
     - service: media_player.volume_set
       data_template:
@@ -191,11 +191,17 @@ fade_in_music:
           stop_volume: '{{ stop_volume }}'
     - wait_template: >
         {% if (step_size|float > 0) %}
-          {{ state_attr(states("sensor.media_output"), "volume_level")|float >= (stop_volume|float / 100) }}
+          {{ states("sensor.chromecast_volume")|float >= stop_volume|float }}
         {% else %}
-          {{ state_attr(states("sensor.media_output"), "volume_level")|float <= (stop_volume|float / 100) }}
+          {{ states("sensor.chromecast_volume")|float <= stop_volume|float }}
         {% endif %}
       timeout: '00:05:00'
+    - service: script.turn_on
+      entity_id: script.update_media_select_source
+    - service: script.turn_on
+      entity_id: script.update_receiver_volume_slider
+    - service: script.turn_on
+      entity_id: script.update_chromecast_volume_slider
     - delay:
         seconds: 5
     # automations can be restored now
@@ -278,12 +284,8 @@ morning_music:
       data:
         entity_id: input_select.media_output_select
         option: 'Master Suite Audio'
-    - delay:
-        seconds: 5
     - service: script.turn_on
       entity_id: script.play_chill_music
-    - delay:
-        seconds: 1
     - service: script.turn_on
       entity_id: script.fade_in_music
       data:
