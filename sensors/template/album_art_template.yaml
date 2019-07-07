@@ -2,5 +2,10 @@ platform: template
 sensors:
   album_art:
     friendly_name: Currently Playing
-    value_template: '{{ states.media_player.mpd.attributes["media_artist"] ~ " - " ~  states.media_player.mpd.attributes["media_title"] }}'
+    value_template: >
+      {% if is_state("sensor.home_audio_app", "Spotify") %}
+        {{ state_attr(states("sensor.media_output"), "media_artist")  ~ " - " ~  state_attr(states("sensor.media_output"), "media_title")}}
+      {% else %}
+        {{ state_attr("media_player.mpd", "media_artist")  ~ " - " ~  state_attr("media_player.mpd", "media_title")}}
+      {% endif %}
     entity_picture_template: '{{ states("sensor.mopidy_album_art_url") }}'

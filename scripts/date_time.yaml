@@ -75,7 +75,7 @@ morning:
           step_size: -5
           start_volume: !secret default_home_audio_volume
           stop_volume: 0
-    - wait_template: '{{ states("input_number.living_room_audio_volume")|float == 0 }}'
+    - wait_template: '{{ state_attr("media_player.home_audio", "volume_level")|float == 0 }}'
       timeout: '00:10:00'
     - service: script.turn_on
       entity_id: script.play_all_music
@@ -86,7 +86,7 @@ morning:
           step_size: 5
           start_volume: 0
           stop_volume: !secret default_home_audio_volume
-    - wait_template: '{{ states("input_number.living_room_audio_volume")|float >= 0.7 }}'
+    - wait_template: '{{ state_attr("media_player.home_audio", "volume_level")|float >= 0.7 }}'
       timeout: '00:10:00'
     - delay:
         minutes: 5
@@ -96,8 +96,8 @@ morning:
         brightness_pct: 100
 #    - service: lock.unlock
 #      entity_id: lock.front_door
-    - service: light.turn_on
-      entity_id: light.kitchen
+#    - service: light.turn_on
+#      entity_id: light.kitchen
 ringer_on_conditional:
   alias: Phone Ringer On Conditional
   sequence:
@@ -113,8 +113,8 @@ sunset:
       entity_id: light.fairy_lights
     - service: light.turn_on
       entity_id: light.living_room_lamp
-    - service: switch.turn_on
-      entity_id: switch.christmas_wreath
+#    - service: switch.turn_on
+#      entity_id: switch.christmas_wreath
     - service: script.turn_on
       entity_id: script.led_strip_turn_on
 bedtime:
@@ -138,21 +138,7 @@ bedtime:
     - service: input_boolean.turn_off
       entity_id: input_boolean.plants_watered_tracker
     - service: switch.turn_on
-      data_template:
-        entity_id: >
-          {% if states('sensor.dark_sky_daytime_high_apparent_temperature')|int > 18 %}
-            switch.bedroom_fan
-          {% else %}
-            switch.bedroom_air_purifier
-          {% endif %}
-    - service: switch.turn_off
-      data_template:
-        entity_id: >
-          {% if states('sensor.dark_sky_daytime_high_apparent_temperature')|int > 18 %}
-            switch.bedroom_air_purifier
-          {% else %}
-            switch.bedroom_fan
-          {% endif %}
+      entity_id: switch.bedroom_air_purifier
     - service: script.turn_on
       entity_id: script.disable_presence
     - delay:

@@ -111,6 +111,22 @@ views:
                     - sensor.album_art
               - type: conditional
                 conditions:
+                  - entity: media_player.fake_home_audio
+                    state: 'playing'
+                card:
+                  type: entities
+                  entities:
+                    - sensor.album_art
+              - type: conditional
+                conditions:
+                  - entity: media_player.master_suite_audio
+                    state: 'playing'
+                card:
+                  type: entities
+                  entities:
+                    - sensor.album_art
+              - type: conditional
+                conditions:
                   - entity: media_player.mpd
                     state: 'playing'
                 card:
@@ -214,6 +230,7 @@ views:
           - input_number.bedroom_audio_volume
           - input_number.bathroom_audio_volume
           - input_number.main_bathroom_audio_volume
+          - input_select.media_output_select
       - type: media-control
         entity: media_player.bedroom_audio
       - type: media-control

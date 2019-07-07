@@ -2,4 +2,4 @@ platform: template
 sensors:
   media_track:
     friendly_name: Media Track
-    value_template: '{{ states.media_player.mpd.attributes["media_title"] }}'
+    value_template: '{{ state_attr("media_player.mpd", "media_title") }}'

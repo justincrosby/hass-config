@@ -23,5 +23,20 @@ sensors:
       {% endif %}
     friendly_name: 'Media Source'
   home_audio_app:
-    value_template: '{{ state_attr("media_player.home_audio", "app_name") }}'
+    value_template: '{{ state_attr(states("sensor.media_output"), "app_name") }}'
     friendly_name: 'Home Audio App'
+  media_output:
+    value_template: >
+      {% if is_state("input_select.media_output_select", "Home Audio") %}
+        media_player.home_audio
+      {% elif is_state("input_select.media_output_select", "Fake Home Audio") %}
+        media_player.fake_home_audio
+      {% elif is_state("input_select.media_output_select", "Master Suite Audio") %}
+        media_player.master_suite_audio
+      {% else %}
+        media_player.home_audio
+      {% endif %}
+    friendly_name: 'Media Output'
+  media_status:
+    value_template: '{{ states(states("sensor.media_output")) }}'
+    friendly_name: 'Media Status'

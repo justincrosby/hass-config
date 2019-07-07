@@ -11,3 +11,11 @@ media_select:
     - Switch
     - WiiU
   initial: Cast Audio
+media_output_select:
+  name: Media Output Select
+  icon: mdi:volume-high
+  options:
+    - Home Audio
+    - Fake Home Audio
+    - Master Suite Audio
+  initial: Home Audio

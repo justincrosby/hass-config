@@ -9,7 +9,8 @@ switch_to_chromecast:
           true
         {% endif %}
     - service: media_player.turn_off
-      entity_id: media_player.home_audio
+      data_template:
+        entity_id: '{{ states("sensor.media_output") }}'
     - service: media_player.media_stop
       entity_id: media_player.mpd
     - service: media_player.turn_on
@@ -74,7 +75,8 @@ pause_music:
     - service: media_player.media_pause
       entity_id: media_player.mpd
     - service: media_player.media_pause
-      entity_id: media_player.home_audio
+      data_template:
+        entity_id: '{{ states("sensor.media_output") }}'
 next_track:
   alias: Next Track
   sequence:
@@ -97,17 +99,19 @@ next_track_home_audio:
       entity_id: media_player.mpd
       state: 'off'
     - service: media_player.media_next_track
-      entity_id: media_player.home_audio
+      data_template:
+        entity_id: '{{ states("sensor.media_output") }}'
 stream_mopidy_to_cc:
   alias: Start Mopidy Stream
   sequence:
     - service: media_player.media_stop
-      entity_id: media_player.home_audio
+      data_template:
+        entity_id: '{{ states("sensor.media_output") }}'
     - delay:
         seconds: 1
     - service: media_player.play_media
-      data:
-        entity_id: media_player.home_audio
+      data_template:
+        entity_id: '{{ states("sensor.media_output") }}'
         media_content_id: !secret icecast_url
         media_content_type: 'audio/mp4'
 restart_mopidy_stream:
@@ -117,8 +121,8 @@ restart_mopidy_stream:
       entity_id: media_player.mpd
       state: 'playing'
     - service: media_player.play_media
-      data:
-        entity_id: media_player.home_audio
+      data_template:
+        entity_id: '{{ states("sensor.media_output") }}'
         media_content_id: !secret icecast_url
         media_content_type: 'audio/mp4'
 play_all_music:
@@ -171,14 +175,12 @@ play_all_music_conditional:
 fade_in_music:
   alias: Wrapper for volume increase
   sequence:
-    - wait_template: '{{ is_state("media_player.home_audio", "playing") }}'
+    - wait_template: '{{ is_state(states("sensor.media_output"), "playing") }}'
       timeout: '00:10:00'
     - service: media_player.volume_set
       data_template:
-        entity_id: media_player.home_audio
+        entity_id: '{{ states("sensor.media_output") }}'
         volume_level: '{{ start_volume }}'
-#    - service: script.turn_on
-#      entity_id: script.set_default_audio_levels
     - delay:
         seconds: 45
     - service: script.turn_on
@@ -187,8 +189,15 @@ fade_in_music:
         variables:
           step_size: '{{ step_size }}'
           stop_volume: '{{ stop_volume }}'
-    - wait_template: '{{ states("input_number.living_room_audio_volume")|float >= stop_volume }}'
+    - wait_template: >
+        {% if (step_size|float > 0) %}
+          {{ state_attr(states("sensor.media_output"), "volume_level")|float >= (stop_volume|float / 100) }}
+        {% else %}
+          {{ state_attr(states("sensor.media_output"), "volume_level")|float <= (stop_volume|float / 100) }}
+        {% endif %}
       timeout: '00:05:00'
+    - delay:
+        seconds: 5
     # automations can be restored now
     - service: automation.turn_on
       entity_id: automation.music_started_1
@@ -203,14 +212,14 @@ increase_volume:
   sequence:
     - service: media_player.volume_set
       data_template:
-        entity_id: media_player.home_audio
+        entity_id: '{{ states("sensor.media_output") }}'
         volume_level: >
-          {% if (step_size|float > 0) and ((state_attr("media_player.home_audio", "volume_level")|float + (step_size|float / 100)) > (stop_volume|float / 100)) %}
+          {% if (step_size|float > 0) and ((state_attr(states("sensor.media_output"), "volume_level")|float + (step_size|float / 100)) > (stop_volume|float / 100)) %}
             {{ stop_volume|float / 100 }}
-          {% elif (step_size|float < 0) and ((state_attr("media_player.home_audio", "volume_level")|float + (step_size|float / 100)) < (stop_volume|float / 100)) %}
+          {% elif (step_size|float < 0) and ((state_attr(states("sensor.media_output"), "volume_level")|float + (step_size|float / 100)) < (stop_volume|float / 100)) %}
             {{ stop_volume|float / 100 }}
           {% else %}
-            {{ state_attr("media_player.home_audio", "volume_level")|float + (step_size|float / 100) }}
+            {{ state_attr(states("sensor.media_output"), "volume_level")|float + (step_size|float / 100) }}
           {% endif %}
     - service: script.turn_on
       entity_id: script.increase_volume_pause
@@ -223,9 +232,9 @@ increase_volume_pause:
   sequence:
     - condition: template
       value_template: >
-        {% if (step_size|float > 0) and (state_attr("media_player.home_audio", "volume_level")|float < (stop_volume|float / 100)) %}
+        {% if (step_size|float > 0) and (state_attr(states("sensor.media_output"), "volume_level")|float < (stop_volume|float / 100)) %}
           true
-        {% elif (step_size|float < 0) and (state_attr("media_player.home_audio", "volume_level")|float > (stop_volume|float / 100)) %}
+        {% elif (step_size|float < 0) and (state_attr(states("sensor.media_output"), "volume_level")|float > (stop_volume|float / 100)) %}
           true
         {% else %}
           false
@@ -265,8 +274,12 @@ morning_music:
       entity_id: automation.media_input_select_changed
     - service: automation.turn_off
       entity_id: automation.chromecast_volume_slider_moved
-    - service: script.turn_on
-      entity_id: script.set_audio_levels_0
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.media_output_select
+        option: 'Master Suite Audio'
+    - delay:
+        seconds: 5
     - service: script.turn_on
       entity_id: script.play_chill_music
     - delay:
@@ -277,7 +290,7 @@ morning_music:
         variables:
           step_size: 1
           start_volume: 0
-          stop_volume: 60
+          stop_volume: 50
     - delay:
         minutes: 15
     - service: input_select.select_option
@@ -291,45 +304,26 @@ set_default_audio_levels:
       data:
         entity_id: media_player.denon_avr_x1300w
         volume_level: !secret default_receiver_volume
+#    - service: media_player.volume_set
+#      data:
+#        entity_id: media_player.home_audio
+#        volume_level: !secret default_home_audio_volume
     - service: media_player.volume_set
       data:
-        entity_id: media_player.home_audio
-        volume_level: !secret default_home_audio_volume
-    - service: input_number.set_value
+        entity_id: media_player.living_room_audio
+        volume_level: !secret default_living_room_audio_volume
+    - service: media_player.volume_set
       data:
-        entity_id: input_number.living_room_audio_volume
-        value: !secret default_living_room_audio_volume
-    - service: input_number.set_value
+        entity_id: media_player.bedroom_audio_volume
+        volume_level: !secret default_bedroom_audio_volume
+    - service: media_player.volume_set
       data:
-        entity_id: input_number.bedroom_audio_volume
-        value: !secret default_bedroom_audio_volume
-    - service: input_number.set_value
+        entity_id: media_player.bathroom_speaker
+        volume_level: !secret default_bathroom_audio_volume
+    - service: media_player.volume_set
       data:
-        entity_id: input_number.bathroom_audio_volume
-        value: !secret default_bathroom_audio_volume
-    - service: input_number.set_value
-      data:
-        entity_id: input_number.main_bathroom_audio_volume
-        value: !secret default_bathroom_audio_volume
-set_audio_levels_0:
-  alias: Mute all chromecast audios
-  sequence:
-    - service: input_number.set_value
-      data:
-        entity_id: input_number.living_room_audio_volume
-        value: 0
-    - service: input_number.set_value
-      data:
-        entity_id: input_number.bedroom_audio_volume
-        value: 0
-    - service: input_number.set_value
-      data:
-        entity_id: input_number.bathroom_audio_volume
-        value: 0
-    - service: input_number.set_value
-      data:
-        entity_id: input_number.main_bathroom_audio_volume
-        value: 0
+        entity_id: media_player.main_bathroom_speaker
+        volume_level: !secret default_bathroom_audio_volume
 media_input_select:
   alias: Change the home theatre settings depending on the input selection
   sequence:
@@ -395,8 +389,8 @@ media_input_select:
     - delay:
         milliseconds: 500
     - service: media_player.volume_set
-      data:
-        entity_id: media_player.home_audio
+      data_template:
+        entity_id: '{{ states("sensor.media_output") }}'
         volume_level: 0
 shutdown_conditional:
   alias: Shutdown routine
@@ -409,7 +403,8 @@ shutdown_conditional:
           false
         {% endif %}
     - service: media_player.turn_off
-      entity_id: media_player.home_audio
+      data_template:
+        entity_id: '{{ states("sensor.media_output") }}'
     - service: media_player.media_stop
       entity_id: media_player.mpd
     - service: media_player.turn_off
@@ -445,10 +440,16 @@ change_tv_input_conditional:
 update_media_select_source:
   alias: When the receiver source is changed manually, update the input select
   sequence:
+    - service: automation.turn_off
+      entity_id: automation.media_input_select_changed
+    - delay:
+        seconds: 1
     - service: input_select.select_option
       data_template:
         entity_id: input_select.media_select
         option: '{{ states("sensor.media_source") }}'
+    - service: automation.turn_on
+      entity_id: automation.media_input_select_changed
 receiver_volume_changed:
   alias: Change the receiver volume based on the slider
   sequence:
@@ -459,21 +460,33 @@ receiver_volume_changed:
 update_receiver_volume_slider:
   alias: When the volume is changed manually, update the receiver volume
   sequence:
+    - service: automation.turn_off
+      entity_id: automation.receiver_volume_slider_moved
+    - delay:
+        seconds: 1
     - service: input_number.set_value
       data_template:
         entity_id: input_number.receiver_audio_volume
         value: '{{ states("sensor.receiver_volume")|int }}'
+    - service: automation.turn_on
+      entity_id: automation.receiver_volume_slider_moved
 chromecast_volume_changed:
   alias: Change the chromecast volume based on the slider
   sequence:
     - service: media_player.volume_set
       data_template:
-        entity_id: media_player.home_audio
+        entity_id: '{{ states("sensor.media_output") }}'
         volume_level: '{{ states("input_number.chromecast_audio_volume")|float / 100 }}'
 update_chromecast_volume_slider:
   alias: When the volume is changed manually, update the chromecast volume
   sequence:
+    - service: automation.turn_off
+      entity_id: automation.chromecast_volume_slider_moved
+    - delay:
+        seconds: 1
     - service: input_number.set_value
       data_template:
         entity_id: input_number.chromecast_audio_volume
         value: '{{ states("sensor.chromecast_volume")|int }}'
+    - service: automation.turn_on
+      entity_id: automation.chromecast_volume_slider_moved
