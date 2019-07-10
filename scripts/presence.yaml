@@ -8,30 +8,32 @@ arrive_home:
 #      entity_id: lock.front_door
     - service: script.turn_on
       entity_id: script.turn_on_pc_conditional
-    - service: switch.turn_on
-      entity_id: switch.led_strip_switch
+#    - service: switch.turn_on
+#      entity_id: switch.led_strip_switch
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.media_select
+        option: 'Cast Audio'
     # disable these automations so they don't mess with audio settings
     - service: automation.turn_off
-      entity_id: automation.music_started_1
-    - service: automation.turn_off
-      entity_id: automation.music_started_2
-    - service: automation.turn_off
       entity_id: automation.media_input_select_changed
-    - service: automation.turn_off
-      entity_id: automation.chromecast_volume_slider_moved
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.media_output_select
+        option: 'Home Audio'
     - delay:
         seconds: 1
     - service: script.turn_on
       entity_id: script.play_all_music_conditional
     - delay:
-        seconds: 1
+        seconds: 2
     - service: script.turn_on
       entity_id: script.fade_in_music
       data:
         variables:
           step_size: 5
           start_volume: 0
-          stop_volume: !secret default_home_audio_volume
+          stop_volume: 45
 #    - service: light.turn_on
 #      data_template:
 #        entity_id: light.kitchen

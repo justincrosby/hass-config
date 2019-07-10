@@ -239,42 +239,10 @@
   action:
     - service: shell_command.update_album_art
 
-- alias: Keep Bathroom Google Home Alive
+- alias: Media Output Changed
   trigger:
-    platform: time_pattern
-    minutes: '/2'
-  condition:
-    condition: or
-    conditions:
-      - condition: state
-        entity_id: media_player.bathroom_speaker
-        state: 'off'
-      - condition: state
-        entity_id: media_player.bathroom_speaker
-        state: 'idle'
+    platform: state
+    entity_id: sensor.media_output
   action:
-    service: media_player.play_media
-    entity_id: media_player.bathroom_speaker
-    data:
-      media_content_id: !secret silent_audio_url
-      media_content_type: music
-
-- alias: Keep Main Bathroom Google Home Alive
-  trigger:
-    platform: time_pattern
-    minutes: '/2'
-  condition:
-    condition: or
-    conditions:
-      - condition: state
-        entity_id: media_player.main_bathroom_speaker
-        state: 'off'
-      - condition: state
-        entity_id: media_player.main_bathroom_speaker
-        state: 'idle'
-  action:
-    service: media_player.play_media
-    entity_id: media_player.main_bathroom_speaker
-    data:
-      media_content_id: !secret silent_audio_url
-      media_content_type: music
+    - service: script.turn_on
+      entity_id: script.stream_mopidy_to_cc

@@ -45,8 +45,14 @@ morning:
     - condition: state
       entity_id: binary_sensor.alarm_full
       state: 'on'
-    - service: script.turn_on
-      entity_id: script.switch_to_audio
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.media_output_select
+        option: 'Bedroom Audio'
+    - service: input_select.select_option
+      data_template:
+        entity_id: input_select.media_select
+        option: 'Cast Audio'
     - service: script.turn_on
       entity_id: script.morning_music
     - wait_template: '{{ is_state("automation.music_started_1", "off") }}'
@@ -73,10 +79,18 @@ morning:
       data:
         variables:
           step_size: -5
-          start_volume: !secret default_home_audio_volume
+          start_volume: 35
           stop_volume: 0
-    - wait_template: '{{ state_attr("media_player.home_audio", "volume_level")|float == 0 }}'
+    - wait_template: '{{ states("sensor.chromecast_volume")|float == 0 }}'
       timeout: '00:10:00'
+    - service: automation.turn_off
+      entity_id: automation.media_output_changed
+    - delay:
+        seconds: 1
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.media_output_select
+        option: 'Master Suite Audio'
     - service: script.turn_on
       entity_id: script.play_all_music
     - service: script.turn_on
@@ -85,8 +99,8 @@ morning:
         variables:
           step_size: 5
           start_volume: 0
-          stop_volume: !secret default_home_audio_volume
-    - wait_template: '{{ state_attr("media_player.home_audio", "volume_level")|float >= 0.7 }}'
+          stop_volume: 40
+    - wait_template: '{{ states("sensor.chromecast_volume")|float >= 40 }}'
       timeout: '00:10:00'
     - delay:
         minutes: 5

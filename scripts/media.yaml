@@ -198,10 +198,6 @@ fade_in_music:
       timeout: '00:05:00'
     - service: script.turn_on
       entity_id: script.update_media_select_source
-    - service: script.turn_on
-      entity_id: script.update_receiver_volume_slider
-    - service: script.turn_on
-      entity_id: script.update_chromecast_volume_slider
     - delay:
         seconds: 5
     # automations can be restored now
@@ -213,6 +209,8 @@ fade_in_music:
       entity_id: automation.media_input_select_changed
     - service: automation.turn_on
       entity_id: automation.chromecast_volume_slider_moved
+    - service: automation.turn_on
+      entity_id: automation.media_output_changed
 increase_volume:
   alias: Slowly increase the audio level
   sequence:
@@ -220,12 +218,12 @@ increase_volume:
       data_template:
         entity_id: '{{ states("sensor.media_output") }}'
         volume_level: >
-          {% if (step_size|float > 0) and ((state_attr(states("sensor.media_output"), "volume_level")|float + (step_size|float / 100)) > (stop_volume|float / 100)) %}
+          {% if (step_size|float > 0) and ((states("sensor.chromecast_volume")|float + step_size|float) > stop_volume|float) %}
             {{ stop_volume|float / 100 }}
-          {% elif (step_size|float < 0) and ((state_attr(states("sensor.media_output"), "volume_level")|float + (step_size|float / 100)) < (stop_volume|float / 100)) %}
+          {% elif (step_size|float < 0) and ((states("sensor.chromecast_volume")|float + step_size|float) < stop_volume|float) %}
             {{ stop_volume|float / 100 }}
           {% else %}
-            {{ state_attr(states("sensor.media_output"), "volume_level")|float + (step_size|float / 100) }}
+            {{ states("sensor.chromecast_volume")|float + (step_size|float / 100) }}
           {% endif %}
     - service: script.turn_on
       entity_id: script.increase_volume_pause
@@ -238,9 +236,9 @@ increase_volume_pause:
   sequence:
     - condition: template
       value_template: >
-        {% if (step_size|float > 0) and (state_attr(states("sensor.media_output"), "volume_level")|float < (stop_volume|float / 100)) %}
+        {% if (step_size|float > 0) and (states("sensor.chromecast_volume")|float < stop_volume|float) %}
           true
-        {% elif (step_size|float < 0) and (state_attr(states("sensor.media_output"), "volume_level")|float > (stop_volume|float / 100)) %}
+        {% elif (step_size|float < 0) and (states("sensor.chromecast_volume")|float > stop_volume|float) %}
           true
         {% else %}
           false
@@ -280,10 +278,10 @@ morning_music:
       entity_id: automation.media_input_select_changed
     - service: automation.turn_off
       entity_id: automation.chromecast_volume_slider_moved
-    - service: input_select.select_option
-      data:
-        entity_id: input_select.media_output_select
-        option: 'Master Suite Audio'
+    - service: automation.turn_off
+      entity_id: automation.media_output_changed
+    - delay:
+        seconds: 1
     - service: script.turn_on
       entity_id: script.play_chill_music
     - service: script.turn_on
@@ -292,7 +290,7 @@ morning_music:
         variables:
           step_size: 1
           start_volume: 0
-          stop_volume: 50
+          stop_volume: 35
     - delay:
         minutes: 15
     - service: input_select.select_option
@@ -337,7 +335,7 @@ media_input_select:
         {% endif %}
       entity_id: media_player.vizio_smartcast
     - service_template: >
-        {% if is_state('input_select.media_select', 'Shutdown') %}
+        {% if is_state('input_select.media_select', 'Shutdown') or (is_state('sensor.media_source', 'Cast Audio') and not is_state('sensor.media_output', 'Home Audio')) %}
           media_player.turn_off
         {% else %}
           media_player.turn_on

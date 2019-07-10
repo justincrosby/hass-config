@@ -18,4 +18,5 @@ media_output_select:
     - Home Audio
     - Fake Home Audio
     - Master Suite Audio
+    - Bedroom Audio
   initial: Home Audio
