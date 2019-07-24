@@ -177,6 +177,10 @@ fade_in_music:
   sequence:
     - wait_template: '{{ is_state("sensor.media_status", "playing") }}'
       timeout: '00:10:00'
+    - service: script.turn_on
+      entity_id: script.set_default_audio_levels
+    - delay:
+        seconds: 2
     - service: media_player.volume_set
       data_template:
         entity_id: '{{ states("sensor.media_output") }}'
@@ -196,21 +200,11 @@ fade_in_music:
           {{ states("sensor.chromecast_volume")|float <= stop_volume|float }}
         {% endif %}
       timeout: '00:05:00'
-    - service: script.turn_on
-      entity_id: script.update_media_select_source
     - delay:
         seconds: 5
     # automations can be restored now
-    - service: automation.turn_on
-      entity_id: automation.music_started_1
-    - service: automation.turn_on
-      entity_id: automation.music_started_2
-    - service: automation.turn_on
-      entity_id: automation.media_input_select_changed
-    - service: automation.turn_on
-      entity_id: automation.chromecast_volume_slider_moved
-    - service: automation.turn_on
-      entity_id: automation.media_output_changed
+    - service: input_boolean.turn_on
+      entity_id: input_boolean.enable_music_automations
 increase_volume:
   alias: Slowly increase the audio level
   sequence:
@@ -219,11 +213,11 @@ increase_volume:
         entity_id: '{{ states("sensor.media_output") }}'
         volume_level: >
           {% if (step_size|float > 0) and ((states("sensor.chromecast_volume")|float + step_size|float) > stop_volume|float) %}
-            {{ stop_volume|float / 100 }}
+            {{ (stop_volume|float / 100) }}
           {% elif (step_size|float < 0) and ((states("sensor.chromecast_volume")|float + step_size|float) < stop_volume|float) %}
-            {{ stop_volume|float / 100 }}
+            {{ (stop_volume|float / 100) }}
           {% else %}
-            {{ states("sensor.chromecast_volume")|float + (step_size|float / 100) }}
+            {{ (states("sensor.chromecast_volume")|float / 100) + (step_size|float / 100) }}
           {% endif %}
     - service: script.turn_on
       entity_id: script.increase_volume_pause
@@ -236,9 +230,9 @@ increase_volume_pause:
   sequence:
     - condition: template
       value_template: >
-        {% if (step_size|float > 0) and (states("sensor.chromecast_volume")|float < stop_volume|float) %}
+        {% if (step_size|float > 0) and (states("sensor.chromecast_volume")|float < stop_volume|float) and is_state("sensor.media_status", "playing") %}
           true
-        {% elif (step_size|float < 0) and (states("sensor.chromecast_volume")|float > stop_volume|float) %}
+        {% elif (step_size|float < 0) and (states("sensor.chromecast_volume")|float > stop_volume|float) and is_state("sensor.media_status", "playing") %}
           true
         {% else %}
           false
@@ -259,7 +253,7 @@ shower_time:
     - service: input_number.set_value
       data:
         entity_id: input_number.bathroom_audio_volume
-        value: 0.7
+        value: 0.5
     - delay:
         minutes: 15
     - service: input_number.set_value
@@ -269,17 +263,19 @@ shower_time:
 morning_music:
   alias: Start music quietly in the morning
   sequence:
-    # disable these automations so they don't mess with audio settings
-    - service: automation.turn_off
-      entity_id: automation.music_started_1
-    - service: automation.turn_off
-      entity_id: automation.music_started_2
-    - service: automation.turn_off
-      entity_id: automation.media_input_select_changed
-    - service: automation.turn_off
-      entity_id: automation.chromecast_volume_slider_moved
-    - service: automation.turn_off
-      entity_id: automation.media_output_changed
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.media_output_select
+        option: 'Bedroom Audio'
+    - delay:
+        milliseconds: 500
+    - service: input_select.select_option
+      data_template:
+        entity_id: input_select.media_select
+        option: 'Cast Audio'
+    # disable music automations so they don't mess with audio settings
+    - service: input_boolean.turn_off
+      entity_id: input_boolean.enable_music_automations
     - delay:
         seconds: 1
     - service: script.turn_on
@@ -300,26 +296,66 @@ morning_music:
 set_default_audio_levels:
   alias: Sets a good audio level throughout the house
   sequence:
-    - service: media_player.volume_set
-      data:
-        entity_id: media_player.denon_avr_x1300w
-        volume_level: !secret default_receiver_volume
-#    - service: media_player.volume_set
-#      data:
-#        entity_id: media_player.home_audio
-#        volume_level: !secret default_home_audio_volume
-    - service: media_player.volume_set
-      data:
-        entity_id: media_player.living_room_audio
-        volume_level: !secret default_living_room_audio_volume
+    - service: script.turn_on
+      entity_id: script.set_default_bedroom_volume
+    - service: script.turn_on
+      entity_id: script.set_default_master_suite_volume
+    - service: script.turn_on
+      entity_id: script.set_default_home_audio_volume
+set_default_bedroom_volume:
+  alias: Sets the default volume for bedroom audio when selected
+  sequence:
+    - condition: state
+      entity_id: input_select.media_output_select
+      state: 'Bedroom Audio'
     - service: media_player.volume_set
       data:
         entity_id: media_player.bedroom_audio_volume
         volume_level: !secret default_bedroom_audio_volume
+set_default_master_suite_volume:
+  alias: Sets the default volume for master suite audio when selected
+  sequence:
+    - condition: state
+      entity_id: input_select.media_output_select
+      state: 'Master Suite Audio'
+    - service: media_player.volume_set
+      data:
+        entity_id: media_player.bedroom_audio_volume
+        volume_level: !secret default_bedroom_audio_volume
+    - delay:
+        milliseconds: 500
     - service: media_player.volume_set
       data:
         entity_id: media_player.bathroom_speaker
         volume_level: !secret default_bathroom_audio_volume
+set_default_home_audio_volume:
+  alias: Sets the default volume for master suite audio when selected
+  sequence:
+    - condition: state
+      entity_id: input_select.media_output_select
+      state: 'Home Audio'
+    - service: media_player.volume_set
+      data:
+        entity_id: media_player.denon_avr_x1300w
+        volume_level: !secret default_receiver_volume
+    - service: media_player.volume_set
+      data:
+        entity_id: media_player.living_room_audio
+        volume_level: !secret default_living_room_audio_volume
+    - delay:
+        milliseconds: 500
+    - service: media_player.volume_set
+      data:
+        entity_id: media_player.bedroom_audio_volume
+        volume_level: !secret default_bedroom_audio_volume
+    - delay:
+        milliseconds: 500
+    - service: media_player.volume_set
+      data:
+        entity_id: media_player.bathroom_speaker
+        volume_level: !secret default_bathroom_audio_volume
+    - delay:
+        milliseconds: 500
     - service: media_player.volume_set
       data:
         entity_id: media_player.main_bathroom_speaker

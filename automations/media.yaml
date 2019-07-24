@@ -4,6 +4,10 @@
     platform: state
     entity_id: sensor.media_source
     to: 'CastAudio'
+  condition:
+    condition: state
+    entity_id: input_boolean.enable_music_automations
+    state: 'on'
   action:
     - service: script.turn_on
       entity_id: script.switch_to_audio
@@ -14,6 +18,10 @@
     platform: state
     entity_id: sensor.media_status
     to: 'playing'
+  condition:
+    condition: state
+    entity_id: input_boolean.enable_music_automations
+    state: 'on'
   action:
     - service: script.turn_on
       entity_id: script.switch_to_audio
@@ -24,6 +32,10 @@
     platform: state
     entity_id: media_player.home_audio
     to: 'playing'
+  condition:
+    condition: state
+    entity_id: input_boolean.enable_music_automations
+    state: 'on'
   action:
     - service: input_select.select_option
       data:
@@ -36,6 +48,10 @@
     platform: state
     entity_id: media_player.fake_home_audio
     to: 'playing'
+  condition:
+    condition: state
+    entity_id: input_boolean.enable_music_automations
+    state: 'on'
   action:
     - service: input_select.select_option
       data:
@@ -48,6 +64,10 @@
     platform: state
     entity_id: media_player.master_suite_audio
     to: 'playing'
+  condition:
+    condition: state
+    entity_id: input_boolean.enable_music_automations
+    state: 'on'
   action:
     - service: input_select.select_option
       data:
@@ -168,18 +188,34 @@
   trigger:
     platform: state
     entity_id: input_select.media_select
+  condition:
+    condition: state
+    entity_id: input_boolean.enable_music_automations
+    state: 'on'
   action:
     service: script.turn_on
     entity_id: script.media_input_select
+
+- alias: Media Input Changed
+  trigger:
+    platform: state
+    entity_id: sensor.media_source
+  # Prevent recursive calls
+  condition:
+    condition: template
+    value_template: '{{ states("sensor.media_source") != states("input_select.media_select") }}'
+  action:
+    - service: script.turn_on
+      entity_id: script.update_media_select_source
 
 - alias: Receiver Volume Slider Moved
   trigger:
     platform: state
     entity_id: input_number.receiver_audio_volume
-  # Prevent recursive calls
   condition:
-    condition: template
-    value_template: '{{ states("sensor.receiver_volume") != states("input_number.receiver_audio_volume") }}'
+    condition: state
+    entity_id: input_boolean.enable_music_automations
+    state: 'on'
   action:
     service: script.turn_on
     entity_id: script.receiver_volume_changed
@@ -202,8 +238,14 @@
     entity_id: input_number.chromecast_audio_volume
   # Prevent recursive calls
   condition:
-    condition: template
-    value_template: '{{ states("sensor.chromecast_volume") != states("input_number.chromecast_audio_volume") }}'
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: input_boolean.enable_music_automations
+        state: 'on'
+      - condition: state
+        entity_id: sensor.media_status
+        state: 'playing'
   action:
     service: script.turn_on
     entity_id: script.chromecast_volume_changed
@@ -220,18 +262,6 @@
     - service: script.turn_on
       entity_id: script.update_chromecast_volume_slider
 
-- alias: Media Source Changed
-  trigger:
-    platform: state
-    entity_id: sensor.media_source
-  # Prevent recursive calls
-  condition:
-    condition: template
-    value_template: '{{ states("sensor.media_source") != states("input_select.media_select") }}'
-  action:
-    - service: script.turn_on
-      entity_id: script.update_media_select_source
-
 - alias: Media Track Changed
   trigger:
     platform: state
@@ -243,6 +273,15 @@
   trigger:
     platform: state
     entity_id: sensor.media_output
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: input_boolean.enable_music_automations
+        state: 'on'
+      - condition: state
+        entity_id: sensor.media_status
+        state: 'playing'
   action:
     - service: script.turn_on
       entity_id: script.stream_mopidy_to_cc

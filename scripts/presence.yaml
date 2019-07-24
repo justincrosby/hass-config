@@ -12,21 +12,21 @@ arrive_home:
 #      entity_id: switch.led_strip_switch
     - service: input_select.select_option
       data:
-        entity_id: input_select.media_select
-        option: 'Cast Audio'
-    # disable these automations so they don't mess with audio settings
-    - service: automation.turn_off
-      entity_id: automation.media_input_select_changed
-    - service: input_select.select_option
-      data:
         entity_id: input_select.media_output_select
         option: 'Home Audio'
+    - delay:
+        milliseconds: 500
+    - service: input_select.select_option
+      data_template:
+        entity_id: input_select.media_select
+        option: 'Cast Audio'
+    # disable music automations so they don't mess with audio settings
+    - service: input_boolean.turn_off
+      entity_id: input_boolean.enable_music_automations
     - delay:
         seconds: 1
     - service: script.turn_on
       entity_id: script.play_all_music_conditional
-    - delay:
-        seconds: 2
     - service: script.turn_on
       entity_id: script.fade_in_music
       data:

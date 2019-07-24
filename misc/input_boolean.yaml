@@ -10,3 +10,6 @@ fish_fed_tracker:
 plants_watered_tracker:
   name: Plants Watered Tracker
   icon: mdi:flower
+enable_music_automations:
+  name: Enable the Music Automations
+  initial: true

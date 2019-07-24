@@ -29,6 +29,14 @@ frontend:
 logger:
   default: warn
 
+recorder:
+  purge_keep_days: 2
+  exclude:
+    entities:
+      - sensor.time
+      - sensor.album_art
+      - sensor.mopidy_album_art_url
+
 # Enable lovelace
 lovelace:
   mode: yaml

@@ -45,14 +45,6 @@ morning:
     - condition: state
       entity_id: binary_sensor.alarm_full
       state: 'on'
-    - service: input_select.select_option
-      data:
-        entity_id: input_select.media_output_select
-        option: 'Bedroom Audio'
-    - service: input_select.select_option
-      data_template:
-        entity_id: input_select.media_select
-        option: 'Cast Audio'
     - service: script.turn_on
       entity_id: script.morning_music
     - wait_template: '{{ is_state("automation.music_started_1", "off") }}'
