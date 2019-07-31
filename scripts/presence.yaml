@@ -20,6 +20,10 @@ arrive_home:
       data_template:
         entity_id: input_select.media_select
         option: 'Cast Audio'
+    - wait_template: '{{ is_state("script.media_input_select", "on") }}'
+      timeout: '00:00:10'
+    - wait_template: '{{ is_state("script.media_input_select", "off") }}'
+      timeout: '00:1:00'
     # disable music automations so they don't mess with audio settings
     - service: input_boolean.turn_off
       entity_id: input_boolean.enable_music_automations

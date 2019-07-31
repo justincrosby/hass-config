@@ -9,8 +9,10 @@
     entity_id: input_boolean.enable_music_automations
     state: 'on'
   action:
-    - service: script.turn_on
-      entity_id: script.switch_to_audio
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.media_select
+        option: 'Cast Audio'
 
 - alias: Music Started 2
   initial_state: on
@@ -23,8 +25,10 @@
     entity_id: input_boolean.enable_music_automations
     state: 'on'
   action:
-    - service: script.turn_on
-      entity_id: script.switch_to_audio
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.media_select
+        option: 'Cast Audio'
 
 - alias: Music Started 3
   initial_state: on
@@ -80,8 +84,10 @@
     entity_id: media_player.vizio_smartcast
     to: 'on'
   action:
-    - service: script.turn_on
-      entity_id: script.switch_to_chromecast
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.media_select
+        option: 'Cast Video'
 
 - alias: Casting Started 2
   trigger:
@@ -89,8 +95,10 @@
     entity_id: media_player.vizio_smartcast
     to: 'playing'
   action:
-    - service: script.turn_on
-      entity_id: script.switch_to_chromecast
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.media_select
+        option: 'Cast Video'
 
 - alias: Casting Started 3
   trigger:
@@ -202,8 +210,13 @@
     entity_id: sensor.media_source
   # Prevent recursive calls
   condition:
-    condition: template
-    value_template: '{{ states("sensor.media_source") != states("input_select.media_select") }}'
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: input_boolean.enable_music_automations
+        state: 'on'
+      - condition: template
+        value_template: '{{ states("sensor.media_source") != states("input_select.media_select") }}'
   action:
     - service: script.turn_on
       entity_id: script.update_media_select_source
