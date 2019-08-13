@@ -5,7 +5,7 @@ sensors:
       {% if is_state("media_player.denon_avr_x1300w", "off") %}
         0
       {% else %}
-        {{ (state_attr("media_player.denon_avr_x1300w", "volume_level") * 100)|int }}
+        {{ (state_attr("media_player.denon_avr_x1300w", "volume_level") * 100)|round() }}
       {% endif %}
     friendly_name: 'Receiver Volume'
   chromecast_volume:
@@ -21,6 +21,6 @@ sensors:
       {% elif state_attr(states("sensor.media_output"), "volume_level") == None %}
         0
       {% else %}
-        {{ (state_attr(states("sensor.media_output"), "volume_level") * 100)|int }}
+        {{ (state_attr(states("sensor.media_output"), "volume_level") * 100)|round() }}
       {% endif %}
     friendly_name: 'Chromecast Volume'

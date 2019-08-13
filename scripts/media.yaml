@@ -281,7 +281,7 @@ set_default_master_suite_volume:
         entity_id: media_player.bathroom_speaker
         volume_level: !secret default_bathroom_audio_volume
 set_default_home_audio_volume:
-  alias: Sets the default volume for master suite audio when selected
+  alias: Sets the default volume for home audio when selected
   sequence:
     - condition: state
       entity_id: input_select.media_output_select
@@ -319,10 +319,10 @@ set_default_receiver_volume:
   sequence:
     - condition: template
       value_template: >
-        {% if not is_state('sensor.media_source', 'Cast Audio') and is_state('sensor.media_source', 'Shutdown')%}
-          true
-        {% else %}
+        {% if is_state('input_select.media_select', 'Cast Audio') or is_state('input_select.media_select', 'Shutdown') %}
           false
+        {% else %}
+          true
         {% endif %}
     - service: media_player.volume_set
       data:
@@ -333,10 +333,10 @@ switch_to_chromecast:
   sequence:
     - condition: template
       value_template: >
-        {% if not is_state('sensor.media_select', 'Cast Audio') and not is_state('sensor.media_select', 'Shutdown') %}
-          true
-        {% else %}
+        {% if is_state('input_select.media_select', 'Cast Audio') or is_state('input_select.media_select', 'Shutdown') %}
           false
+        {% else %}
+          true
         {% endif %}
     - service: media_player.turn_off
       data_template:
@@ -390,6 +390,8 @@ switch_to_chromecast:
           {% else %}
             HDMI-1
           {% endif %}
+    - wait_template: '{{ is_state("sensor.media_source", states("input_select.media_select")) }}'
+      timeout: '00:1:00'
 switch_to_audio:
   alias: Switch to Audio
   sequence:
@@ -407,6 +409,8 @@ switch_to_audio:
         milliseconds: 500
     - service: script.turn_on
       entity_id: script.set_default_audio_levels
+    - wait_template: '{{ is_state("sensor.media_source", states("input_select.media_select")) }}'
+      timeout: '00:1:00'
 media_shutdown:
   alias: Shutdown all media
   sequence:
@@ -424,11 +428,15 @@ media_shutdown:
       entity_id: media_player.mpd
     - service: media_player.turn_off
       entity_id: media_player.vizio_smartcast
+    - wait_template: '{{ is_state("sensor.media_source", states("input_select.media_select")) }}'
+      timeout: '00:1:00'
 media_input_select:
   alias: Change the home theatre settings depending on the input selection
   sequence:
     - service: input_boolean.turn_off
       entity_id: input_boolean.enable_music_automations
+    - delay:
+        milliseconds: 500
     - service: script.turn_on
       entity_id: script.media_shutdown
     - service: script.turn_on
@@ -441,6 +449,8 @@ media_input_select:
       timeout: '00:1:00'
     - wait_template: '{{ is_state("script.switch_to_audio", "off") }}'
       timeout: '00:1:00'
+    - delay:
+        seconds: 1
     - service: input_boolean.turn_on
       entity_id: input_boolean.enable_music_automations
 change_tv_input_conditional:
