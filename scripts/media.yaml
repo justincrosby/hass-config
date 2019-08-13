@@ -258,10 +258,10 @@ set_default_bedroom_volume:
       state: 'Bedroom Audio'
     - wait_template: '{{ is_state("sensor.media_status", "playing") }}'
       timeout: '00:1:00'
-    - service: media_player.volume_set
+    - service: input_number.set_value
       data:
-        entity_id: media_player.bedroom_audio_volume
-        volume_level: !secret default_bedroom_audio_volume
+        entity_id: input_number.bedroom_audio_volume
+        value: !secret default_bedroom_audio_volume
 set_default_master_suite_volume:
   alias: Sets the default volume for master suite audio when selected
   sequence:
@@ -270,16 +270,16 @@ set_default_master_suite_volume:
       state: 'Master Suite Audio'
     - wait_template: '{{ is_state("sensor.media_status", "playing") }}'
       timeout: '00:1:00'
-    - service: media_player.volume_set
+    - service: input_number.set_value
       data:
-        entity_id: media_player.bedroom_audio_volume
-        volume_level: !secret default_bedroom_audio_volume
+        entity_id: input_number.bedroom_audio_volume
+        value: !secret default_bedroom_audio_volume
     - delay:
         milliseconds: 500
-    - service: media_player.volume_set
+    - service: input_number.set_value
       data:
-        entity_id: media_player.bathroom_speaker
-        volume_level: !secret default_bathroom_audio_volume
+        entity_id: input_number.bathroom_audio_volume
+        value: !secret default_bathroom_audio_volume
 set_default_home_audio_volume:
   alias: Sets the default volume for home audio when selected
   sequence:
@@ -289,31 +289,31 @@ set_default_home_audio_volume:
     - service: media_player.volume_set
       data:
         entity_id: media_player.denon_avr_x1300w
-        volume_level: !secret default_receiver_volume
+        volume_level: !secret default_receiver_cast_volume
     - wait_template: '{{ is_state("sensor.media_status", "playing") }}'
       timeout: '00:1:00'
-    - service: media_player.volume_set
+    - service: input_number.set_value
       data:
-        entity_id: media_player.living_room_audio
-        volume_level: !secret default_living_room_audio_volume
+        entity_id: input_number.living_room_audio_volume
+        value: !secret default_living_room_audio_volume
     - delay:
         milliseconds: 500
-    - service: media_player.volume_set
+    - service: input_number.set_value
       data:
-        entity_id: media_player.bedroom_audio_volume
-        volume_level: !secret default_bedroom_audio_volume
+        entity_id: input_number.bedroom_audio_volume
+        value: !secret default_bedroom_audio_volume
     - delay:
         milliseconds: 500
-    - service: media_player.volume_set
+    - service: input_number.set_value
       data:
-        entity_id: media_player.bathroom_speaker
-        volume_level: !secret default_bathroom_audio_volume
+        entity_id: input_number.bathroom_audio_volume
+        value: !secret default_bathroom_audio_volume
     - delay:
         milliseconds: 500
-    - service: media_player.volume_set
+    - service: input_number.set_value
       data:
-        entity_id: media_player.main_bathroom_speaker
-        volume_level: !secret default_bathroom_audio_volume
+        entity_id: input_number.main_bathroom_audio_volume
+        value: !secret default_bathroom_audio_volume
 set_default_receiver_volume:
   alias: Sets the default volume for the home theatre
   sequence:
