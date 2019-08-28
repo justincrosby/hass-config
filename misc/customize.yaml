@@ -20,6 +20,8 @@
     friendly_name: Justin
   binary_sensor.jenni_presence:
     friendly_name: Jenni
+  binary_sensor.jayden_presence:
+    friendly_name: Jayden
 # Switches
   switch.justins_pc:
     friendly_name: Justins PC
@@ -42,6 +44,9 @@
     icon: mdi:fridge-outline
   light.led_strip:
     icon: mdi:led-strip
+  light.scrub_room:
+    friendly_name: Jayden's Room
+    icon: mdi:lamp
 # Media
   media_player.denon_avr_x1300w:
     friendly_name: Denon AVR

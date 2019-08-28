@@ -11,6 +11,7 @@ views:
     badges:
       - binary_sensor.justin_presence
       - binary_sensor.jenni_presence
+      - binary_sensor.jayden_presence
       - sensor.sunset_time
       - sensor.workday_alarm
       - sensor.weekend_alarm
@@ -155,7 +156,7 @@ views:
               - type: light
                 entity: light.bedroom
               - type: light
-                entity: light.led_strip_display
+                entity: light.scrub_room
       - type: weather-forecast
         entity: weather.dark_sky
   - path: alarms
