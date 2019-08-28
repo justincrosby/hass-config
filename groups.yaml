@@ -76,13 +76,11 @@ a_switches:
   - light.fish_light
   - light.betta_light
   - switch.justins_pc
-  - light.living_room_lamp
+  - light.living_room
   - light.kitchen
   - light.led_strip
-  - switch.christmas_wreath
   - lock.front_door
   - switch.bedroom_air_purifier
-  - switch.bedroom_fan
   - input_boolean.workday_alarm
   - input_boolean.weekend_alarm
   - input_boolean.fish_fed_tracker
@@ -93,8 +91,7 @@ a_lights:
   entities:
   - light.bedroom
   - light.fairy_lights
-  - light.kitchen
-  - light.living_room_lamp
+  - light.living_room
   - light.led_strip
 a_automations:
   name: All Automations
@@ -148,12 +145,6 @@ dark_sky:
     - sensor.dark_sky_summary
     - sensor.dark_sky_hourly_summary
     - sensor.dark_sky_daytime_high_apparent_temperature
-living_room_lights:
-  name: Living Room Lights
-  view: false
-  entities:
-    - light.kitchen
-    - light.living_room_lamp
 media_input_control:
   name: Media Control
   view: false

@@ -58,7 +58,8 @@ light.fish_light:
   expose: true
 light.living_room_lamp:
   expose: true
-light.kitchen:
+light.living_room:
+  name: Living Room Lights
   expose: true
 light.led_strip:
   expose: true

@@ -121,8 +121,8 @@ morning:
       entity_id: script.enable_presence
 #    - service: lock.unlock
 #      entity_id: lock.front_door
-#    - service: light.turn_on
-#      entity_id: light.kitchen
+    - service: light.turn_on
+      entity_id: light.living_room
 ringer_on_conditional:
   alias: Phone Ringer On Conditional
   sequence:

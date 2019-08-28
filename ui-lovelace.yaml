@@ -148,7 +148,7 @@ views:
           - type: horizontal-stack
             cards:
               - type: light
-                entity: light.kitchen
+                entity: light.living_room_light
               - type: light
                 entity: light.living_room_lamp
           - type: horizontal-stack

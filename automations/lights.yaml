@@ -7,12 +7,12 @@
     data_template:
       entity_id: light.led_strip
       brightness: >
-        {% if states.light.kitchen.attributes["brightness"]|int > 205 %}
+        {% if state_attr("light.living_room", "brightness")|int > 205 %}
           205
         {% else %}
-          {{ states.light.kitchen.attributes["brightness"] }}
+          {{ state_attr("light.living_room", "brightness") }}
         {% endif %}
-      rgb_color: ['{{ states.light.kitchen.attributes["rgb_color"][0] }}', '{{ states.light.kitchen.attributes["rgb_color"][1] }}', '{{ states.light.kitchen.attributes["rgb_color"][2] }}']
+      rgb_color: ['{{ state_attr("light.living_room", "rgb_color")[0] }}', '{{ state_attr("light.living_room", "rgb_color")[1] }}', '{{ state_attr("light.living_room", "rgb_color")[2] }}']
 - alias: Periodically Change the LED Strip to a Random Colour
   trigger:
     platform: time_pattern

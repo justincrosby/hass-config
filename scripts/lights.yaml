@@ -65,22 +65,22 @@ remote_button_1:
   alias: Rmote button 1 pressed
   sequence:
     - service_template: >
-        {% if is_state("light.kitchen", "off") %}
+        {% if is_state("light.living_room", "off") %}
           light.turn_on
         {% else %}
           light.turn_off
         {% endif %}
-      entity_id: light.kitchen
+      entity_id: light.living_room
 remote_button_1_long:
   alias: Rmote button 1 long pressed
   sequence:
     - service_template: >
-        {% if is_state("light.kitchen", "off") or is_state("light.living_room_lamp", "off") %}
-          homeassistant.turn_on
+        {% if is_state("light.living_room_lamp", "off") %}
+          light.turn_on
         {% else %}
-          homeassistant.turn_off
+          light.turn_off
         {% endif %}
-      entity_id: group.living_room_lights
+      entity_id: light.living_room_lamp
 remote_button_2:
   alias: Rmote button 2 pressed
   sequence:
