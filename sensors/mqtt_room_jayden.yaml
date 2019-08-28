@@ -1,0 +1,6 @@
+platform: mqtt
+state_topic: !secret jaydens_phone_bluetooth_mac
+value_template: '{{ value_json.confidence }}'
+unit_of_measurement: '%'
+name: 'Jayden Home Percent'
+
