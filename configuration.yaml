@@ -153,10 +153,10 @@ hue:
       allow_unreachable: true
       allow_hue_groups: true
 
-august:
-  login_method: email
-  username: !secret august_username
-  password: !secret august_password
+#august:
+#  login_method: email
+#  username: !secret august_username
+#  password: !secret august_password
 
 switch: !include_dir_list switches/
 light: !include_dir_list lights/

@@ -254,6 +254,9 @@ set_default_bedroom_volume:
   alias: Sets the default volume for bedroom audio when selected
   sequence:
     - condition: state
+      entity_id: input_select.media_select
+      state: 'Cast Audio'
+    - condition: state
       entity_id: input_select.media_output_select
       state: 'Bedroom Audio'
     - wait_template: '{{ is_state("sensor.media_status", "playing") }}'
@@ -265,6 +268,9 @@ set_default_bedroom_volume:
 set_default_master_suite_volume:
   alias: Sets the default volume for master suite audio when selected
   sequence:
+    - condition: state
+      entity_id: input_select.media_select
+      state: 'Cast Audio'
     - condition: state
       entity_id: input_select.media_output_select
       state: 'Master Suite Audio'
@@ -283,6 +289,9 @@ set_default_master_suite_volume:
 set_default_home_audio_volume:
   alias: Sets the default volume for home audio when selected
   sequence:
+    - condition: state
+      entity_id: input_select.media_select
+      state: 'Cast Audio'
     - condition: state
       entity_id: input_select.media_output_select
       state: 'Home Audio'
@@ -372,6 +381,8 @@ switch_to_chromecast:
         milliseconds: 500
     - service: script.turn_on
       entity_id: script.set_default_audio_levels
+    - wait_template: '{{ is_state("media_player.vizio_smartcast", "on") }}'
+      timeout: '00:1:00'
     - condition: template
       value_template: >
         {% if is_state('input_select.media_select', 'Cast Video') %}
@@ -379,8 +390,6 @@ switch_to_chromecast:
         {% else %}
           {{ state_attr("media_player.vizio_smartcast", "source") != "HDMI-1" }}
         {% endif %}
-    - wait_template: '{{ is_state("media_player.vizio_smartcast", "on") }}'
-      timeout: '00:1:00'
     - service: media_player.select_source
       data_template:
         entity_id: media_player.vizio_smartcast
