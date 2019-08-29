@@ -2,14 +2,25 @@ arrive_home:
   alias: Arrive Home
   sequence:
     - condition: state
-      entity_id: binary_sensor.presence_everyone_home
-      state: 'off'
+      entity_id: binary_sensor.presence_should_activate
+      state: 'on'
 #    - service: lock.unlock
 #      entity_id: lock.front_door
     - service: script.turn_on
       entity_id: script.turn_on_pc_conditional
 #    - service: switch.turn_on
 #      entity_id: switch.led_strip_switch
+    - service: light.turn_on
+      data_template:
+        entity_id: light.living_room
+        brightness_pct: >
+            {% if now().strftime("%H")|int > 23 %}
+              30
+            {% else %}
+              95
+            {% endif %}
+    - service: script.turn_on
+      entity_id: script.sunset
     - delay:
         seconds: 20
     - condition: state
@@ -43,20 +54,6 @@ arrive_home:
           step_size: 5
           start_volume: 0
           stop_volume: 45
-    - service: light.turn_on
-      data_template:
-        entity_id: light.living_room
-        brightness_pct: >
-            {% if now().strftime("%H")|int > 23 %}
-              30
-            {% else %}
-              95
-            {% endif %}
-    - condition: sun
-      after: sunset
-      after_offset: "+00:20:00"
-    - service: script.turn_on
-      entity_id: script.sunset
 turn_on_pc_conditional:
   alias: Turn On the PC In the Evening
   sequence:

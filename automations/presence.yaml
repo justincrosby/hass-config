@@ -22,6 +22,17 @@
     service: script.turn_on
     entity_id: script.leave_home
 
+- alias: Leave Home Jayden
+  initial_state: false
+  trigger:
+    platform: state
+    entity_id: binary_sensor.jayden_presence
+    from: 'on'
+    to: 'off'
+  action:
+    service: script.turn_on
+    entity_id: script.leave_home
+
 - alias: Arrive Home Justin
   initial_state: false
   trigger:
@@ -40,6 +51,17 @@
   trigger:
     platform: state
     entity_id: binary_sensor.jenni_presence
+    from: 'off'
+    to: 'on'
+  action:
+    service: script.turn_on
+    entity_id: script.arrive_home
+
+- alias: Arrive Home Jayden
+  initial_state: false
+  trigger:
+    platform: state
+    entity_id: binary_sensor.jayden_presence
     from: 'off'
     to: 'on'
   action:
