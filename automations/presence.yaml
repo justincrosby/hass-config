@@ -1,10 +1,13 @@
 - alias: Leave Home Justin
-  initial_state: false
   trigger:
     platform: state
     entity_id: binary_sensor.justin_presence
     from: 'on'
     to: 'off'
+  condition:
+    condition: state
+    entity_id: input_boolean.enable_presence_automations
+    state: 'on'
   action:
     - service: script.turn_on
       entity_id: script.leave_home_justin
@@ -12,12 +15,15 @@
       entity_id: script.leave_home
 
 - alias: Leave Home Jenni
-  initial_state: false
   trigger:
     platform: state
     entity_id: binary_sensor.jenni_presence
     from: 'on'
     to: 'off'
+  condition:
+    condition: state
+    entity_id: input_boolean.enable_presence_automations
+    state: 'on'
   action:
     service: script.turn_on
     entity_id: script.leave_home
@@ -29,6 +35,10 @@
     entity_id: binary_sensor.jayden_presence
     from: 'on'
     to: 'off'
+  condition:
+    condition: state
+    entity_id: input_boolean.enable_presence_automations
+    state: 'on'
   action:
     service: script.turn_on
     entity_id: script.leave_home
@@ -40,6 +50,10 @@
     entity_id: binary_sensor.justin_presence
     from: 'off'
     to: 'on'
+  condition:
+    condition: state
+    entity_id: input_boolean.enable_presence_automations
+    state: 'on'
   action:
     - service: script.turn_on
       entity_id: script.arrive_home_justin
@@ -53,6 +67,10 @@
     entity_id: binary_sensor.jenni_presence
     from: 'off'
     to: 'on'
+  condition:
+    condition: state
+    entity_id: input_boolean.enable_presence_automations
+    state: 'on'
   action:
     service: script.turn_on
     entity_id: script.arrive_home
@@ -64,6 +82,10 @@
     entity_id: binary_sensor.jayden_presence
     from: 'off'
     to: 'on'
+  condition:
+    condition: state
+    entity_id: input_boolean.enable_presence_automations
+    state: 'on'
   action:
     service: script.turn_on
     entity_id: script.arrive_home

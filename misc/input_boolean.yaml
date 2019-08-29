@@ -13,3 +13,6 @@ plants_watered_tracker:
 enable_music_automations:
   name: Enable the Music Automations
   initial: true
+enable_presence_automations:
+  name: Enable the Presence Automations
+  initial: false

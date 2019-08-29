@@ -117,8 +117,8 @@ morning:
       data:
         entity_id: light.bedroom
         brightness_pct: 100
-    - service: script.turn_on
-      entity_id: script.enable_presence
+    - service: input_boolean.turn_on
+      entity_id: input_boolean.enable_presence_automations
 #    - service: lock.unlock
 #      entity_id: lock.front_door
     - service: light.turn_on
@@ -167,8 +167,8 @@ bedtime:
       entity_id: input_boolean.plants_watered_tracker
     - service: switch.turn_on
       entity_id: switch.bedroom_air_purifier
-    - service: script.turn_on
-      entity_id: script.disable_presence
+    - service: input_boolean.turn_off
+      entity_id: input_boolean.enable_presence_automations
     - delay:
         minutes: 30
     - service: shell_command.shutdown
