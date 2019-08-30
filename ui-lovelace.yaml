@@ -184,28 +184,6 @@ views:
     cards:
       - type: entities
         entities:
-          - automation.arrive_home_jenni
-          - automation.arrive_home_justin
-          - automation.cast_music_when_playing_from_mpd
-          - automation.casting_started_1
-          - automation.casting_started_2
-          - automation.leave_home_jenni
-          - automation.leave_home_justin
-          - automation.media_input_select_changed
-          - automation.chromecast_volume_slider_moved
-          - automation.receiver_volume_slider_moved
-          - automation.music_started_1
-          - automation.music_started_2
-          - automation.night_no_one_home
-          - automation.restart_stream
-          - automation.stop_mpd_when_other_device_casting
-          - automation.sunset
-          #- automation.update_google_assistant
-          - automation.update_led_strip_colour_when_hue_colour_changed
-          - automation.periodically_change_the_led_strip_to_a_random_colour
-          #- automation.its_christmas
-      - type: entities
-        entities:
           - script.be_right_back
           - script.bedtime
           - script.led_strip_turn_on
@@ -221,6 +199,34 @@ views:
           - script.switch_to_chromecast
           - script.volume_down
           - script.volume_up
+      - type: entities
+        entities:
+          - input_boolean.enable_music_automations
+          - input_boolean.enable_presence_automations
+      - type: entities
+        entities:
+          - automation.arrive_home_jenni
+          - automation.arrive_home_justin
+          - automation.arrive_home_jayden
+          - automation.cast_music_when_playing_from_mpd
+          - automation.casting_started_1
+          - automation.casting_started_2
+          - automation.leave_home_jenni
+          - automation.leave_home_justin
+          - automation.leave_home_jayden
+          - automation.media_input_select_changed
+          - automation.chromecast_volume_slider_moved
+          - automation.receiver_volume_slider_moved
+          - automation.music_started_1
+          - automation.music_started_2
+          - automation.night_no_one_home
+          - automation.restart_stream
+          - automation.stop_mpd_when_other_device_casting
+          - automation.sunset
+          #- automation.update_google_assistant
+          - automation.update_led_strip_colour_when_hue_colour_changed
+          - automation.periodically_change_the_led_strip_to_a_random_colour
+          #- automation.its_christmas
   - path: media
     title: Media Control
     icon: mdi:music

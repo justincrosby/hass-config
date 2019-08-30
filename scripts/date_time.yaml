@@ -3,11 +3,10 @@ shutoff:
   sequence:
     - service: script.turn_on
       entity_id: script.bedroom_light_fade_out
-    - delay:
-        seconds:
-          15
+    - wait_template: '{{ is_state("script.bedroom_light_fade_out", "off") }}'
+      timeout: '00:01:00'
     - service: homeassistant.turn_off
-      entity_id: group.a_lights
+      entity_id: group.main_lights
     - service: input_select.select_option
       data:
         entity_id: input_select.media_select
@@ -16,8 +15,8 @@ shutoff:
       entity_id: switch.justins_pc
 #    - service: lock.lock
 #      entity_id: lock.front_door
-    - service: switch.turn_off
-      entity_id: switch.led_strip_switch
+#    - service: switch.turn_off
+#      entity_id: switch.led_strip_switch
     - condition: template
       value_template: '{{ bedtime == false }}'
     - service: switch.turn_off
@@ -46,7 +45,7 @@ morning:
     - service: script.turn_on
       entity_id: script.morning_music
     - wait_template: '{{ is_state("input_boolean.enable_music_automations", "off") }}'
-      timeout: '00:05:00'
+      timeout: '00:01:00'
     - wait_template: '{{ is_state("input_boolean.enable_music_automations", "on") }}'
       timeout: '00:20:00'
     - delay:
@@ -54,16 +53,23 @@ morning:
     - service: light.turn_on
       data:
         entity_id: light.bedroom
+        rgb_color: [255, 0, 0]
         brightness_pct: 0
     - delay:
         seconds: 1
     - service: light.turn_on
       data:
         entity_id: light.bedroom
+        rgb_color: [255, 255, 0]
         brightness_pct: 80
         transition: 300
     - delay:
         minutes: 20
+    # disable music automations so they don't mess with audio settings
+    - service: input_boolean.turn_off
+      entity_id: input_boolean.enable_music_automations
+    - delay:
+        seconds: 1
     - service: script.turn_on
       entity_id: script.fade_in_music
       data:
@@ -71,16 +77,16 @@ morning:
           step_size: -5
           start_volume: 35
           stop_volume: 0
-    - wait_template: '{{ states("sensor.chromecast_volume")|float == 0 }}'
-      timeout: '00:10:00'
+    - wait_template: '{{ is_state("input_boolean.enable_music_automations", "off") }}'
+      timeout: '00:01:00'
+    - wait_template: '{{ is_state("input_boolean.enable_music_automations", "on") }}'
+      timeout: '00:05:00'
     - service: input_select.select_option
       data_template:
         entity_id: input_select.media_select
         option: 'Shutdown'
-    - wait_template: '{{ is_state("script.media_input_select", "on") }}'
-      timeout: '00:00:10'
     - wait_template: '{{ is_state("script.media_input_select", "off") }}'
-      timeout: '00:1:00'
+      timeout: '00:01:00'
     - service: input_select.select_option
       data:
         entity_id: input_select.media_output_select
@@ -91,10 +97,8 @@ morning:
       data_template:
         entity_id: input_select.media_select
         option: 'Cast Audio'
-    - wait_template: '{{ is_state("script.media_input_select", "on") }}'
-      timeout: '00:00:10'
     - wait_template: '{{ is_state("script.media_input_select", "off") }}'
-      timeout: '00:1:00'
+      timeout: '00:01:00'
     # disable music automations so they don't mess with audio settings
     - service: input_boolean.turn_off
       entity_id: input_boolean.enable_music_automations
@@ -109,14 +113,18 @@ morning:
           step_size: 5
           start_volume: 0
           stop_volume: 40
-    - wait_template: '{{ states("sensor.chromecast_volume")|float >= 40 }}'
-      timeout: '00:10:00'
+    - wait_template: '{{ is_state("input_boolean.enable_music_automations", "off") }}'
+      timeout: '00:01:00'
+    - wait_template: '{{ is_state("input_boolean.enable_music_automations", "on") }}'
+      timeout: '00:05:00'
     - delay:
         minutes: 5
     - service: light.turn_on
       data:
         entity_id: light.bedroom
+        rgb_color: [255, 255, 255]
         brightness_pct: 100
+        transition: 100
     - service: input_boolean.turn_on
       entity_id: input_boolean.enable_presence_automations
 #    - service: lock.unlock
@@ -141,6 +149,15 @@ sunset:
       entity_id: light.fairy_lights
     - service: light.turn_on
       entity_id: light.living_room_lamp
+    - condition: state
+      entity_id: light.bedroom
+      state: 'on'
+    - service: light.turn_on
+      data:
+        entity_id: light.bedroom
+        rgb_color: [255, 0, 0]
+        brightness_pct: 60
+        transition: 15
 #    - service: switch.turn_on
 #      entity_id: switch.christmas_wreath
 #    - service: script.turn_on
@@ -153,8 +170,12 @@ bedtime:
       data:
         variables:
           bedtime: true
-    - service: switch.turn_off
-      entity_id: switch.christmas_wreath
+    - wait_template: '{{ is_state("script.shutoff", "off") }}'
+      timeout: '00:01:00'
+    - service: input_boolean.turn_off
+      entity_id: input_boolean.enable_presence_automations
+    - service: input_boolean.turn_off
+      entity_id: input_boolean.enable_music_automations
     - service: switch.turn_on
       entity_id: switch.phone_bedtime
     - service: script.turn_on
@@ -167,8 +188,3 @@ bedtime:
       entity_id: input_boolean.plants_watered_tracker
     - service: switch.turn_on
       entity_id: switch.bedroom_air_purifier
-    - service: input_boolean.turn_off
-      entity_id: input_boolean.enable_presence_automations
-    - delay:
-        minutes: 30
-    - service: shell_command.shutdown

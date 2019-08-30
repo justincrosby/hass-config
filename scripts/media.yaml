@@ -221,8 +221,6 @@ morning_music:
       data_template:
         entity_id: input_select.media_select
         option: 'Cast Audio'
-    - wait_template: '{{ is_state("script.media_input_select", "on") }}'
-      timeout: '00:00:10'
     - wait_template: '{{ is_state("script.media_input_select", "off") }}'
       timeout: '00:1:00'
     # disable music automations so they don't mess with audio settings
@@ -409,17 +407,26 @@ switch_to_audio:
       state: 'Cast Audio'
     - service: media_player.turn_off
       entity_id: media_player.vizio_smartcast
-    - service: media_player.turn_on
-      entity_id: media_player.denon_avr_x1300w
-    - wait_template: '{{ is_state("media_player.denon_avr_x1300w", "on") }}'
-      timeout: '00:1:00'
-    - service: shell_command.switch_to_audio
-    - delay:
-        milliseconds: 500
+    - service: script.turn_on
+      entity_id: script.switch_to_audio_receiver
+    - wait_template: '{{ is_state("script.switch_to_audio_receiver", "off") }}'
+      timeout: '00:01:00'
     - service: script.turn_on
       entity_id: script.set_default_audio_levels
     - wait_template: '{{ is_state("sensor.media_source", states("input_select.media_select")) }}'
-      timeout: '00:1:00'
+      timeout: '00:01:00'
+switch_to_audio_receiver:
+  alias: Switch to Audio Receiver
+  sequence:
+    - condition: template
+      value_template: '{{ not is_state("input_select.media_output_select", "Bedroom Audio") and not is_state("input_select.media_output_select", "Master Suite Audio") }}'
+    - service: media_player.turn_on
+      entity_id: media_player.denon_avr_x1300w
+    - wait_template: '{{ is_state("media_player.denon_avr_x1300w", "on") }}'
+      timeout: '00:01:00'
+    - service: shell_command.switch_to_audio
+    - delay:
+        milliseconds: 500
 media_shutdown:
   alias: Shutdown all media
   sequence:

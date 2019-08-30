@@ -1,4 +1,5 @@
 - alias: Leave Home Justin
+  initial_state: true
   trigger:
     platform: state
     entity_id: binary_sensor.justin_presence
@@ -15,6 +16,7 @@
       entity_id: script.leave_home
 
 - alias: Leave Home Jenni
+  initial_state: true
   trigger:
     platform: state
     entity_id: binary_sensor.jenni_presence
@@ -29,7 +31,7 @@
     entity_id: script.leave_home
 
 - alias: Leave Home Jayden
-  initial_state: false
+  initial_state: true
   trigger:
     platform: state
     entity_id: binary_sensor.jayden_presence
@@ -44,7 +46,7 @@
     entity_id: script.leave_home
 
 - alias: Arrive Home Justin
-  initial_state: false
+  initial_state: true
   trigger:
     platform: state
     entity_id: binary_sensor.justin_presence
@@ -61,7 +63,7 @@
       entity_id: script.arrive_home
 
 - alias: Arrive Home Jenni
-  initial_state: false
+  initial_state: true
   trigger:
     platform: state
     entity_id: binary_sensor.jenni_presence
@@ -76,7 +78,7 @@
     entity_id: script.arrive_home
 
 - alias: Arrive Home Jayden
-  initial_state: false
+  initial_state: true
   trigger:
     platform: state
     entity_id: binary_sensor.jayden_presence
