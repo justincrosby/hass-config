@@ -39,6 +39,8 @@ morning:
   sequence:
     - service: script.turn_on
       entity_id: script.ringer_on_conditional
+    - service: script.turn_on
+      entity_id: script.full_alarm_off
     - condition: state
       entity_id: binary_sensor.alarm_full
       state: 'on'
@@ -131,6 +133,16 @@ morning:
 #      entity_id: lock.front_door
     - service: light.turn_on
       entity_id: light.living_room
+full_alarm_off:
+  alias: Routine for when the alarm is off
+  sequence:
+    - condition: state
+      entity_id: binary_sensor.alarm_full
+      state: 'off'
+    - service: input_boolean.turn_on
+      entity_id: input_boolean.enable_presence_automations
+    - service: input_boolean.turn_on
+      entity_id: input_boolean.enable_music_automations
 ringer_on_conditional:
   alias: Phone Ringer On Conditional
   sequence:
