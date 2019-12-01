@@ -18,3 +18,4 @@ tts/
 www/
 *.pyc
 __pycache__
+custom_components/

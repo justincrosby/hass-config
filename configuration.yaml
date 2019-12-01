@@ -64,11 +64,6 @@ python_script:
 
 updater:
 
-custom_updater:
-  track:
-    - cards
-    - components
-
 # Discover some devices automatically
 discovery:
 
@@ -178,6 +173,10 @@ media_player:
   - platform: spotify
     client_id: !secret spotify_client_id
     client_secret: !secret spotify_client_secret
+
+spotcast:
+  username: !secret spotify_username
+  password: !secret spotify_password
 
 panel_iframe:
   iris:
