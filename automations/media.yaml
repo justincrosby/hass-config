@@ -109,37 +109,6 @@
     - service: media_player.turn_off
       data_template:
         entity_id: '{{ states("sensor.media_output") }}'
-    - service: media_player.turn_off
-      entity_id: media_player.mpd
-
-- alias: Cast music when playing from MPD
-  trigger:
-    platform: state
-    entity_id: media_player.mpd
-    from: 'off'
-    to: 'playing'
-  action:
-    - service: script.turn_on
-      entity_id: script.stream_mopidy_to_cc
-
-- alias: Restart stream
-  trigger:
-    platform: state
-    entity_id: sensor.media_status
-    from: 'playing'
-    to: 'idle'
-  action:
-    - service: script.turn_on
-      entity_id: script.restart_mopidy_stream
-
-- alias: Stop MPD when other device casting
-  trigger:
-    platform: state
-    entity_id: sensor.home_audio_app
-    to: 'Spotify'
-  action:
-    - service: media_player.media_stop
-      entity_id: media_player.mpd
 
 - alias: Home audio unavailable for 15 minutes
   trigger:
@@ -275,13 +244,6 @@
     - service: script.turn_on
       entity_id: script.update_chromecast_volume_slider
 
-- alias: Media Track Changed
-  trigger:
-    platform: state
-    entity_id: sensor.media_track
-  action:
-    - service: shell_command.update_album_art
-
 - alias: Media Output Changed
   trigger:
     platform: state
@@ -297,4 +259,4 @@
         state: 'playing'
   action:
     - service: script.turn_on
-      entity_id: script.stream_mopidy_to_cc
+      entity_id: script.change_media_output

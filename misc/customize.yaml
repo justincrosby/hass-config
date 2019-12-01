@@ -54,8 +54,6 @@
   media_player.vizio_smartcast:
     friendly_name: Vizio
     icon: mdi:television
-  media_player.mpd:
-    icon: mdi:music
   media_player.home_audio:
     hidden: false
     icon: mdi:music

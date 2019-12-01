@@ -168,8 +168,6 @@ media_player:
     access_token: !secret vizio_access_token
   - platform: denonavr
     host: !secret denon_ip
-  - platform: mpd
-    host: !secret mpd_ip
   - platform: spotify
     client_id: !secret spotify_client_id
     client_secret: !secret spotify_client_secret

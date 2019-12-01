@@ -126,14 +126,6 @@ views:
                   type: entities
                   entities:
                     - sensor.album_art
-              - type: conditional
-                conditions:
-                  - entity: media_player.mpd
-                    state: 'playing'
-                card:
-                  type: entities
-                  entities:
-                    - media_player.mpd
           - type: conditional
             conditions:
               - entity: media_player.home_audio
@@ -208,7 +200,6 @@ views:
           - automation.arrive_home_jenni
           - automation.arrive_home_justin
           - automation.arrive_home_jayden
-          - automation.cast_music_when_playing_from_mpd
           - automation.casting_started_1
           - automation.casting_started_2
           - automation.leave_home_jenni
@@ -221,7 +212,6 @@ views:
           - automation.music_started_2
           - automation.night_no_one_home
           - automation.restart_stream
-          - automation.stop_mpd_when_other_device_casting
           - automation.sunset
           #- automation.update_google_assistant
           - automation.update_led_strip_colour_when_hue_colour_changed

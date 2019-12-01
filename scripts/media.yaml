@@ -12,103 +12,22 @@ volume_down:
       data_template:
         entity_id: media_player.denon_avr_x1300w
         volume_level: '{{ state_attr("media_player.denon_avr_x1300w", "volume_level") - 0.05 }}'
-play_music:
-  alias: Play Music
-  sequence:
-    - service: media_player.media_play
-      entity_id: media_player.mpd
-pause_music:
-  alias: Pause Music
-  sequence:
-    - service: media_player.media_pause
-      entity_id: media_player.mpd
-    - service: media_player.media_pause
-      data_template:
-        entity_id: '{{ states("sensor.media_output") }}'
-next_track:
-  alias: Next Track
-  sequence:
-    - service: script.turn_on
-      entity_id: script.next_track_mpd
-    - service: script.turn_on
-      entity_id: script.next_track_home_audio
-next_track_mpd:
-  alias: Next Track MPD
-  sequence:
-    - condition: state
-      entity_id: media_player.mpd
-      state: 'playing'
-    - service: media_player.media_next_track
-      entity_id: media_player.mpd
-next_track_home_audio:
-  alias: Next Track Home Audio
-  sequence:
-    - condition: state
-      entity_id: media_player.mpd
-      state: 'off'
-    - service: media_player.media_next_track
-      data_template:
-        entity_id: '{{ states("sensor.media_output") }}'
-stream_mopidy_to_cc:
-  alias: Start Mopidy Stream
-  sequence:
-    - service: media_player.media_stop
-      data_template:
-        entity_id: '{{ states("sensor.media_output") }}'
-    - delay:
-        seconds: 1
-    - service: media_player.play_media
-      data_template:
-        entity_id: '{{ states("sensor.media_output") }}'
-        media_content_id: !secret icecast_url
-        media_content_type: 'audio/mp4'
-restart_mopidy_stream:
-  alias: Restart Mopidy Stream
-  sequence:
-    - condition: state
-      entity_id: media_player.mpd
-      state: 'playing'
-    - service: media_player.play_media
-      data_template:
-        entity_id: '{{ states("sensor.media_output") }}'
-        media_content_id: !secret icecast_url
-        media_content_type: 'audio/mp4'
 play_all_music:
   alias: Play All Music Playlist
   sequence:
-    - service: media_player.media_stop
-      entity_id: media_player.mpd
-#    - service: script.turn_on
-#      entity_id: script.clear_track_list
-    - service: media_player.shuffle_set
-      data:
-        entity_id: media_player.mpd
-        shuffle: true
-    - service: media_player.play_media
-      data:
-        entity_id: media_player.mpd
-        media_content_type: 'audio/mp4'
-        media_content_id: spotify:user:justinception_:playlist:4mSGoZ3eIAeOR5niVaZNat
+    - service: spotcast.start
+      data_template:
+        entity_id: '{{ states("sensor.media_output") }}'
+        uri: !secret all_music_playlist_uri
+        random_song: true
 play_chill_music:
   alias: Play Chill Music Playlist
   sequence:
-    - service: media_player.media_stop
-      entity_id: media_player.mpd
-#    - service: script.turn_on
-#      entity_id: script.clear_track_list
-    - service: media_player.shuffle_set
-      data:
-        entity_id: media_player.mpd
-        shuffle: true
-    - service: media_player.play_media
-      data:
-        entity_id: media_player.mpd
-        media_content_type: 'audio/mp4'
-        media_content_id: spotify:user:justinception_:playlist:2A6wCBOUNCoBkEPaUgomX4
-clear_track_list:
-  alias: Clear Track List
-  sequence:
-    - service: rest_command.clear_track_list
+    - service: spotcast.start
+      data_template:
+        entity_id: '{{ states("sensor.media_output") }}'
+        uri: !secret chill_music_playlist_uri
+        random_song: true
 play_all_music_conditional:
   alias: Play All Music Playlist Before 11pm
   sequence:
@@ -120,6 +39,12 @@ play_all_music_conditional:
           after: "09:00:00"
     - service: script.turn_on
       entity_id: script.play_all_music
+change_media_output:
+  alias: Change the media output
+  sequence:
+    - service: spotcast.start
+      data_template:
+        entity_id: '{{ states("sensor.media_output") }}'
 fade_in_music:
   alias: Wrapper for volume increase
   sequence:
@@ -135,12 +60,11 @@ fade_in_music:
         volume_level: '{{ start_volume }}'
     - delay:
         seconds: 45
-    - service: script.turn_on
-      entity_id: script.increase_volume
+    - service: python_script.turn_on
+      entity_id: python_script.volume_fade
       data_template:
-        variables:
-          step_size: '{{ step_size }}'
-          stop_volume: '{{ stop_volume }}'
+        step_size: '{{ step_size }}'
+        end_volume: '{{ stop_volume }}'
     - wait_template: >
         {% if (step_size|float > 0) %}
           {{ states("sensor.chromecast_volume")|float >= stop_volume|float }}
@@ -153,46 +77,6 @@ fade_in_music:
     # automations can be restored now
     - service: input_boolean.turn_on
       entity_id: input_boolean.enable_music_automations
-increase_volume:
-  alias: Slowly increase the audio level
-  sequence:
-    - service: media_player.volume_set
-      data_template:
-        entity_id: '{{ states("sensor.media_output") }}'
-        volume_level: >
-          {% if (step_size|float > 0) and ((states("sensor.chromecast_volume")|float + step_size|float) > stop_volume|float) %}
-            {{ (stop_volume|float / 100) }}
-          {% elif (step_size|float < 0) and ((states("sensor.chromecast_volume")|float + step_size|float) < stop_volume|float) %}
-            {{ (stop_volume|float / 100) }}
-          {% else %}
-            {{ (states("sensor.chromecast_volume")|float / 100) + (step_size|float / 100) }}
-          {% endif %}
-    - service: script.turn_on
-      entity_id: script.increase_volume_pause
-      data_template:
-        variables:
-          step_size: '{{ step_size }}'
-          stop_volume: '{{ stop_volume }}'
-increase_volume_pause:
-  alias: Script to loop volume increase script
-  sequence:
-    - condition: template
-      value_template: >
-        {% if (step_size|float > 0) and (states("sensor.chromecast_volume")|float < stop_volume|float) and is_state("sensor.media_status", "playing") %}
-          true
-        {% elif (step_size|float < 0) and (states("sensor.chromecast_volume")|float > stop_volume|float) and is_state("sensor.media_status", "playing") %}
-          true
-        {% else %}
-          false
-        {% endif %}
-    - delay:
-        seconds: 1
-    - service: script.turn_on
-      entity_id: script.increase_volume
-      data_template:
-        variables:
-          step_size: '{{ step_size }}'
-          stop_volume: '{{ stop_volume }}'
 shower_time:
   alias: Increase the Volume During Shower
   sequence:
@@ -348,8 +232,6 @@ switch_to_chromecast:
     - service: media_player.turn_off
       data_template:
         entity_id: '{{ states("sensor.media_output") }}'
-    - service: media_player.media_stop
-      entity_id: media_player.mpd
     - service: media_player.turn_on
       entity_id: media_player.vizio_smartcast
     - service: media_player.turn_on
