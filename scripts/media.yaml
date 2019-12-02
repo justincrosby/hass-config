@@ -49,10 +49,6 @@ start_playlist:
     - wait_template: '{{ is_state("sensor.media_status", "playing") }}'
       timeout: '00:01:00'
     - service: shell_command.shuffle_spotify
-    - service: python_script.volume_fade
-      data:
-        step_size: 5
-        end_volume: 50
 play_all_music:
   alias: Play All Music Playlist
   sequence:
@@ -90,37 +86,6 @@ change_media_output:
     - service: spotcast.start
       data_template:
         entity_id: '{{ states("sensor.media_output") }}'
-fade_in_music:
-  alias: Wrapper for volume increase
-  sequence:
-    - wait_template: '{{ is_state("sensor.media_status", "playing") }}'
-      timeout: '00:10:00'
-    - service: script.turn_on
-      entity_id: script.set_default_audio_levels
-    - delay:
-        seconds: 2
-    - service: media_player.volume_set
-      data_template:
-        entity_id: '{{ states("sensor.media_output") }}'
-        volume_level: '{{ start_volume }}'
-    - delay:
-        seconds: 45
-    - service: python_script.volume_fade
-      data_template:
-        step_size: '{{ step_size }}'
-        end_volume: '{{ stop_volume }}'
-    - wait_template: >
-        {% if (step_size|float > 0) %}
-          {{ states("sensor.chromecast_volume")|float >= stop_volume|float }}
-        {% else %}
-          {{ states("sensor.chromecast_volume")|float <= stop_volume|float }}
-        {% endif %}
-      timeout: '00:05:00'
-    - delay:
-        seconds: 5
-    # automations can be restored now
-    - service: input_boolean.turn_on
-      entity_id: input_boolean.enable_music_automations
 shower_time:
   alias: Increase the Volume During Shower
   sequence:
@@ -139,32 +104,48 @@ shower_time:
 morning_music:
   alias: Start music quietly in the morning
   sequence:
-    - service: input_select.select_option
-      data:
-        entity_id: input_select.media_output_select
-        option: 'Bedroom Audio'
-    - delay:
-        milliseconds: 500
-    - service: input_select.select_option
-      data_template:
-        entity_id: input_select.media_select
-        option: 'Cast Audio'
-    - wait_template: '{{ is_state("script.media_input_select", "off") }}'
-      timeout: '00:1:00'
     # disable music automations so they don't mess with audio settings
     - service: input_boolean.turn_off
       entity_id: input_boolean.enable_music_automations
     - delay:
         seconds: 1
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.media_output_select
+        option: 'Bedroom Audio'
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.media_select
+        option: 'Cast Audio'
     - service: script.turn_on
       entity_id: script.play_chill_music
-    - service: script.turn_on
-      entity_id: script.fade_in_music
+    - wait_template: '{{ is_state("sensor.media_status", "playing") }}'
+      timeout: '00:01:00'
+    - service: python_script.volume_fade
       data:
-        variables:
-          step_size: 1
-          start_volume: 0
-          stop_volume: 35
+        step_size: 1
+        end_volume: 35
+    - delay:
+        minutes: 20
+    - service: python_script.volume_fade
+      data:
+        step_size: 5
+        end_volume: 0
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.media_output_select
+        option: 'Master Suite Audio'
+    - service: script.turn_on
+      entity_id: script.play_all_music
+    - delay:
+        seconds: 1
+    - service: python_script.volume_fade
+      data:
+        step_size: 5
+        end_volume: 40
+    # re-enable the automations now
+    - service: input_boolean.turn_on
+      entity_id: input_boolean.enable_music_automations
 set_default_audio_levels:
   alias: Sets a good audio level throughout the house
   sequence:

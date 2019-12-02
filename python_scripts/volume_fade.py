@@ -30,5 +30,9 @@ if (step_size is not None) and (end_volume is not None):
 		hass.services.call('media_player', 'volume_set', service_data, False)
 		
 		time.sleep(1)
+
+	hass.services.call('script', 'turn_on', {'entity_id': 'script.update_chromecast_volume_slider'}, False)
+	if (end_volume != 0):
+		hass.services.call('script', 'turn_on', {'entity_id': 'script.set_default_audio_levels'}, False)
 else:
 	logger.error('Invalid parameter value.')

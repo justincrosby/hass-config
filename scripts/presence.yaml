@@ -49,32 +49,32 @@ arrive_home_music:
     - condition: state
       entity_id: binary_sensor.presence_should_activate
       state: 'on'
-    - service: input_select.select_option
-      data:
-        entity_id: input_select.media_output_select
-        option: 'Home Audio'
-    - delay:
-        milliseconds: 500
-    - service: input_select.select_option
-      data_template:
-        entity_id: input_select.media_select
-        option: 'Cast Audio'
-    - wait_template: '{{ is_state("script.media_input_select", "off") }}'
-      timeout: '00:1:00'
     # disable music automations so they don't mess with audio settings
     - service: input_boolean.turn_off
       entity_id: input_boolean.enable_music_automations
     - delay:
         seconds: 1
-    - service: script.turn_on
-      entity_id: script.play_all_music_conditional
-    - service: script.turn_on
-      entity_id: script.fade_in_music
+    - service: input_select.select_option
       data:
-        variables:
-          step_size: 5
-          start_volume: 0
-          stop_volume: 45
+        entity_id: input_select.media_output_select
+        option: 'Home Audio'
+    - service: input_select.select_option
+      data_template:
+        entity_id: input_select.media_select
+        option: 'Cast Audio'
+    - service: script.turn_on
+      entity_id: script.switch_to_audio
+    - service: script.turn_on
+      entity_id: script.play_all_music
+    - delay:
+        seconds: 1
+    - service: python_script.volume_fade
+      data:
+        step_size: 5
+        end_volume: 45
+    # re-enable the automations now
+    - service: input_boolean.turn_on
+      entity_id: input_boolean.enable_music_automations
 leave_home:
   alias: Leave Home
   sequence:
