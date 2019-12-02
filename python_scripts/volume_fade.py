@@ -8,6 +8,11 @@ if (step_size is not None) and (end_volume is not None):
 	current_volume = int(hass.states.get('sensor.chromecast_volume').state)
 	entity_id = hass.states.get('sensor.media_output').state
 
+	if (current_volume == end_volume):
+		time.sleep(1)
+		if (current_volume == end_volume):
+			logger.warning('Passing an end_volume value equal to the current_volume')
+
 	if (current_volume > end_volume):
 		if (step_size > 0):
 			step_size = step_size * -1

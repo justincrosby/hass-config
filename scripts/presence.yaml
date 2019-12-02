@@ -46,9 +46,16 @@ arrive_home_justin:
 arrive_home_music:
   alias: Play music when Justin arrives home
   sequence:
-    - condition: state
-      entity_id: binary_sensor.presence_should_activate
-      state: 'on'
+    - condition: template
+      value_template: '{{ not is_state("sensor.media_status", "playing") }}'
+    - condition: and
+      conditions:
+        - condition: state
+          entity_id: media_player.denon_avr_x1300w
+          state: 'on'
+        - condition: state
+          entity_id: binary_sensor.jenni_presence
+          state: 'on'
     # disable music automations so they don't mess with audio settings
     - service: input_boolean.turn_off
       entity_id: input_boolean.enable_music_automations
@@ -64,8 +71,12 @@ arrive_home_music:
         option: 'Cast Audio'
     - service: script.turn_on
       entity_id: script.switch_to_audio
+    - delay:
+        seconds: 1
     - service: script.turn_on
       entity_id: script.play_all_music
+    - wait_template: '{{ is_state("sensor.media_status", "playing") }}'
+      timeout: '00:01:00'
     - delay:
         seconds: 1
     - service: python_script.volume_fade
@@ -75,9 +86,41 @@ arrive_home_music:
     # re-enable the automations now
     - service: input_boolean.turn_on
       entity_id: input_boolean.enable_music_automations
-leave_home:
-  alias: Leave Home
+leave_home_justin:
+  alias: Leave Home Justin
   sequence:
+    - service: switch.turn_on
+      entity_id: switch.phone_ringer_off
+    - condition: state
+      entity_id: binary_sensor.jenni_presence
+      state: 'off'
+    - service: homeassistant.turn_off
+      entity_id: group.master_suite
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.media_select
+        option: Shutdown
+    - service: homeassistant.turn_off
+      entity_id: group.living_room
+leave_home_jenni:
+  alias: Leave Home Jenni
+  sequence:
+    - condition: state
+      entity_id: binary_sensor.justin_presence
+      state: 'off'
+    - service: homeassistant.turn_off
+      entity_id: group.master_suite
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.media_select
+        option: Shutdown
+    - service: homeassistant.turn_off
+      entity_id: group.living_room
+leave_home_jayden:
+  alias: Leave Home Jayden
+  sequence:
+    - service: homeassistant.turn_off
+      entity_id: group.jaydens_room
     - condition: state
       entity_id: binary_sensor.presence_anyone_home
       state: 'off'
@@ -86,11 +129,6 @@ leave_home:
       data:
         variables:
           bedtime: false
-leave_home_justin:
-  alias: Leave Home Justin
-  sequence:
-    - service: switch.turn_on
-      entity_id: switch.phone_ringer_off
 be_right_back:
   alias: Be Right Back
   sequence:

@@ -2,6 +2,26 @@ main_lights:
   name: Main Lights
   view: false
   entities:
-  - light.bedroom
-  - light.fairy_lights
-  - light.living_room
+    - light.bedroom
+    - light.fairy_lights
+    - light.living_room
+master_suite:
+  name: Master Suite
+  view: false
+  entities:
+    - light.bedroom
+    - switch.bedroom_air_purifier
+living_room:
+  name: Living Room
+  view: false
+  entities:
+    - media_player.vizio_smartcast
+    - media_player.denon_avr_x1300w
+    - light.fairy_lights
+    - light.living_room
+    - switch.justins_pc
+jaydens_room:
+  name: Jayden's Room
+  view: false
+  entities:
+    - light.scrub_room

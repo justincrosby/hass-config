@@ -37,10 +37,6 @@ start_playlist:
       data_template:
         entity_id: '{{ entity_id }}'
         is_volume_muted: false
-    - service: media_player.volume_set  #setting the volume is optional ofcourse
-      data_template:
-        entity_id: '{{ entity_id }}'
-        volume_level: 0
     - service: spotcast.start
       data_template:
         device_name: '{{ device_name }}'

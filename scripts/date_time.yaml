@@ -20,8 +20,6 @@ shutoff:
     - condition: template
       value_template: '{{ bedtime == false }}'
     - service: switch.turn_off
-      entity_id: switch.bedroom_fan
-    - service: switch.turn_off
       entity_id: switch.bedroom_air_purifier
 bedroom_light_fade_out:
   alias: Fade out the bedroom lights if they are on
