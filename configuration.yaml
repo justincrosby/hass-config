@@ -177,10 +177,6 @@ spotcast:
   password: !secret spotify_password
 
 panel_iframe:
-  iris:
-    title: 'Music'
-    url: !secret iris_url
-    icon: mdi:music
   plex:
     title: 'Plex'
     url: !secret plex_url

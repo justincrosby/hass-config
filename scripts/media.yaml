@@ -12,22 +12,67 @@ volume_down:
       data_template:
         entity_id: media_player.denon_avr_x1300w
         volume_level: '{{ state_attr("media_player.denon_avr_x1300w", "volume_level") - 0.05 }}'
+start_playlist:
+  alias: Start a spotify playlist
+  fields:
+    device_name:
+      description: 'The friendly name of the media player to cast to.'
+      example: 'Home Audio'
+    entity_id:
+      description: 'The media player to cast to.'
+      example: 'media_player.home_audio'
+    playlist_uri:
+      description: 'The Spotify playlist URI to play.'
+      example: 'spotify:playlist:*'
+  sequence:
+    - service: media_player.volume_mute
+      data_template:
+        entity_id: '{{ entity_id }}'
+        is_volume_muted: true
+    - service: spotcast.start
+      data_template:
+        device_name: '{{ device_name }}'
+        uri: 'spotify:track:5V3b2UB9tCAHuqXj2b2EP7'  # track with 1 second of silence
+    - service: media_player.volume_mute
+      data_template:
+        entity_id: '{{ entity_id }}'
+        is_volume_muted: false
+    - service: media_player.volume_set  #setting the volume is optional ofcourse
+      data_template:
+        entity_id: '{{ entity_id }}'
+        volume_level: 0
+    - service: spotcast.start
+      data_template:
+        device_name: '{{ device_name }}'
+        uri: '{{ playlist_uri }}'
+        random_song: true
+    - wait_template: '{{ is_state("sensor.media_status", "playing") }}'
+      timeout: '00:01:00'
+    - service: shell_command.shuffle_spotify
+    - service: python_script.volume_fade
+      data:
+        step_size: 5
+        end_volume: 50
 play_all_music:
   alias: Play All Music Playlist
   sequence:
-    - service: spotcast.start
+    - service: script.turn_on
+      entity_id: script.start_playlist
       data_template:
-        entity_id: '{{ states("sensor.media_output") }}'
-        uri: !secret all_music_playlist_uri
-        random_song: true
+        variables:
+          device_name: '{{ states("input_select.media_output_select") }}'
+          entity_id: '{{ states("sensor.media_output") }}'
+          playlist_uri: !secret all_music_playlist_uri
 play_chill_music:
   alias: Play Chill Music Playlist
   sequence:
-    - service: spotcast.start
+    - service: script.turn_on
+      entity_id: script.start_playlist
       data_template:
-        entity_id: '{{ states("sensor.media_output") }}'
-        uri: !secret chill_music_playlist_uri
-        random_song: true
+        variables:
+          device_name: '{{ states("input_select.media_output_select") }}'
+          entity_id: '{{ states("sensor.media_output") }}'
+          playlist_uri: !secret chill_music_playlist_uri
 play_all_music_conditional:
   alias: Play All Music Playlist Before 11pm
   sequence:
@@ -60,8 +105,7 @@ fade_in_music:
         volume_level: '{{ start_volume }}'
     - delay:
         seconds: 45
-    - service: python_script.turn_on
-      entity_id: python_script.volume_fade
+    - service: python_script.volume_fade
       data_template:
         step_size: '{{ step_size }}'
         end_volume: '{{ stop_volume }}'

@@ -1,3 +1,4 @@
 shutdown_pc: !secret command_pc_shutdown
 switch_to_audio: 'wget http://192.168.0.6/MainZone/index.put.asp?cmd0=PutZone_InputFunction%2FAUX1'
 shutdown: 'sudo shutdown -h now'
+shuffle_spotify: !secret command_shuffle_spotify

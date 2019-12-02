@@ -1,7 +1,7 @@
 title: Home
 
 resources:
-  - url: /local/custom-lovelace/upcoming-media-card/upcoming-media-card.js?v=0.1.2
+  - url: /community_plugin/upcoming-media-card/upcoming-media-card.js
     type: js
 
 views:
@@ -100,32 +100,6 @@ views:
               type: entities
               entities:
                 - media_player.bedroom_tv
-          - type: vertical-stack
-            cards:
-              - type: conditional
-                conditions:
-                  - entity: media_player.home_audio
-                    state: 'playing'
-                card:
-                  type: entities
-                  entities:
-                    - sensor.album_art
-              - type: conditional
-                conditions:
-                  - entity: media_player.fake_home_audio
-                    state: 'playing'
-                card:
-                  type: entities
-                  entities:
-                    - sensor.album_art
-              - type: conditional
-                conditions:
-                  - entity: media_player.master_suite_audio
-                    state: 'playing'
-                card:
-                  type: entities
-                  entities:
-                    - sensor.album_art
           - type: conditional
             conditions:
               - entity: media_player.home_audio
@@ -180,12 +154,8 @@ views:
           - script.bedtime
           - script.led_strip_turn_on
           - script.morning
-          - script.next_track
-          - script.pause_music
           - script.play_all_music
           - script.play_chill_music
-          - script.play_music
-          - script.restart_mopidy_stream
           - script.shutoff
           - script.switch_to_audio
           - script.switch_to_chromecast
