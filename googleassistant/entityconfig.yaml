@@ -34,10 +34,6 @@ script.switch_to_audio:
   expose: true
 script.switch_to_chromecast:
   expose: true
-script.volume_up:
-  expose: true
-script.volume_down:
-  expose: true
 script.watered_the_plants:
   name: Watered plants
   expose: true
@@ -61,8 +57,6 @@ light.living_room_lamp:
 light.living_room:
   name: Living Room Lights
   expose: true
-light.led_strip:
-  expose: true
 # Media
 switch.justins_pc:
   name: My PC
@@ -77,7 +71,4 @@ media_player.denon_avrx1300w:
 switch.bedroom_air_purifier:
   expose: true
 switch.bedroom_fan:
-  expose: true
-# Lock
-lock.front_door:
   expose: true

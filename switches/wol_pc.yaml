@@ -1,5 +1,5 @@
 platform: wake_on_lan
-mac_address: !secret justins_pc_mac
+mac: !secret justins_pc_mac
 name: justins_pc
 host: !secret justins_pc_ip
 turn_off: 

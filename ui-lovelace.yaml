@@ -181,7 +181,6 @@ views:
           - automation.music_started_1
           - automation.music_started_2
           - automation.night_no_one_home
-          - automation.restart_stream
           - automation.sunset
           #- automation.update_google_assistant
           - automation.update_led_strip_colour_when_hue_colour_changed

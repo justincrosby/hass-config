@@ -44,6 +44,8 @@ lovelace:
 # Enables configuration UI
 config:
 
+mobile_app:
+
 http:
   base_url: https://hass.justincrosby.ca/
   ip_ban_enabled: true
@@ -111,7 +113,7 @@ notify:
 
 google_assistant:
   project_id: !secret assistant_project_id
-  api_key: !secret assistant_api_key
+  service_account: !include Hass-340f86dbfbd8.json
   exposed_domains:
     - switch
     - light
@@ -163,14 +165,16 @@ input_boolean: !include misc/input_boolean.yaml
 input_select: !include misc/input_select.yaml
 
 media_player:
-  - platform: vizio
-    host: !secret vizio_ip
-    access_token: !secret vizio_access_token
   - platform: denonavr
     host: !secret denon_ip
-  - platform: spotify
-    client_id: !secret spotify_client_id
-    client_secret: !secret spotify_client_secret
+
+vizio:
+  - host: !secret vizio_ip
+    access_token: !secret vizio_access_token
+
+spotify:
+  client_id: !secret spotify_client_id
+  client_secret: !secret spotify_client_secret
 
 spotcast:
   username: !secret spotify_username

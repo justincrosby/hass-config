@@ -24,6 +24,9 @@ start_playlist:
     playlist_uri:
       description: 'The Spotify playlist URI to play.'
       example: 'spotify:playlist:*'
+    volume_level:
+      description: 'The volume level to start the playlist at (%).'
+      example: '50'
   sequence:
     - service: media_player.volume_mute
       data_template:
@@ -42,11 +45,41 @@ start_playlist:
         device_name: '{{ device_name }}'
         uri: '{{ playlist_uri }}'
         random_song: true
-    - wait_template: '{{ is_state("sensor.media_status", "playing") }}'
-      timeout: '00:01:00'
-    - service: shell_command.shuffle_spotify
+        shuffle: true
+    - service: media_player.volume_set
+      data_template:
+        entity_id: '{{ entity_id }}'
+        volume_level: '{{ volume_level|float / 100 }}'
+    - condition: template
+      value_template: '{{ state_attr(states("sensor.media_output"), volume_level) != (volume_level|float / 100) }}'
+    - delay:
+        seconds: 1
+    - service: media_player.volume_set
+      data_template:
+        entity_id: '{{ entity_id }}'
+        volume_level: '{{ volume_level|float / 100 }}'
+    - condition: template
+      value_template: '{{ state_attr(states("sensor.media_output"), volume_level) != (volume_level|float / 100) }}'
+    - delay:
+        seconds: 1
+    - service: media_player.volume_set
+      data_template:
+        entity_id: '{{ entity_id }}'
+        volume_level: '{{ volume_level|float / 100 }}'
 play_all_music:
   alias: Play All Music Playlist
+  sequence:
+    - service: script.turn_on
+      entity_id: script.play_all_music_var
+      data:
+        variables:
+          volume_level: !secret default_home_audio_volume
+play_all_music_var:
+  alias: Play All Music Playlist with Volume Select
+  fields:
+    volume_level:
+      description: 'The volume level to start the playlist at (%).'
+      example: '50'
   sequence:
     - service: script.turn_on
       entity_id: script.start_playlist
@@ -55,8 +88,17 @@ play_all_music:
           device_name: '{{ states("input_select.media_output_select") }}'
           entity_id: '{{ states("sensor.media_output") }}'
           playlist_uri: !secret all_music_playlist_uri
+          volume_level: '{{ volume_level }}'
 play_chill_music:
   alias: Play Chill Music Playlist
+  sequence:
+    - service: script.turn_on
+      data:
+        entity_id: script.play_chill_music_var
+        variables:
+          volume_level: !secret default_home_audio_volume
+play_chill_music_var:
+  alias: Play Chill Music Playlist with Volume Select
   sequence:
     - service: script.turn_on
       entity_id: script.start_playlist
@@ -65,6 +107,7 @@ play_chill_music:
           device_name: '{{ states("input_select.media_output_select") }}'
           entity_id: '{{ states("sensor.media_output") }}'
           playlist_uri: !secret chill_music_playlist_uri
+          volume_level: '{{ volume_level }}'
 play_all_music_conditional:
   alias: Play All Music Playlist Before 11pm
   sequence:
@@ -114,9 +157,15 @@ morning_music:
         entity_id: input_select.media_select
         option: 'Cast Audio'
     - service: script.turn_on
-      entity_id: script.play_chill_music
-    - wait_template: '{{ is_state("sensor.media_status", "playing") }}'
-      timeout: '00:01:00'
+      data:
+        entity_id: script.play_chill_music_var
+        variables:
+          volume_level: 0
+    - delay:
+        seconds: 1
+    - condition: state
+      entity_id: script.start_playlist
+      state: 'off'
     - service: python_script.volume_fade
       data:
         step_size: 1
@@ -131,10 +180,21 @@ morning_music:
       data:
         entity_id: input_select.media_output_select
         option: 'Master Suite Audio'
+    - service: media_player.media_stop
+      data_template:
+        entity_id: '{{ states("sensor.media_output") }}'
+    - wait_template: '{{ not is_state("sensor.media_status", "playing") }}'
+      timeout: '00:01:00'
     - service: script.turn_on
-      entity_id: script.play_all_music
+      data:
+        entity_id: script.play_all_music_var
+        variables:
+          volume_level: 0
     - delay:
         seconds: 1
+    - condition: state
+      entity_id: script.start_playlist
+      state: 'off'
     - service: python_script.volume_fade
       data:
         step_size: 5
