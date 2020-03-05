@@ -48,14 +48,22 @@ arrive_home_music:
   sequence:
     - condition: template
       value_template: '{{ not is_state("sensor.media_status", "playing") }}'
-    - condition: and
+    - condition: or
       conditions:
         - condition: state
-          entity_id: media_player.denon_avr_x1300w
+          entity_id: binary_sensor.presence_should_activate
           state: 'on'
-        - condition: state
-          entity_id: binary_sensor.jenni_presence
-          state: 'on'
+        - condition: and
+          conditions:
+            - condition: state
+              entity_id: binary_sensor.presence_should_activate
+              state: 'off'
+            - condition: state
+              entity_id: media_player.denon_avr_x1300w
+              state: 'off'
+            - condition: state
+              entity_id: media_player.vizio_smartcast
+              state: 'off'
     # disable music automations so they don't mess with audio settings
     - service: input_boolean.turn_off
       entity_id: input_boolean.enable_music_automations

@@ -120,6 +120,8 @@ bedtime:
           bedtime: true
     - wait_template: '{{ is_state("script.shutoff", "off") }}'
       timeout: '00:01:00'
+    - delay:
+        seconds: 1
     - service: input_boolean.turn_off
       entity_id: input_boolean.enable_presence_automations
     - service: input_boolean.turn_off

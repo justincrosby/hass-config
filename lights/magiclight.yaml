@@ -1,5 +1,5 @@
-platform: flux_led
-devices:
-  192.168.0.27:
-    name: LED Strip
-    mode: "rgb"
+#platform: flux_led
+#devices:
+#  192.168.0.27:
+#    name: LED Strip
+#    mode: "rgb"

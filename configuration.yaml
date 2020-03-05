@@ -128,10 +128,10 @@ device_tracker:
     username: !secret router_username
     password: !secret router_password
 
-wemo:
-  discovery: false
-  static:
-    - !secret wemo_fairy_lights_switch_ip
+#wemo:
+#  discovery: false
+#  static:
+#    - !secret wemo_fairy_lights_switch_ip
 #    - !secret wemo_fish_light_switch_ip
 
 tplink:
@@ -142,13 +142,16 @@ tplink:
     - host: !secret tplink_betta_light_switch_ip
     - host: !secret tplink_fish_light_switch_ip
 #    - host: !secret tplink_led_strip_switch_ip
-    - host: !secret tplink_living_room_lamp_switch_ip
+    - host: !secret tplink_fairy_lights_switch_ip
 
 hue:
   bridges:
     - host: !secret hue_bridge_ip
       allow_unreachable: true
       allow_hue_groups: true
+
+remote:
+  - platform: huesensor
 
 #august:
 #  login_method: email
