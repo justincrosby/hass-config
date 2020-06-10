@@ -40,8 +40,8 @@
     event: start
   action:
     #- service: google_assistant.request_sync
-    - service: frontend.set_theme
-      data:
-        name: dark_theme
+    #- service: frontend.set_theme
+    #  data:
+    #    name: dark_theme
     - service: script.turn_on
       entity_id: script.enable_presence_on_boot

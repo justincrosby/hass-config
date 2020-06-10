@@ -150,8 +150,8 @@ hue:
       allow_unreachable: true
       allow_hue_groups: true
 
-remote:
-  - platform: huesensor
+#remote:
+#  - platform: huesensor
 
 #august:
 #  login_method: email
@@ -170,6 +170,7 @@ input_select: !include misc/input_select.yaml
 media_player:
   - platform: denonavr
     host: !secret denon_ip
+    show_all_sources: true
 
 vizio:
   - host: !secret vizio_ip
@@ -180,8 +181,8 @@ spotify:
   client_secret: !secret spotify_client_secret
 
 spotcast:
-  username: !secret spotify_username
-  password: !secret spotify_password
+  sp_dc: !secret sp_dc
+  sp_key: !secret sp_key
 
 panel_iframe:
   plex:

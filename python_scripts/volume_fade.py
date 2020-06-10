@@ -2,6 +2,8 @@
 
 step_size = int(data.get('step_size'))
 end_volume = int(data.get('end_volume'))
+timeout = 120
+start_time = time.time()
 
 # These values must be passed in
 if (step_size is not None) and (end_volume is not None):
@@ -33,6 +35,9 @@ if (step_size is not None) and (end_volume is not None):
 				current_volume = end_volume
 		service_data = {'entity_id': entity_id, 'volume_level': (float(current_volume) / 100)}
 		hass.services.call('media_player', 'volume_set', service_data, False)
+		
+		if((time.time() - start_time) > timeout):
+			break
 		
 		time.sleep(1)
 
