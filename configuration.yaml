@@ -40,6 +40,11 @@ recorder:
 # Enable lovelace
 lovelace:
   mode: yaml
+  resources:
+    - url: /hacsfiles/upcoming-media-card/upcoming-media-card.js
+      type: module
+    - url: /hacsfiles/mini-media-player/mini-media-player-bundle.js
+      type: module
 
 # Enables configuration UI
 config:
@@ -47,7 +52,6 @@ config:
 mobile_app:
 
 http:
-  base_url: https://hass.justincrosby.ca/
   ip_ban_enabled: true
   login_attempts_threshold: 5
 
