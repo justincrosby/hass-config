@@ -87,7 +87,7 @@
     - service: input_select.select_option
       data:
         entity_id: input_select.media_select
-        option: 'Cast Video'
+        option: 'Shield'
 
 - alias: Casting Started 2
   trigger:
@@ -98,7 +98,7 @@
     - service: input_select.select_option
       data:
         entity_id: input_select.media_select
-        option: 'Cast Video'
+        option: 'Shield'
 
 - alias: Casting Started 3
   trigger:
@@ -133,12 +133,22 @@
 - alias: Bedroom Audio Slider Moved
   trigger:
     platform: state
-    entity_id: input_number.bedroom_audio_volume
+    entity_id: input_number.master_bedroom_audio_volume
   action:
     service: media_player.volume_set
     data_template:
-      entity_id: media_player.bedroom_audio
-      volume_level: '{{ states("input_number.bedroom_audio_volume")|float }}'
+      entity_id: media_player.master_bedroom_audio
+      volume_level: '{{ states("input_number.master_bedroom_audio_volume")|float }}'
+
+- alias: Master Bathroom Audio Slider Moved
+  trigger:
+    platform: state
+    entity_id: input_number.master_bathroom_audio_volume
+  action:
+    service: media_player.volume_set
+    data_template:
+      entity_id: media_player.master_bathroom_speaker
+      volume_level: '{{ states("input_number.master_bathroom_audio_volume")|float }}'
 
 - alias: Bathroom Audio Slider Moved
   trigger:
@@ -149,16 +159,6 @@
     data_template:
       entity_id: media_player.bathroom_speaker
       volume_level: '{{ states("input_number.bathroom_audio_volume")|float }}'
-
-- alias: Main Bathroom Audio Slider Moved
-  trigger:
-    platform: state
-    entity_id: input_number.main_bathroom_audio_volume
-  action:
-    service: media_player.volume_set
-    data_template:
-      entity_id: media_player.main_bathroom_speaker
-      volume_level: '{{ states("input_number.main_bathroom_audio_volume")|float }}'
 
 - alias: Media Input Select Changed
   initial_state: on

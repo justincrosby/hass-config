@@ -132,13 +132,13 @@ shower_time:
         seconds: 2
     - service: input_number.set_value
       data:
-        entity_id: input_number.bathroom_audio_volume
+        entity_id: input_number.master_bathroom_audio_volume
         value: 0.5
     - delay:
         minutes: 15
     - service: input_number.set_value
       data:
-        entity_id: input_number.bathroom_audio_volume
+        entity_id: input_number.master_bathroom_audio_volume
         value: !secret default_bathroom_audio_volume
 morning_music:
   alias: Start music quietly in the morning
@@ -226,8 +226,8 @@ set_default_bedroom_volume:
       timeout: '00:1:00'
     - service: input_number.set_value
       data:
-        entity_id: input_number.bedroom_audio_volume
-        value: !secret default_bedroom_audio_volume
+        entity_id: input_number.master_bedroom_audio_volume
+        value: !secret default_master_bedroom_audio_volume
 set_default_master_suite_volume:
   alias: Sets the default volume for master suite audio when selected
   sequence:
@@ -241,13 +241,13 @@ set_default_master_suite_volume:
       timeout: '00:1:00'
     - service: input_number.set_value
       data:
-        entity_id: input_number.bedroom_audio_volume
-        value: !secret default_bedroom_audio_volume
+        entity_id: input_number.master_bedroom_audio_volume
+        value: !secret default_master_bedroom_audio_volume
     - delay:
         milliseconds: 500
     - service: input_number.set_value
       data:
-        entity_id: input_number.bathroom_audio_volume
+        entity_id: input_number.master_bathroom_audio_volume
         value: !secret default_bathroom_audio_volume
 set_default_home_audio_volume:
   alias: Sets the default volume for home audio when selected
@@ -272,19 +272,19 @@ set_default_home_audio_volume:
         milliseconds: 500
     - service: input_number.set_value
       data:
-        entity_id: input_number.bedroom_audio_volume
-        value: !secret default_bedroom_audio_volume
+        entity_id: input_number.master_bedroom_audio_volume
+        value: !secret default_master_bedroom_audio_volume
     - delay:
         milliseconds: 500
     - service: input_number.set_value
       data:
-        entity_id: input_number.bathroom_audio_volume
+        entity_id: input_number.master_bathroom_audio_volume
         value: !secret default_bathroom_audio_volume
     - delay:
         milliseconds: 500
     - service: input_number.set_value
       data:
-        entity_id: input_number.main_bathroom_audio_volume
+        entity_id: input_number.bathroom_audio_volume
         value: !secret default_bathroom_audio_volume
 set_default_receiver_volume:
   alias: Sets the default volume for the home theatre
@@ -323,8 +323,8 @@ switch_to_chromecast:
       data_template:
         entity_id: media_player.denon_avr_x1300w
         source: >
-          {% if is_state('input_select.media_select', 'Cast Video') %}
-            TV Audio
+          {% if is_state('input_select.media_select', 'Shield') %}
+            Shield
           {% elif is_state('input_select.media_select', 'PS3') %}
             PS3
           {% elif is_state('input_select.media_select', 'Record Player') %}
@@ -345,21 +345,11 @@ switch_to_chromecast:
     - wait_template: '{{ is_state("media_player.vizio_smartcast", "on") }}'
       timeout: '00:1:00'
     - condition: template
-      value_template: >
-        {% if is_state('input_select.media_select', 'Cast Video') %}
-          {{ state_attr("media_player.vizio_smartcast", "source") != "SMARTCAST" }}
-        {% else %}
-          {{ state_attr("media_player.vizio_smartcast", "source") != "HDMI-1" }}
-        {% endif %}
+      value_template: '{{ state_attr("media_player.vizio_smartcast", "source") != "HDMI-1" }}'
     - service: media_player.select_source
-      data_template:
+      data:
         entity_id: media_player.vizio_smartcast
-        source: >
-          {% if is_state('input_select.media_select', 'Cast Video') %}
-            CAST
-          {% else %}
-            HDMI-1
-          {% endif %}
+        source: HDMI-1
     - wait_template: '{{ is_state("sensor.media_source", states("input_select.media_select")) }}'
       timeout: '00:1:00'
 switch_to_audio:
@@ -443,19 +433,14 @@ change_tv_input_conditional:
           true
         {% endif %}
     - condition: template
-      value_template: >
-        {% if is_state('input_select.media_select', 'Cast Video') %}
-          {{ state_attr("media_player.vizio_smartcast", "source") != "SMARTCAST" }}
-        {% else %}
-          {{ state_attr("media_player.vizio_smartcast", "source") != "HDMI-1" }}
-        {% endif %}
+      value_template: '{{ state_attr("media_player.vizio_smartcast", "source") != "HDMI-1" }}'
     - wait_template: '{{ is_state("media_player.vizio_smartcast", "on") }}'
       timeout: '00:1:00'
     - service: media_player.select_source
       data_template:
         entity_id: media_player.vizio_smartcast
         source: >
-          {% if is_state('input_select.media_select', 'Cast Video') %}
+          {% if is_state('input_select.media_select', 'Shield') %}
             CAST
           {% else %}
             HDMI-1

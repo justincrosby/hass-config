@@ -14,7 +14,7 @@ sensors:
       - media_player.home_audio
       - media_player.fake_home_audio
       - media_player.master_suite_audio
-      - media_player.bedroom_audio
+      - media_player.master_bedroom_audio
     value_template: >
       {% if is_state("sensor.media_output", "unknown") %}
         0

@@ -28,20 +28,20 @@ living_room_audio_volume:
   min: 0
   max: 1
   step: 0.01
-bedroom_audio_volume:
+master_bedroom_audio_volume:
   name: Bedroom Audio Level
+  icon: mdi:volume-high
+  min: 0
+  max: 1
+  step: 0.01
+master_bathroom_audio_volume:
+  name: Master Bathroom Audio Level
   icon: mdi:volume-high
   min: 0
   max: 1
   step: 0.01
 bathroom_audio_volume:
   name: Bathroom Audio Level
-  icon: mdi:volume-high
-  min: 0
-  max: 1
-  step: 0.01
-main_bathroom_audio_volume:
-  name: Main Bathroom Audio Level
   icon: mdi:volume-high
   min: 0
   max: 1
