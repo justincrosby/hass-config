@@ -92,8 +92,8 @@
 - alias: Casting Started 2
   trigger:
     platform: state
-    entity_id: media_player.vizio_smartcast
-    to: 'playing'
+    entity_id: media_player.shield
+    to: 'on'
   action:
     - service: input_select.select_option
       data:
@@ -101,6 +101,17 @@
         option: 'Shield'
 
 - alias: Casting Started 3
+  trigger:
+    platform: state
+    entity_id: media_player.shield
+    to: 'playing'
+  action:
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.media_select
+        option: 'Shield'
+
+- alias: Casting Started 4
   trigger:
     platform: state
     entity_id: media_player.bedroom_tv

@@ -171,11 +171,6 @@ input_boolean: !include misc/input_boolean.yaml
 
 input_select: !include misc/input_select.yaml
 
-media_player:
-  - platform: denonavr
-    host: !secret denon_ip
-    show_all_sources: true
-
 vizio:
   - host: !secret vizio_ip
     access_token: !secret vizio_access_token

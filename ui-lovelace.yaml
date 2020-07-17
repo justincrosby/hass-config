@@ -120,7 +120,6 @@ views:
               type: custom:mini-media-player
               entity: media_player.home_audio
               artwork: cover
-              type: entities
       ## Lights ##
       - type: vertical-stack
         cards:
