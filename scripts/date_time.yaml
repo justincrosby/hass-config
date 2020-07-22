@@ -69,6 +69,8 @@ morning:
         transition: 100
     - service: input_boolean.turn_on
       entity_id: input_boolean.enable_presence_automations
+    - service: switch.turn_off
+      entity_id: switch.bedroom_air_purifier
 full_alarm_off:
   alias: Routine for when the alarm is off
   sequence:

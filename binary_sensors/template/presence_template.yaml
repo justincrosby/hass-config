@@ -18,3 +18,9 @@ sensors:
         true
       {% endif %}
     friendly_name: 'Should presence automation activate?'
+  bedroom_motion:
+    friendly_name: 'Bedroom Motion Detected'
+    value_template: '{{ is_state("sensor.bedroom_burglar", "8") }}'
+  office_motion:
+    friendly_name: 'Office Motion Detected'
+    value_template: '{{ is_state("sensor.office_burglar", "8") }}'
