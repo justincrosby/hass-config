@@ -58,3 +58,9 @@ chromecast_audio_volume:
   min: 0
   max: 100
   step: 1
+thermostat_target_temp:
+  name: Thermostat Target Temperature
+  icon: mdi:thermometer
+  min: 15
+  max: 25
+  step: 0.5

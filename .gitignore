@@ -14,8 +14,13 @@ plex.conf
 .google.token
 home-assistant.log
 home-assistant_v2.db
+home-assistant_v2.db-shm
+home-assistant_v2.db-wal
 tts/
 www/
 *.pyc
 __pycache__
 custom_components/
+OZW_Log.txt
+*.sqlite
+*.xml

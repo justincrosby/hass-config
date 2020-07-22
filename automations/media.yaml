@@ -93,7 +93,8 @@
   trigger:
     platform: state
     entity_id: media_player.shield
-    to: 'on'
+    from: 'off'
+    to: 'idle'
   action:
     - service: input_select.select_option
       data:
@@ -104,6 +105,7 @@
   trigger:
     platform: state
     entity_id: media_player.shield
+    from: 'idle'
     to: 'playing'
   action:
     - service: input_select.select_option

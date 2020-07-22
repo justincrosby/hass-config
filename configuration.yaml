@@ -171,6 +171,14 @@ input_boolean: !include misc/input_boolean.yaml
 
 input_select: !include misc/input_select.yaml
 
+zwave:
+  usb_path: /dev/ttyACM0
+
+media_player:
+  - platform: androidtv
+    name: Shield
+    host: !secret shield_ip
+
 vizio:
   - host: !secret vizio_ip
     access_token: !secret vizio_access_token

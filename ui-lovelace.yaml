@@ -91,7 +91,7 @@ views:
           - type: conditional
             conditions:
               - entity: media_player.shield
-                state: 'on'
+                state: 'idle'
             card:
               type: entities
               entities:
@@ -137,6 +137,12 @@ views:
                 entity: light.scrub_room
       - type: weather-forecast
         entity: weather.dark_sky
+      - type: entities
+        entities:
+          - entity: sensor.current_temp
+          - entity: input_number.thermostat_target_temp
+          - entity: input_select.thermostat_mode_select
+          - entity: sensor.thermostat_state
   - path: alarms
     title: Alarms
     icon: mdi:alarm

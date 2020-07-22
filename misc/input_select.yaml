@@ -20,3 +20,9 @@ media_output_select:
     - Master Suite Audio
     - Bedroom Audio
   initial: Home Audio
+thermostat_mode_select:
+  name: Thermostat Mode Select
+  icon: mdi:thermostat
+  options:
+    - Summer
+    - Winter

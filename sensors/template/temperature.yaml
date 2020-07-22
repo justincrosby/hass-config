@@ -1,0 +1,93 @@
+platform: template
+sensors:
+  current_temp:
+    friendly_name: Current Temperature
+    icon_template: mdi:thermometer
+    entity_id:
+      - sensor.thermostat_temperature
+      - sensor.bedroom_temperature
+      - sensor.office_temperature
+    unit_of_measurement: "°C"
+    value_template: >-
+       {{ ((float(states("sensor.thermostat_temperature")) + float(states("sensor.bedroom_temperature")) + float(states("sensor.office_temperature"))) / 3) | round(1) }}
+  target_temp:
+    friendly_name: Target Temperature
+    icon_template: mdi:thermometer
+    entity_id:
+      - binary_sensor.presence_anyone_home
+      - sensor.time
+    unit_of_measurement: "°C"
+    value_template: >-
+      {% if is_state("binary_sensor.presence_anyone_home", "on") %}
+        {% if is_state("input_select.thermostat_mode_select", "Summer") %}
+          {% if states("sensor.time") < "08:00" %}
+            22
+          {% elif states("sensor.time") < "23:00" %}
+            20
+          {% elif states("sensor.time") <= "24:00" %}
+            22
+          {% endif %}
+        {% else %}
+          {% if states("sensor.time") < "08:00" %}
+            18
+          {% elif states("sensor.time") < "23:00" %}
+            20
+          {% elif states("sensor.time") <= "24:00" %}
+            18
+          {% endif %}
+        {% endif %}
+      {% else %}
+        {% if is_state("input_select.thermostat_mode_select", "Summer") %}
+          24
+        {% else %}
+          15
+        {% endif %}
+      {% endif %}
+  thermostat_state:
+    friendly_name: Thermostat State
+    icon_template: >-
+      {% if state_attr("climate.thermostat", "hvac_action") == "cooling" %}
+        mdi:air-conditioner
+      {% elif state_attr("climate.thermostat", "hvac_action") == "heating" %}
+        mdi:radiator
+      {% else %}
+        mdi:radiator-off
+      {% endif %}
+    entity_id:
+      - climate.thermostat
+    value_template: >-
+      {% if state_attr("climate.thermostat", "hvac_action") == "cooling" %}
+        Cooling
+      {% elif state_attr("climate.thermostat", "hvac_action") == "heating" %}
+        Heating
+      {% else %}
+        Off
+      {% endif %}
+  thermostat_target_temp:
+    friendly_name: Thermostat Target Temperature
+    icon_template: mdi:thermometer
+    entity_id:
+      - climate.thermostat
+    value_template: '{{ state_attr("climate.thermostat", "temperature") }}'
+  thermostat_hvac_option:
+    friendly_name: Thermostat HVAC Action
+    icon_template: mdi:thermostat
+    entity_id:
+      - sensor.current_temp
+      - sensor.target_temp
+    value_template: >-
+      {% if is_state("input_select.thermostat_mode_select", "Summer") %}
+        {% if float(states("sensor.current_temp")) >= (float(states("sensor.target_temp")) + 0.5) %}
+          cool
+        {% else %}
+          off
+        {% endif %}
+      {% else %}
+        {% if (float(states("sensor.current_temp")) - 0.5) <= float(states("sensor.target_temp")) %}
+          heat
+        {% elif float(states("sensor.current_temp")) >= (float(states("sensor.target_temp")) + 1) %}
+          cool
+        {% else %}
+          off
+        {% endif %}
+      {% endif %}

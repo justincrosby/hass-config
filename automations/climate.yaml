@@ -1,0 +1,49 @@
+- alias: Update temperature target
+  trigger:
+    platform: state
+    entity_id: sensor.thermostat_temperature
+  action:
+    - service: input_number.set_value
+      data_template:
+        entity_id: input_number.thermostat_target_temp
+        value: '{{ states("sensor.thermostat_target_temp") }}'
+- alias: Update temperature target 2
+  trigger:
+    platform: state
+    entity_id: sensor.target_temp
+  action:
+    - service: input_number.set_value
+      data_template:
+        entity_id: input_number.thermostat_target_temp
+        value: '{{ states("sensor.target_temp") }}'
+- alias: Update the thermostat temperature/mode
+  trigger:
+    - platform: state
+      entity_id: sensor.thermostat_hvac_option
+      to: 'cool'
+    - platform: state
+      entity_id: sensor.thermostat_hvac_option
+      to: 'heat'
+  action:
+    - service: climate.set_temperature
+      data_template:
+        entity_id: climate.thermostat
+        temperature: >-
+          {% if is_state("sensor.thermostat_hvac_option", "cool") %}
+            {{ float(states("input_number.thermostat_target_temp")) - 1 }}
+          {% else %}
+            {{ float(states("input_number.thermostat_target_temp")) + 1 }}
+          {% endif %}
+        hvac_mode: '{{ states("sensor.thermostat_hvac_option") }}'
+- alias: Update the thermostat mode
+  trigger:
+    platform: state
+    entity_id: sensor.thermostat_hvac_option
+    to: 'off'
+    for:
+      minutes: 15
+  action:
+    - service: climate.set_hvac_mode
+      data_template:
+        entity_id: climate.thermostat
+        hvac_mode: '{{ states("sensor.thermostat_hvac_option") }}'
