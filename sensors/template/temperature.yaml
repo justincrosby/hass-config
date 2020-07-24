@@ -9,7 +9,7 @@ sensors:
       - sensor.office_temperature
     unit_of_measurement: "°C"
     value_template: >-
-       {{ ((float(states("sensor.thermostat_temperature")) + float(states("sensor.bedroom_temperature")) + float(states("sensor.office_temperature"))) / 3) | round(1) }}
+      {{ ((states("sensor.thermostat_temperature")|float(0) + states("sensor.bedroom_temperature")|float(0) + states("sensor.office_temperature")|float(0)) / 3) | round(1) }}
   target_temp:
     friendly_name: Target Temperature
     icon_template: mdi:thermometer
@@ -43,6 +43,31 @@ sensors:
           15
         {% endif %}
       {% endif %}
+  corrected_target_temp:
+    friendly_name: Corrected Target Temp
+    icon_template: mdi:thermometer
+    entity_id:
+      - sensor.thermostat_temperature
+      - sensor.current_temp
+      - input_number.thermostat_target_temp
+    unit_of_measurement: "°C"
+    value_template: '{{ (float(states("sensor.thermostat_temperature")) - float(states("sensor.current_temp")) + float(states("input_number.thermostat_target_temp"))) | round(0) }}'
+  hvac_option_choice:
+    friendly_name: Thermostat HVAC Action
+    icon_template: mdi:thermostat
+    entity_id:
+      - sensor.current_temp
+      - sensor.corrected_target_temp
+    value_template: >-
+      {% if is_state("input_select.thermostat_mode_select", "Summer") %}
+        cool
+      {% else %}
+        {% if float(states("sensor.current_temp")) >= (float(states("sensor.corrected_target_temp")) + 2) %}
+          cool
+        {% else %}
+          heat
+        {% endif %}
+      {% endif %}
   thermostat_state:
     friendly_name: Thermostat State
     icon_template: >-
@@ -69,25 +94,3 @@ sensors:
     entity_id:
       - climate.thermostat
     value_template: '{{ state_attr("climate.thermostat", "temperature") }}'
-  thermostat_hvac_option:
-    friendly_name: Thermostat HVAC Action
-    icon_template: mdi:thermostat
-    entity_id:
-      - sensor.current_temp
-      - sensor.target_temp
-    value_template: >-
-      {% if is_state("input_select.thermostat_mode_select", "Summer") %}
-        {% if float(states("sensor.current_temp")) >= (float(states("sensor.target_temp")) + 0.5) %}
-          cool
-        {% else %}
-          off
-        {% endif %}
-      {% else %}
-        {% if (float(states("sensor.current_temp")) - 0.5) <= float(states("sensor.target_temp")) %}
-          heat
-        {% elif float(states("sensor.current_temp")) >= (float(states("sensor.target_temp")) + 1) %}
-          cool
-        {% else %}
-          off
-        {% endif %}
-      {% endif %}
