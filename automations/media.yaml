@@ -1,119 +1,77 @@
+### Media Starting
 - alias: Music Started 1
-  initial_state: on
   trigger:
     platform: state
-    entity_id: sensor.media_source
-    to: 'CastAudio'
+    entity_id: sensor.media_player_status
+    to: 'playing'
   condition:
-    condition: state
-    entity_id: input_boolean.enable_music_automations
-    state: 'on'
+    condition: template
+    value_template: >
+      {% if is_state("input_select.receiver_source_select", "Cast Audio") %}
+        false
+      {% else %}
+        true
+      {% endif %}
   action:
     - service: input_select.select_option
       data:
-        entity_id: input_select.media_select
+        entity_id: input_select.receiver_source_select
         option: 'Cast Audio'
-
 - alias: Music Started 2
-  initial_state: on
   trigger:
     platform: state
-    entity_id: sensor.media_status
+    entity_id: sensor.media_player_status
     to: 'playing'
   condition:
     condition: state
-    entity_id: input_boolean.enable_music_automations
-    state: 'on'
+    entity_id: input_select.receiver_source_select
+    state: 'Cast Audio'
   action:
-    - service: input_select.select_option
-      data:
-        entity_id: input_select.media_select
-        option: 'Cast Audio'
-
-- alias: Music Started 3
-  initial_state: on
+    - service: script.turn_on
+      entity_id: script.media_input_select
+- alias: Living Room TV Started 1
   trigger:
-    platform: state
-    entity_id: media_player.home_audio
-    to: 'playing'
+    - platform: state
+      entity_id: media_player.shield
+      from: 'off'
+      to: 'idle'
+    - platform: state
+      entity_id: media_player.shield
+      from: 'idle'
+      to: 'playing'
   condition:
-    condition: state
-    entity_id: input_boolean.enable_music_automations
-    state: 'on'
+    condition: template
+    value_template: >
+      {% if is_state("input_select.receiver_source_select", "Shield") %}
+        false
+      {% else %}
+        true
+      {% endif %}
   action:
     - service: input_select.select_option
       data:
-        entity_id: input_select.media_output_select
-        option: 'Home Audio'
-
-- alias: Music Started 4
-  initial_state: on
-  trigger:
-    platform: state
-    entity_id: media_player.fake_home_audio
-    to: 'playing'
-  condition:
-    condition: state
-    entity_id: input_boolean.enable_music_automations
-    state: 'on'
-  action:
-    - service: input_select.select_option
-      data:
-        entity_id: input_select.media_output_select
-        option: 'Fake Home Audio'
-
-- alias: Music Started 5
-  initial_state: on
-  trigger:
-    platform: state
-    entity_id: media_player.master_suite_audio
-    to: 'playing'
-  condition:
-    condition: state
-    entity_id: input_boolean.enable_music_automations
-    state: 'on'
-  action:
-    - service: input_select.select_option
-      data:
-        entity_id: input_select.media_output_select
-        option: 'Master Suite Audio'
-
-- alias: Casting Started 1
-  trigger:
-    platform: state
-    entity_id: media_player.vizio_smartcast
-    to: 'on'
-  action:
-    - service: input_select.select_option
-      data:
-        entity_id: input_select.media_select
+        entity_id: input_select.receiver_source_select
         option: 'Shield'
-
-- alias: Casting Started 2
+- alias: Living Room TV Started 2
   trigger:
-    platform: state
-    entity_id: media_player.shield
-    from: 'off'
-    to: 'idle'
+    - platform: state
+      entity_id: media_player.shield
+      from: 'off'
+      to: 'idle'
+    - platform: state
+      entity_id: media_player.shield
+      from: 'idle'
+      to: 'playing'
+  condition:
+    condition: state
+    entity_id: input_select.receiver_source_select
+    state: 'Shield'
   action:
     - service: input_select.select_option
       data:
-        entity_id: input_select.media_select
+        entity_id: input_select.receiver_source_select
         option: 'Shield'
-
-- alias: Casting Started 3
-  trigger:
-    platform: state
-    entity_id: media_player.shield
-    from: 'idle'
-    to: 'playing'
-  action:
-    - service: input_select.select_option
-      data:
-        entity_id: input_select.media_select
-        option: 'Shield'
-
-- alias: Casting Started 4
+- alias: Bedroom TV Started
   trigger:
     platform: state
     entity_id: media_player.bedroom_tv
@@ -121,18 +79,9 @@
   action:
     - service: media_player.turn_off
       data_template:
-        entity_id: '{{ states("sensor.media_output") }}'
+        entity_id: '{{ states("sensor.media_player_output") }}'
 
-- alias: Home audio unavailable for 15 minutes
-  trigger:
-    platform: state
-    entity_id: sensor.media_status
-    to: 'unavailable'
-    for:
-      minutes: 15
-  action:
-    service: homeassistant.restart
-
+### Volume Sliders ##
 - alias: Living Room Audio Slider Moved
   trigger:
     platform: state
@@ -141,8 +90,7 @@
     service: media_player.volume_set
     data_template:
       entity_id: media_player.living_room_audio
-      volume_level: '{{ states("input_number.living_room_audio_volume")|float }}'
-
+      volume_level: '{{ states("input_number.living_room_audio_volume")|float / 100 }}'
 - alias: Bedroom Audio Slider Moved
   trigger:
     platform: state
@@ -151,8 +99,7 @@
     service: media_player.volume_set
     data_template:
       entity_id: media_player.master_bedroom_audio
-      volume_level: '{{ states("input_number.master_bedroom_audio_volume")|float }}'
-
+      volume_level: '{{ states("input_number.master_bedroom_audio_volume")|float / 100 }}'
 - alias: Master Bathroom Audio Slider Moved
   trigger:
     platform: state
@@ -161,8 +108,7 @@
     service: media_player.volume_set
     data_template:
       entity_id: media_player.master_bathroom_speaker
-      volume_level: '{{ states("input_number.master_bathroom_audio_volume")|float }}'
-
+      volume_level: '{{ states("input_number.master_bathroom_audio_volume")|float / 100 }}'
 - alias: Bathroom Audio Slider Moved
   trigger:
     platform: state
@@ -171,105 +117,35 @@
     service: media_player.volume_set
     data_template:
       entity_id: media_player.bathroom_speaker
-      volume_level: '{{ states("input_number.bathroom_audio_volume")|float }}'
-
-- alias: Media Input Select Changed
-  initial_state: on
-  trigger:
-    platform: state
-    entity_id: input_select.media_select
-  condition:
-    condition: state
-    entity_id: input_boolean.enable_music_automations
-    state: 'on'
-  action:
-    service: script.turn_on
-    entity_id: script.media_input_select
-
-- alias: Media Input Changed
-  trigger:
-    platform: state
-    entity_id: sensor.media_source
-  # Prevent recursive calls
-  condition:
-    condition: and
-    conditions:
-      - condition: state
-        entity_id: input_boolean.enable_music_automations
-        state: 'on'
-      - condition: template
-        value_template: '{{ states("sensor.media_source") != states("input_select.media_select") }}'
-  action:
-    - service: script.turn_on
-      entity_id: script.update_media_select_source
-
+      volume_level: '{{ states("input_number.bathroom_audio_volume")|float / 100 }}'
 - alias: Receiver Volume Slider Moved
   trigger:
     platform: state
     entity_id: input_number.receiver_audio_volume
-  condition:
-    condition: state
-    entity_id: input_boolean.enable_music_automations
-    state: 'on'
   action:
     service: script.turn_on
-    entity_id: script.receiver_volume_changed
-
-- alias: Receiver Volume Changed
-  trigger:
-    platform: state
-    entity_id: sensor.receiver_volume
-  # Prevent recursive calls
-  condition:
-    condition: template
-    value_template: '{{ states("sensor.receiver_volume") != states("input_number.receiver_audio_volume") }}'
-  action:
-    - service: script.turn_on
-      entity_id: script.update_receiver_volume_slider
-
+    entity_id: script.set_receiver_volume
 - alias: Chromecast Volume Slider Moved
   trigger:
     platform: state
     entity_id: input_number.chromecast_audio_volume
-  # Prevent recursive calls
-  condition:
-    condition: and
-    conditions:
-      - condition: state
-        entity_id: input_boolean.enable_music_automations
-        state: 'on'
-      - condition: state
-        entity_id: sensor.media_status
-        state: 'playing'
   action:
     service: script.turn_on
-    entity_id: script.chromecast_volume_changed
+    entity_id: script.set_chromecast_volume
 
-- alias: Chromecast Volume Changed
+### I/O Select ###
+- alias: Media Input Select Changed
   trigger:
     platform: state
-    entity_id: sensor.chromecast_volume
-  # Prevent recursive calls
-  condition:
-    condition: template
-    value_template: '{{ states("sensor.chromecast_volume") != states("input_number.chromecast_audio_volume") }}'
+    entity_id: input_select.receiver_source_select
   action:
-    - service: script.turn_on
-      entity_id: script.update_chromecast_volume_slider
-
+    service: script.turn_on
+    entity_id: script.media_input_select
 - alias: Media Output Changed
   trigger:
     platform: state
-    entity_id: sensor.media_output
-  condition:
-    condition: and
-    conditions:
-      - condition: state
-        entity_id: input_boolean.enable_music_automations
-        state: 'on'
-      - condition: state
-        entity_id: sensor.media_status
-        state: 'playing'
+    entity_id: input_select.media_output_select
   action:
-    - service: script.turn_on
-      entity_id: script.change_media_output
+    - service: spotcast.start
+      data_template:
+        entity_id: '{{ states("input_select.media_output_select") }}'

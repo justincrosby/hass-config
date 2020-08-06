@@ -1,5 +1,5 @@
-media_select:
-  name: Media Select
+receiver_source_select:
+  name: Receiver Source Select
   icon: mdi:television
   options:
     - Shutdown
@@ -10,7 +10,7 @@ media_select:
     - Steam
     - Switch
     - WiiU
-  initial: Cast Audio
+  initial: Shutdown
 media_output_select:
   name: Media Output Select
   icon: mdi:volume-high
@@ -18,7 +18,7 @@ media_output_select:
     - Home Audio
     - Fake Home Audio
     - Master Suite Audio
-    - Bedroom Audio
+    - Master Bedroom Audio
   initial: Home Audio
 thermostat_mode_select:
   name: Thermostat Mode Select

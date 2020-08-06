@@ -47,31 +47,52 @@ views:
           - entity: media_player.denon_avr_x1300w
             tap_action:
               action: toggle
-      - type: glance
-        entities:
-          - entity: sensor.fish_fed
+          - entity: script.play_all_music
+            name: All Music
+            icon: mdi:music
+            show_state: false
             tap_action:
-              action: call-service
-              service: input_boolean.toggle
-              service_data:
-                entity_id: input_boolean.fish_fed_tracker
-          - entity: sensor.plants_watered
+              action: toggle
+          - entity: script.play_chill_music
+            name: Chill Music
+            icon: mdi:music
+            show_state: false
             tap_action:
-              action: call-service
-              service: input_boolean.toggle
-              service_data:
-                entity_id: input_boolean.plants_watered_tracker
+              action: toggle
       ## Media Control ##
       - type: vertical-stack
         cards:
           - type: entities
             entities:
-              - entity: input_select.media_select
-                name: Input
+              - entity: input_select.receiver_source_select
+                name: Input Select
+              - entity: input_select.media_output_select
               - entity: input_number.receiver_audio_volume
                 name: Receiver Volume
               - entity: input_number.chromecast_audio_volume
                 name: Chromecast Volume
+          - type: glance
+            title: Current Media States
+            entities:
+              - entity: sensor.receiver_source
+                tap_action:
+                  action: call-service
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.media_input_select
+              - entity: sensor.receiver_volume
+                tap_action:
+                  action: call-service
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.set_receiver_volume
+              - entity: sensor.chromecast_audio_volume
+                name: Chromecast Volume
+                tap_action:
+                  action: call-service
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.set_chromecast_volume
           - type: conditional
             conditions:
               - entity: media_player.vizio_smartcast
@@ -137,12 +158,17 @@ views:
                 entity: light.scrub_room
       - type: weather-forecast
         entity: weather.dark_sky
-      - type: entities
-        entities:
-          - entity: sensor.current_temp
-          - entity: input_number.thermostat_target_temp
-          - entity: input_select.thermostat_mode_select
-          - entity: sensor.thermostat_state
+      - type: vertical-stack
+        cards:
+          - type: sensor
+            entity: sensor.current_temp
+            graph: line
+            hours_to_show: 4
+          - type: entities
+            entities:
+              - entity: input_number.thermostat_target_temp
+              - entity: input_select.thermostat_mode_select
+              - entity: sensor.thermostat_state
   - path: alarms
     title: Alarms
     icon: mdi:alarm

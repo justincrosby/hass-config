@@ -12,119 +12,6 @@ volume_down:
       data_template:
         entity_id: media_player.denon_avr_x1300w
         volume_level: '{{ state_attr("media_player.denon_avr_x1300w", "volume_level") - 0.05 }}'
-start_playlist:
-  alias: Start a spotify playlist
-  fields:
-    device_name:
-      description: 'The friendly name of the media player to cast to.'
-      example: 'Home Audio'
-    entity_id:
-      description: 'The media player to cast to.'
-      example: 'media_player.home_audio'
-    playlist_uri:
-      description: 'The Spotify playlist URI to play.'
-      example: 'spotify:playlist:*'
-    volume_level:
-      description: 'The volume level to start the playlist at (%).'
-      example: '50'
-  sequence:
-    - service: media_player.volume_mute
-      data_template:
-        entity_id: '{{ entity_id }}'
-        is_volume_muted: true
-    - service: spotcast.start
-      data_template:
-        device_name: '{{ device_name }}'
-        uri: 'spotify:track:5V3b2UB9tCAHuqXj2b2EP7'  # track with 1 second of silence
-    - service: media_player.volume_mute
-      data_template:
-        entity_id: '{{ entity_id }}'
-        is_volume_muted: false
-    - service: spotcast.start
-      data_template:
-        device_name: '{{ device_name }}'
-        uri: '{{ playlist_uri }}'
-        random_song: true
-        shuffle: true
-    - service: media_player.volume_set
-      data_template:
-        entity_id: '{{ entity_id }}'
-        volume_level: '{{ volume_level|float / 100 }}'
-    - condition: template
-      value_template: '{{ state_attr(states("sensor.media_output"), volume_level) != (volume_level|float / 100) }}'
-    - delay:
-        seconds: 1
-    - service: media_player.volume_set
-      data_template:
-        entity_id: '{{ entity_id }}'
-        volume_level: '{{ volume_level|float / 100 }}'
-    - condition: template
-      value_template: '{{ state_attr(states("sensor.media_output"), volume_level) != (volume_level|float / 100) }}'
-    - delay:
-        seconds: 1
-    - service: media_player.volume_set
-      data_template:
-        entity_id: '{{ entity_id }}'
-        volume_level: '{{ volume_level|float / 100 }}'
-play_all_music:
-  alias: Play All Music Playlist
-  sequence:
-    - service: script.turn_on
-      entity_id: script.play_all_music_var
-      data:
-        variables:
-          volume_level: !secret default_home_audio_volume
-play_all_music_var:
-  alias: Play All Music Playlist with Volume Select
-  fields:
-    volume_level:
-      description: 'The volume level to start the playlist at (%).'
-      example: '50'
-  sequence:
-    - service: script.turn_on
-      entity_id: script.start_playlist
-      data_template:
-        variables:
-          device_name: '{{ states("input_select.media_output_select") }}'
-          entity_id: '{{ states("sensor.media_output") }}'
-          playlist_uri: !secret all_music_playlist_uri
-          volume_level: '{{ volume_level }}'
-play_chill_music:
-  alias: Play Chill Music Playlist
-  sequence:
-    - service: script.turn_on
-      data:
-        entity_id: script.play_chill_music_var
-        variables:
-          volume_level: !secret default_home_audio_volume
-play_chill_music_var:
-  alias: Play Chill Music Playlist with Volume Select
-  sequence:
-    - service: script.turn_on
-      entity_id: script.start_playlist
-      data_template:
-        variables:
-          device_name: '{{ states("input_select.media_output_select") }}'
-          entity_id: '{{ states("sensor.media_output") }}'
-          playlist_uri: !secret chill_music_playlist_uri
-          volume_level: '{{ volume_level }}'
-play_all_music_conditional:
-  alias: Play All Music Playlist Before 11pm
-  sequence:
-    - condition: and
-      conditions:
-        - condition: time
-          before: "23:00:00"
-        - condition: time
-          after: "09:00:00"
-    - service: script.turn_on
-      entity_id: script.play_all_music
-change_media_output:
-  alias: Change the media output
-  sequence:
-    - service: spotcast.start
-      data_template:
-        entity_id: '{{ states("sensor.media_output") }}'
 shower_time:
   alias: Increase the Volume During Shower
   sequence:
@@ -143,26 +30,19 @@ shower_time:
 morning_music:
   alias: Start music quietly in the morning
   sequence:
-    # disable music automations so they don't mess with audio settings
-    - service: input_boolean.turn_off
-      entity_id: input_boolean.enable_music_automations
-    - delay:
-        seconds: 1
     - service: input_select.select_option
       data:
         entity_id: input_select.media_output_select
-        option: 'Bedroom Audio'
+        option: 'Master Bedroom Audio'
     - service: input_select.select_option
       data:
-        entity_id: input_select.media_select
+        entity_id: input_select.receiver_source_select
         option: 'Cast Audio'
     - service: script.turn_on
       data:
         entity_id: script.play_chill_music_var
         variables:
           volume_level: 0
-    - delay:
-        seconds: 1
     - condition: state
       entity_id: script.start_playlist
       state: 'off'
@@ -182,16 +62,14 @@ morning_music:
         option: 'Master Suite Audio'
     - service: media_player.media_stop
       data_template:
-        entity_id: '{{ states("sensor.media_output") }}'
-    - wait_template: '{{ not is_state("sensor.media_status", "playing") }}'
+        entity_id: '{{ states("sensor.media_player_output") }}'
+    - wait_template: '{{ not is_state("sensor.media_player_status", "playing") }}'
       timeout: '00:01:00'
     - service: script.turn_on
       data:
         entity_id: script.play_all_music_var
         variables:
           volume_level: 0
-    - delay:
-        seconds: 1
     - condition: state
       entity_id: script.start_playlist
       state: 'off'
@@ -199,9 +77,20 @@ morning_music:
       data:
         step_size: 5
         end_volume: 40
-    # re-enable the automations now
-    - service: input_boolean.turn_on
-      entity_id: input_boolean.enable_music_automations
+set_receiver_volume:
+  alias: Set the receiver volume according to the slider
+  sequence:
+    - service: media_player.volume_set
+      data_template:
+        entity_id: media_player.bathroom_speaker
+        volume_level: '{{ states("input_number.receiver_audio_volume")|float / 100 }}'
+set_chromecast_volume:
+  alias: Set the chromecast volume according to the slider
+  sequence:
+    - service: media_player.volume_set
+      data_template:
+        entity_id: '{{ states("sensor.media_player_output") }}'
+        volume_level: '{{ states("input_number.chromecast_audio_volume")|float / 100 }}'
 set_default_audio_levels:
   alias: Sets a good audio level throughout the house
   sequence:
@@ -217,12 +106,12 @@ set_default_bedroom_volume:
   alias: Sets the default volume for bedroom audio when selected
   sequence:
     - condition: state
-      entity_id: input_select.media_select
+      entity_id: input_select.receiver_source_select
       state: 'Cast Audio'
     - condition: state
       entity_id: input_select.media_output_select
       state: 'Bedroom Audio'
-    - wait_template: '{{ is_state("sensor.media_status", "playing") }}'
+    - wait_template: '{{ is_state("sensor.media_player_status", "playing") }}'
       timeout: '00:1:00'
     - service: input_number.set_value
       data:
@@ -232,12 +121,12 @@ set_default_master_suite_volume:
   alias: Sets the default volume for master suite audio when selected
   sequence:
     - condition: state
-      entity_id: input_select.media_select
+      entity_id: input_select.receiver_source_select
       state: 'Cast Audio'
     - condition: state
       entity_id: input_select.media_output_select
       state: 'Master Suite Audio'
-    - wait_template: '{{ is_state("sensor.media_status", "playing") }}'
+    - wait_template: '{{ is_state("sensor.media_player_status", "playing") }}'
       timeout: '00:1:00'
     - service: input_number.set_value
       data:
@@ -253,7 +142,7 @@ set_default_home_audio_volume:
   alias: Sets the default volume for home audio when selected
   sequence:
     - condition: state
-      entity_id: input_select.media_select
+      entity_id: input_select.receiver_source_select
       state: 'Cast Audio'
     - condition: state
       entity_id: input_select.media_output_select
@@ -262,7 +151,7 @@ set_default_home_audio_volume:
       data:
         entity_id: media_player.denon_avr_x1300w
         volume_level: !secret default_receiver_cast_volume
-    - wait_template: '{{ is_state("sensor.media_status", "playing") }}'
+    - wait_template: '{{ is_state("sensor.media_player_status", "playing") }}'
       timeout: '00:1:00'
     - service: input_number.set_value
       data:
@@ -291,7 +180,7 @@ set_default_receiver_volume:
   sequence:
     - condition: template
       value_template: >
-        {% if is_state('input_select.media_select', 'Cast Audio') or is_state('input_select.media_select', 'Shutdown') %}
+        {% if is_state('input_select.receiver_source_select', 'Cast Audio') or is_state('input_select.receiver_source_select', 'Shutdown') %}
           false
         {% else %}
           true
@@ -305,16 +194,21 @@ switch_to_chromecast:
   sequence:
     - condition: template
       value_template: >
-        {% if is_state('input_select.media_select', 'Cast Audio') or is_state('input_select.media_select', 'Shutdown') %}
+        {% if is_state('input_select.receiver_source_select', 'Cast Audio') or is_state('input_select.receiver_source_select', 'Shutdown') %}
           false
         {% else %}
           true
         {% endif %}
-    - service: media_player.turn_off
-      data_template:
-        entity_id: '{{ states("sensor.media_output") }}'
+    - service: script.turn_on
+      entity_id: script.media_player_shutdown
     - service: media_player.turn_on
       entity_id: media_player.vizio_smartcast
+    - wait_template: '{{ is_state("media_player.vizio_smartcast", "on") }}'
+      timeout: '00:1:00'
+    - service: media_player.select_source
+      data:
+        entity_id: media_player.vizio_smartcast
+        source: HDMI-1
     - service: media_player.turn_on
       entity_id: media_player.denon_avr_x1300w
     - wait_template: '{{ is_state("media_player.denon_avr_x1300w", "on") }}'
@@ -322,179 +216,66 @@ switch_to_chromecast:
     - service: media_player.select_source
       data_template:
         entity_id: media_player.denon_avr_x1300w
-        source: >
-          {% if is_state('input_select.media_select', 'Shield') %}
-            Shield
-          {% elif is_state('input_select.media_select', 'PS3') %}
-            PS3
-          {% elif is_state('input_select.media_select', 'Record Player') %}
-            RecordPlayer
-          {% elif is_state('input_select.media_select', 'Steam') %}
-            NUC
-          {% elif is_state('input_select.media_select', 'Switch') %}
-            Switch
-          {% elif is_state('input_select.media_select', 'WiiU') %}
-            WiiU
-          {% else %}
-            TV Audio
-          {% endif %}
-    - delay:
-        milliseconds: 500
+        source: '{{ states("sensor.receiver_selected_source") }}'
+    - wait_template: '{{ state_attr("media_player.denon_avr_x1300w", "source") == states("sensor.receiver_selected_source") }}'
+      timeout: '00:01:00'
     - service: script.turn_on
       entity_id: script.set_default_audio_levels
-    - wait_template: '{{ is_state("media_player.vizio_smartcast", "on") }}'
-      timeout: '00:1:00'
-    - condition: template
-      value_template: '{{ state_attr("media_player.vizio_smartcast", "source") != "HDMI-1" }}'
-    - service: media_player.select_source
-      data:
-        entity_id: media_player.vizio_smartcast
-        source: HDMI-1
-    - wait_template: '{{ is_state("sensor.media_source", states("input_select.media_select")) }}'
-      timeout: '00:1:00'
 switch_to_audio:
   alias: Switch to Audio
   sequence:
+    # Execute this script only if we've selected Cast Audio
     - condition: state
-      entity_id: input_select.media_select
+      entity_id: input_select.receiver_source_select
       state: 'Cast Audio'
     - service: media_player.turn_off
       entity_id: media_player.vizio_smartcast
-    - service: script.turn_on
-      entity_id: script.switch_to_audio_receiver
-    - wait_template: '{{ is_state("script.switch_to_audio_receiver", "off") }}'
-      timeout: '00:01:00'
-    - service: script.turn_on
-      entity_id: script.set_default_audio_levels
-    - wait_template: '{{ is_state("sensor.media_source", states("input_select.media_select")) }}'
-      timeout: '00:01:00'
-switch_to_audio_receiver:
-  alias: Switch to Audio Receiver
-  sequence:
-    - condition: template
-      value_template: '{{ not is_state("input_select.media_output_select", "Bedroom Audio") and not is_state("input_select.media_output_select", "Master Suite Audio") }}'
     - service: media_player.turn_on
       entity_id: media_player.denon_avr_x1300w
     - wait_template: '{{ is_state("media_player.denon_avr_x1300w", "on") }}'
       timeout: '00:01:00'
-    - service: shell_command.switch_to_audio
-    - delay:
-        milliseconds: 500
+    - service: media_player.select_source
+      data:
+        entity_id: media_player.denon_avr_x1300w
+        source: CastAudio
+    - wait_template: '{{ state_attr("media_player.denon_avr_x1300w", "source") == "CastAudio" }}'
+      timeout: '00:01:00'
+    - service: script.turn_on
+      entity_id: script.set_default_audio_levels
 media_shutdown:
   alias: Shutdown all media
   sequence:
+    # Execute this script only if we've selected Shutdown
     - condition: state
-      entity_id: input_select.media_select
+      entity_id: input_select.receiver_source_select
       state: 'Shutdown'
     - service: media_player.turn_off
       entity_id: media_player.vizio_smartcast
     - service: media_player.turn_off
       entity_id: media_player.denon_avr_x1300w
     - service: media_player.turn_off
-      data_template:
-        entity_id: '{{ states("sensor.media_output") }}'
-    - service: media_player.media_stop
-      entity_id: media_player.mpd
-    - service: media_player.turn_off
       entity_id: media_player.vizio_smartcast
-    - wait_template: '{{ is_state("sensor.media_source", states("input_select.media_select")) }}'
-      timeout: '00:1:00'
+    - service: script.turn_on
+      entity_id: script.media_player_shutdown
+media_player_shutdown:
+    alias: Shutdown media players if playing
+    sequence:
+      - condition: template
+        value_template: >
+          {% if is_state('sensor.media_player_output', 'none') %}
+            false
+          {% else %}
+            true
+          {% endif %}
+      - service: media_player.turn_off
+        data_template:
+          entity_id: '{{ states("sensor.media_player_output") }}'
 media_input_select:
   alias: Change the home theatre settings depending on the input selection
   sequence:
-    - service: input_boolean.turn_off
-      entity_id: input_boolean.enable_music_automations
-    - delay:
-        milliseconds: 500
     - service: script.turn_on
       entity_id: script.media_shutdown
     - service: script.turn_on
       entity_id: script.switch_to_chromecast
     - service: script.turn_on
       entity_id: script.switch_to_audio
-    - wait_template: '{{ is_state("script.media_shutdown", "off") }}'
-      timeout: '00:1:00'
-    - wait_template: '{{ is_state("script.switch_to_chromecast", "off") }}'
-      timeout: '00:1:00'
-    - wait_template: '{{ is_state("script.switch_to_audio", "off") }}'
-      timeout: '00:1:00'
-    - delay:
-        seconds: 1
-    - service: input_boolean.turn_on
-      entity_id: input_boolean.enable_music_automations
-change_tv_input_conditional:
-  alias: Changes the TV input if it is needed for the current input setting
-  sequence:
-    - condition: template
-      value_template: >
-        {% if is_state('input_select.media_select', 'Cast Audio')  %}
-          false
-        {% else %}
-          true
-        {% endif %}
-    - condition: template
-      value_template: '{{ state_attr("media_player.vizio_smartcast", "source") != "HDMI-1" }}'
-    - wait_template: '{{ is_state("media_player.vizio_smartcast", "on") }}'
-      timeout: '00:1:00'
-    - service: media_player.select_source
-      data_template:
-        entity_id: media_player.vizio_smartcast
-        source: >
-          {% if is_state('input_select.media_select', 'Shield') %}
-            CAST
-          {% else %}
-            HDMI-1
-          {% endif %}
-update_media_select_source:
-  alias: When the receiver source is changed manually, update the input select
-  sequence:
-    - service: automation.turn_off
-      entity_id: automation.media_input_select_changed
-    - delay:
-        seconds: 1
-    - service: input_select.select_option
-      data_template:
-        entity_id: input_select.media_select
-        option: '{{ states("sensor.media_source") }}'
-    - service: automation.turn_on
-      entity_id: automation.media_input_select_changed
-receiver_volume_changed:
-  alias: Change the receiver volume based on the slider
-  sequence:
-    - service: media_player.volume_set
-      data_template:
-        entity_id: media_player.denon_avr_x1300w
-        volume_level: '{{ states("input_number.receiver_audio_volume")|float / 100 }}'
-update_receiver_volume_slider:
-  alias: When the volume is changed manually, update the receiver volume
-  sequence:
-    - service: automation.turn_off
-      entity_id: automation.receiver_volume_slider_moved
-    - delay:
-        seconds: 1
-    - service: input_number.set_value
-      data_template:
-        entity_id: input_number.receiver_audio_volume
-        value: '{{ states("sensor.receiver_volume")|int }}'
-    - service: automation.turn_on
-      entity_id: automation.receiver_volume_slider_moved
-chromecast_volume_changed:
-  alias: Change the chromecast volume based on the slider
-  sequence:
-    - service: media_player.volume_set
-      data_template:
-        entity_id: '{{ states("sensor.media_output") }}'
-        volume_level: '{{ states("input_number.chromecast_audio_volume")|float / 100 }}'
-update_chromecast_volume_slider:
-  alias: When the volume is changed manually, update the chromecast volume
-  sequence:
-    - service: automation.turn_off
-      entity_id: automation.chromecast_volume_slider_moved
-    - delay:
-        seconds: 1
-    - service: input_number.set_value
-      data_template:
-        entity_id: input_number.chromecast_audio_volume
-        value: '{{ states("sensor.chromecast_volume")|int }}'
-    - service: automation.turn_on
-      entity_id: automation.chromecast_volume_slider_moved

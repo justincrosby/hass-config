@@ -1,0 +1,64 @@
+start_playlist:
+  alias: Start a spotify playlist
+  fields:
+    device_name:
+      description: 'The friendly name of the media player to cast to.'
+      example: 'Home Audio'
+    entity_id:
+      description: 'The media player to cast to.'
+      example: 'media_player.home_audio'
+    playlist_uri:
+      description: 'The Spotify playlist URI to play.'
+      example: 'spotify:playlist:*'
+    volume_level:
+      description: 'The volume level to start the playlist at (%).'
+      example: '50'
+  sequence:
+    - service: spotcast.start
+      data_template:
+        device_name: '{{ device_name }}'
+        uri: '{{ playlist_uri }}'
+        random_song: true
+        shuffle: true
+play_all_music:
+  alias: Play All Music Playlist
+  sequence:
+    - service: script.turn_on
+      entity_id: script.play_all_music_var
+      data:
+        variables:
+          volume_level: !secret default_home_audio_volume
+play_all_music_var:
+  alias: Play All Music Playlist with Volume Select
+  fields:
+    volume_level:
+      description: 'The volume level to start the playlist at (%).'
+      example: '50'
+  sequence:
+    - service: script.turn_on
+      entity_id: script.start_playlist
+      data_template:
+        variables:
+          device_name: '{{ states("input_select.media_output_select") }}'
+          entity_id: '{{ states("sensor.media_player_selected_output") }}'
+          playlist_uri: !secret all_music_playlist_uri
+          volume_level: '{{ volume_level }}'
+play_chill_music:
+  alias: Play Chill Music Playlist
+  sequence:
+    - service: script.turn_on
+      data:
+        entity_id: script.play_chill_music_var
+        variables:
+          volume_level: !secret default_home_audio_volume
+play_chill_music_var:
+  alias: Play Chill Music Playlist with Volume Select
+  sequence:
+    - service: script.turn_on
+      entity_id: script.start_playlist
+      data_template:
+        variables:
+          device_name: '{{ states("input_select.media_output_select") }}'
+          entity_id: '{{ states("sensor.media_player_selected_output") }}'
+          playlist_uri: !secret chill_music_playlist_uri
+          volume_level: '{{ volume_level }}'
