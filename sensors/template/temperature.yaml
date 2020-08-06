@@ -20,12 +20,18 @@ sensors:
     value_template: >-
       {% if is_state("binary_sensor.presence_anyone_home", "on") %}
         {% if is_state("input_select.thermostat_mode_select", "Summer") %}
-          {% if states("sensor.time") < "08:00" %}
-            22
-          {% elif states("sensor.time") < "23:00" %}
+          {% if states("sensor.time") < "01:00" %}
             20
-          {% elif states("sensor.time") <= "24:00" %}
+          {% elif states("sensor.time") < "06:00" %}
+            23
+          {% elif states("sensor.time") < "10:00" %}
             22
+          {% elif states("sensor.time") < "12:00" %}
+            20
+          {% elif states("sensor.time") < "14:00" %}
+            19
+          {% elif states("sensor.time") <= "24:00" %}
+            20
           {% endif %}
         {% else %}
           {% if states("sensor.time") < "08:00" %}
