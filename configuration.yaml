@@ -142,11 +142,10 @@ tplink:
   discovery: false
   switch:
     - host: !secret tplink_bedroom_air_purifier_switch_ip
-#    - host: !secret tplink_bedroom_fan_switch_ip
     - host: !secret tplink_betta_light_switch_ip
     - host: !secret tplink_fish_light_switch_ip
-#    - host: !secret tplink_led_strip_switch_ip
     - host: !secret tplink_fairy_lights_switch_ip
+    - host: !secret tplink_master_bathroom_led_switch_ip
 
 hue:
   bridges:
@@ -154,16 +153,13 @@ hue:
       allow_unreachable: true
       allow_hue_groups: true
 
-#remote:
-#  - platform: huesensor
-
 #august:
 #  login_method: email
 #  username: !secret august_username
 #  password: !secret august_password
 
 switch: !include_dir_list switches/
-light: !include_dir_list lights/
+light: !include_dir_merge_list lights/
 
 input_number: !include misc/input_number.yaml
 
@@ -172,7 +168,8 @@ input_boolean: !include misc/input_boolean.yaml
 input_select: !include misc/input_select.yaml
 
 zwave:
-  usb_path: /dev/ttyACM0
+  usb_path: !secret zwave_usb_path
+  config_path: !secret zwave_config_path
 
 media_player:
   - platform: androidtv

@@ -148,4 +148,4 @@
   action:
     - service: spotcast.start
       data_template:
-        entity_id: '{{ states("input_select.media_output_select") }}'
+        device_name: '{{ states("input_select.media_output_select") }}'

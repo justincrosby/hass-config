@@ -1,0 +1,14 @@
+- id: '1597201545488'
+  alias: New Automation
+  description: ''
+  trigger:
+  - device_id: da322d02b97e4de5b5ed9702b5a5a924
+    domain: hue
+    platform: device
+    subtype: turn_on
+    type: remote_button_long_release
+  condition: []
+  action:
+  - data: {}
+    entity_id: light.master_suite_lights
+    service: light.turn_on

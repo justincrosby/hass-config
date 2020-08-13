@@ -1,5 +1,0 @@
-platform: template
-sensors:
-  hue_remote_last_update:
-    value_template: '{{ state_attr("remote.kitchen_switch", "last_updated") }}'
-    friendly_name: 'Hue Remote Last Update'

@@ -5,11 +5,11 @@ shutoff:
       entity_id: script.bedroom_light_fade_out
     - wait_template: '{{ is_state("script.bedroom_light_fade_out", "off") }}'
       timeout: '00:01:00'
-    - service: homeassistant.turn_off
-      entity_id: group.main_lights
+    - service: light.turn_off
+      entity_id: light.all_lights
     - service: input_select.select_option
       data:
-        entity_id: input_select.media_select
+        entity_id: input_select.receiver_source_select
         option: Shutdown
     - service: switch.turn_off
       entity_id: switch.justins_pc
@@ -17,8 +17,9 @@ shutoff:
 #      entity_id: lock.front_door
 #    - service: switch.turn_off
 #      entity_id: switch.led_strip_switch
-    - condition: template
-      value_template: '{{ bedtime == false }}'
+    - condition: state
+      entity_id: input_boolean.bedtime
+      state: 'off'
     - service: switch.turn_off
       entity_id: switch.bedroom_air_purifier
 bedroom_light_fade_out:
@@ -37,8 +38,10 @@ morning:
   sequence:
     - service: script.turn_on
       entity_id: script.ringer_on_conditional
-    - service: script.turn_on
-      entity_id: script.full_alarm_off
+    - service: input_boolean.turn_off
+      entity_id: input_boolean.bedtime
+    - service: input_boolean.turn_on
+      entity_id: input_boolean.enable_presence_automations
     - condition: state
       entity_id: binary_sensor.alarm_full
       state: 'on'
@@ -67,20 +70,8 @@ morning:
         rgb_color: [255, 255, 255]
         brightness_pct: 100
         transition: 100
-    - service: input_boolean.turn_on
-      entity_id: input_boolean.enable_presence_automations
     - service: switch.turn_off
       entity_id: switch.bedroom_air_purifier
-full_alarm_off:
-  alias: Routine for when the alarm is off
-  sequence:
-    - condition: state
-      entity_id: binary_sensor.alarm_full
-      state: 'off'
-    - service: input_boolean.turn_on
-      entity_id: input_boolean.enable_presence_automations
-    - service: input_boolean.turn_on
-      entity_id: input_boolean.enable_music_automations
 ringer_on_conditional:
   alias: Phone Ringer On Conditional
   sequence:
@@ -99,15 +90,6 @@ sunset:
       entity_id: light.fairy_lights
     - service: light.turn_on
       entity_id: light.living_room_lamp
-    - condition: state
-      entity_id: light.bedroom
-      state: 'on'
-    - service: light.turn_on
-      data:
-        entity_id: light.bedroom
-        rgb_color: [255, 165, 0]
-        brightness_pct: 60
-        transition: 15
 #    - service: switch.turn_on
 #      entity_id: switch.christmas_wreath
 #    - service: script.turn_on
@@ -115,19 +97,14 @@ sunset:
 bedtime:
   alias: Bedtime
   sequence:
-    - service: script.turn_on
-      entity_id: script.shutoff
-      data:
-        variables:
-          bedtime: true
+    - service: input_boolean.turn_on
+      entity_id: input_boolean.bedtime
     - wait_template: '{{ is_state("script.shutoff", "off") }}'
       timeout: '00:01:00'
     - delay:
         seconds: 1
     - service: input_boolean.turn_off
       entity_id: input_boolean.enable_presence_automations
-    - service: input_boolean.turn_off
-      entity_id: input_boolean.enable_music_automations
     - service: switch.turn_on
       entity_id: switch.phone_bedtime
     - service: script.turn_on

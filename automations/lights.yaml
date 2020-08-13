@@ -1,73 +1,97 @@
-- alias: Update LED Strip Colour When Hue Colour Changed
+# - alias: Update LED Strip Colour When Hue Colour Changed
+#   trigger:
+#     platform: state
+#     entity_id: sensor.hue_colour
+#   action:
+#     service: light.turn_on
+#     data_template:
+#       entity_id: light.led_strip
+#       brightness: >
+#         {% if state_attr("light.living_room", "brightness")|int > 205 %}
+#           205
+#         {% else %}
+#           {{ state_attr("light.living_room", "brightness") }}
+#         {% endif %}
+#       rgb_color: ['{{ state_attr("light.living_room", "rgb_color")[0] }}', '{{ state_attr("light.living_room", "rgb_color")[1] }}', '{{ state_attr("light.living_room", "rgb_color")[2] }}']
+# - alias: Periodically Change the LED Strip to a Random Colour
+#   trigger:
+#     platform: time_pattern
+#     minutes: '/5'
+#   condition:
+#     condition: state
+#     entity_id: light.led_strip
+#     state: 'on'
+#   action:
+#     service: script.turn_on
+#     entity_id: script.led_strip_set_random_colour
+# - alias: It's Christmas
+#   initial_state: false
+#   trigger:
+#     platform: time_pattern
+#     seconds: '/2'
+#   action:
+#     service: script.turn_on
+#     entity_id: script.led_strip_christmas
+- alias: Hue Remote On Button Press
   trigger:
-    platform: state
-    entity_id: sensor.hue_colour
+    platform: device
+    device_id: da322d02b97e4de5b5ed9702b5a5a924
+    domain: hue
+    type: remote_button_short_release
+    subtype: turn_on
   action:
-    service: light.turn_on
-    data_template:
-      entity_id: light.led_strip
-      brightness: >
-        {% if state_attr("light.living_room", "brightness")|int > 205 %}
-          205
-        {% else %}
-          {{ state_attr("light.living_room", "brightness") }}
-        {% endif %}
-      rgb_color: ['{{ state_attr("light.living_room", "rgb_color")[0] }}', '{{ state_attr("light.living_room", "rgb_color")[1] }}', '{{ state_attr("light.living_room", "rgb_color")[2] }}']
-- alias: Periodically Change the LED Strip to a Random Colour
+    service: light.toggle
+    entity_id: light.master_suite_lights
+- alias: Hue Remote Dim Up Button Press
   trigger:
-    platform: time_pattern
-    minutes: '/5'
-  condition:
-    condition: state
-    entity_id: light.led_strip
-    state: 'on'
+    platform: device
+    device_id: da322d02b97e4de5b5ed9702b5a5a924
+    domain: hue
+    type: remote_button_short_release
+    subtype: dim_up
   action:
-    service: script.turn_on
-    entity_id: script.led_strip_set_random_colour
-- alias: It's Christmas
-  initial_state: false
-  trigger:
-    platform: time_pattern
-    seconds: '/2'
-  action:
-    service: script.turn_on
-    entity_id: script.led_strip_christmas
-- alias: Hue Remote Button Press
-  trigger:
-    platform: state
-    entity_id: sensor.hue_remote_last_update
-  action:
-    service: script.turn_on
-    entity_id: script.hue_remote
-- alias: Update bedroom lights colour
-  trigger:
-    platform: state
+    service: light.toggle
     entity_id: light.bedroom
-    from: 'off'
-    to: 'on'
-  condition:
-    condition: sun
-    after: sunset
-    after_offset: "+02:00:00"
+- alias: Hue Remote Dim Down Button Press
+  trigger:
+    platform: device
+    device_id: da322d02b97e4de5b5ed9702b5a5a924
+    domain: hue
+    type: remote_button_short_release
+    subtype: dim_down
   action:
-    service: light.turn_on
-    data:
-      entity_id: light.bedroom
-      rgb_color: [255, 165, 0]
-      brightness_pct: 60
-      transition: 15
+    service: light.toggle
+    entity_id: light.bathroom
+- alias: Hue Remote Off Button Press
+  trigger:
+    platform: device
+    device_id: da322d02b97e4de5b5ed9702b5a5a924
+    domain: hue
+    type: remote_button_short_release
+    subtype: turn_off
+  action:
+    service: light.toggle
+    entity_id: light.master_bathroom_leds
 - alias: Bedroom motion detected
   trigger:
     platform: state
     entity_id: binary_sensor.bedroom_motion
     to: 'on'
   condition:
-    condition: time
-    after: "08:00:00"
-    before: "00:00:00"
+    condition: state
+    entity_id: input_boolean.bedtime
+    state: 'off'
   action:
     service: light.turn_on
-    entity_id: light.bedroom
+    data_template:
+      entity_id: >-
+        {% if is_state("input_boolean.bedtime", "on") %}
+          light.bathroom
+        {% else %}
+          light.master_suite_lights
+        {% endif %}
+#      rgb_color: '{{ states("sensor.lights_colour") }}'
+      brightness: '{{ states("sensor.lights_brightness")|int }}'
 - alias: Bedroom motion no longer detected
   trigger:
     platform: state
@@ -77,4 +101,24 @@
       minutes: 5
   action:
     service: light.turn_off
-    entity_id: light.bedroom
+    entity_id: light.master_suite_lights
+- alias: Light settings changed
+  trigger:
+    platform: state
+    entity_id: sensor.lights_colour
+  condition:
+    condition: state
+    entity_id: light.master_suite_lights
+    state: 'on'
+  action:
+    service: light.turn_on
+    data_template:
+      entity_id: >-
+        {% if is_state("input_boolean.bedtime", "on") %}
+          light.bathroom
+        {% else %}
+          light.master_suite_lights
+        {% endif %}
+      rgb_color: '{{ states("sensor.lights_colour") }}'
+      brightness: '{{ states("sensor.lights_brightness") }}'
+      transition: 15

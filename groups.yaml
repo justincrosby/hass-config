@@ -1,13 +1,7 @@
-main_lights:
-  name: Main Lights
-  entities:
-    - light.bedroom
-    - light.fairy_lights
-    - light.living_room
 master_suite:
   name: Master Suite
   entities:
-    - light.bedroom
+    - light.master_suite_lights
     - switch.bedroom_air_purifier
 living_room:
   name: Living Room

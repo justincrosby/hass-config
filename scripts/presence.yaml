@@ -47,7 +47,7 @@ arrive_home_music:
   alias: Play music when Justin arrives home
   sequence:
     - condition: template
-      value_template: '{{ not is_state("sensor.media_status", "playing") }}'
+      value_template: '{{ not is_state("sensor.media_player_status", "playing") }}'
     - condition: or
       conditions:
         - condition: state
@@ -64,18 +64,13 @@ arrive_home_music:
             - condition: state
               entity_id: media_player.vizio_smartcast
               state: 'off'
-    # disable music automations so they don't mess with audio settings
-    - service: input_boolean.turn_off
-      entity_id: input_boolean.enable_music_automations
-    - delay:
-        seconds: 1
     - service: input_select.select_option
       data:
         entity_id: input_select.media_output_select
         option: 'Home Audio'
     - service: input_select.select_option
       data_template:
-        entity_id: input_select.media_select
+        entity_id: input_select.receiver_source_select
         option: 'Cast Audio'
     - service: script.turn_on
       entity_id: script.switch_to_audio
@@ -83,7 +78,7 @@ arrive_home_music:
         seconds: 1
     - service: script.turn_on
       entity_id: script.play_all_music
-    - wait_template: '{{ is_state("sensor.media_status", "playing") }}'
+    - wait_template: '{{ is_state("sensor.media_player_status", "playing") }}'
       timeout: '00:01:00'
     - delay:
         seconds: 1
@@ -91,9 +86,6 @@ arrive_home_music:
       data:
         step_size: 5
         end_volume: 45
-    # re-enable the automations now
-    - service: input_boolean.turn_on
-      entity_id: input_boolean.enable_music_automations
 leave_home_justin:
   alias: Leave Home Justin
   sequence:
@@ -106,7 +98,7 @@ leave_home_justin:
       entity_id: group.master_suite
     - service: input_select.select_option
       data:
-        entity_id: input_select.media_select
+        entity_id: input_select.receiver_source_select
         option: Shutdown
     - service: homeassistant.turn_off
       entity_id: group.living_room
@@ -120,7 +112,7 @@ leave_home_jenni:
       entity_id: group.master_suite
     - service: input_select.select_option
       data:
-        entity_id: input_select.media_select
+        entity_id: input_select.receiver_source_select
         option: Shutdown
     - service: homeassistant.turn_off
       entity_id: group.living_room
