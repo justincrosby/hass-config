@@ -82,7 +82,7 @@ set_receiver_volume:
   sequence:
     - service: media_player.volume_set
       data_template:
-        entity_id: media_player.bathroom_speaker
+        entity_id: media_player.denon_avr_x1300w
         volume_level: '{{ states("input_number.receiver_audio_volume")|float / 100 }}'
 set_chromecast_volume:
   alias: Set the chromecast volume according to the slider

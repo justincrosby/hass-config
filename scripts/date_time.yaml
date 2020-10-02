@@ -3,8 +3,8 @@ shutoff:
   sequence:
     - service: script.turn_on
       entity_id: script.bedroom_light_fade_out
-    - wait_template: '{{ is_state("script.bedroom_light_fade_out", "off") }}'
-      timeout: '00:01:00'
+    - delay:
+        seconds: 15
     - service: light.turn_off
       entity_id: light.all_lights
     - service: input_select.select_option
@@ -79,7 +79,7 @@ ringer_on_conditional:
       entity_id: binary_sensor.justin_presence
       state: 'on'
     - service: switch.turn_on
-      entity_id: switch.phone_ringer_on
+      entity_id: switch.phone_morning
 sunset:
   alias: Sunset
   sequence:
@@ -117,3 +117,58 @@ bedtime:
       entity_id: input_boolean.plants_watered_tracker
     - service: switch.turn_on
       entity_id: switch.bedroom_air_purifier
+update_weekday_alarm:
+  alias: Update Weekday Alarm
+  sequence:
+    - condition: state
+      entity_id: binary_sensor.workday_sensor
+      state: 'on'
+    - service_template: >
+        {% if now().strftime("%h %d") == states("sensor.next_alarm_day") %}
+          input_boolean.turn_on
+        {% else %}
+          input_boolean.turn_off
+        {% endif %}
+      entity_id: input_boolean.workday_alarm
+    - condition: state
+      entity_id: input_boolean.workday_alarm
+      state: 'on'
+    - service: input_number.set_value
+      data_template:
+        entity_id: input_number.workday_hours
+        value: '{{ states("sensor.next_alarm_hour") }}'
+    - service: input_number.set_value
+      data_template:
+        entity_id: input_number.workday_minutes
+        value: '{{ states("sensor.next_alarm_minute") }}'
+update_weekend_alarm:
+  alias: Update Weekend Alarm
+  sequence:
+    - condition: state
+      entity_id: binary_sensor.workday_sensor
+      state: 'off'
+    - service_template: >
+        {% if now().strftime("%h %d") == states("sensor.next_alarm_day") %}
+          input_boolean.turn_on
+        {% else %}
+          input_boolean.turn_off
+        {% endif %}
+      entity_id: input_boolean.weekend_alarm
+    - condition: state
+      entity_id: input_boolean.weekend_alarm
+      state: 'on'
+    - service: input_number.set_value
+      data_template:
+        entity_id: input_number.weekend_hours
+        value: '{{ states("sensor.next_alarm_hour") }}'
+    - service: input_number.set_value
+      data_template:
+        entity_id: input_number.weekend_minutes
+        value: '{{ states("sensor.next_alarm_minute") }}'
+update_alarms:
+  alias: Update Alarms
+  sequence:
+    - service: script.turn_on
+      entity_id: script.update_weekday_alarm
+    - service: script.turn_on
+      entity_id: script.update_weekend_alarm

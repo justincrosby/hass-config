@@ -3,6 +3,9 @@ switches:
   phone_bedtime:
     friendly_name: Phone Bedtime
     command_on: !secret command_phone_bedtime
+  phone_morning:
+    friendly_name: Phone Morning
+    command_on: !secret command_phone_morning
   phone_ringer_on:
     friendly_name: Phone Ringer On
     command_on: !secret command_phone_ringer_on

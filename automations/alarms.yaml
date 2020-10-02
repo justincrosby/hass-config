@@ -6,3 +6,10 @@
   action:
     - service: script.turn_on
       entity_id: script.morning
+- alias: Update Alarms
+  trigger:
+    platform: time
+    at: "03:00:00"
+  action:
+    - service: script.turn_on
+      entity_id: script.update_alarms

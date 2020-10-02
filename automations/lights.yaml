@@ -78,9 +78,13 @@
     entity_id: binary_sensor.bedroom_motion
     to: 'on'
   condition:
-    condition: state
-    entity_id: input_boolean.bedtime
-    state: 'off'
+    condition: and
+    conditions:
+    - condition: state
+      entity_id: input_boolean.bedtime
+      state: 'off'
+    - condition: time
+      before: "23:30:00"
   action:
     service: light.turn_on
     data_template:
