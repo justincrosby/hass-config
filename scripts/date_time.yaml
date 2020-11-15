@@ -11,6 +11,8 @@ shutoff:
       data:
         entity_id: input_select.receiver_source_select
         option: Shutdown
+    - delay:
+        seconds: 1
     - service: switch.turn_off
       entity_id: switch.justins_pc
 #    - service: lock.lock
@@ -45,6 +47,9 @@ morning:
     - condition: state
       entity_id: binary_sensor.alarm_full
       state: 'on'
+    - service: shell_command.reboot_router
+    - delay:
+        minutes: 10
     - service: script.turn_on
       entity_id: script.morning_music
     - delay:
@@ -53,7 +58,7 @@ morning:
       data:
         entity_id: light.bedroom
         rgb_color: [255, 0, 0]
-        brightness_pct: 0
+        brightness_pct: 1
     - delay:
         seconds: 1
     - service: light.turn_on
@@ -97,12 +102,14 @@ sunset:
 bedtime:
   alias: Bedtime
   sequence:
-    - service: input_boolean.turn_on
-      entity_id: input_boolean.bedtime
-    - wait_template: '{{ is_state("script.shutoff", "off") }}'
-      timeout: '00:01:00'
+    - service: script.turn_on
+      entity_id: script.shutoff
     - delay:
         seconds: 1
+    - wait_template: '{{ is_state("script.shutoff", "off") }}'
+      timeout: '00:01:00'
+    - service: input_boolean.turn_on
+      entity_id: input_boolean.bedtime
     - service: input_boolean.turn_off
       entity_id: input_boolean.enable_presence_automations
     - service: switch.turn_on

@@ -5,6 +5,8 @@
     entity_id: binary_sensor.justin_presence
     from: 'on'
     to: 'off'
+    for:
+      minutes: 5
   condition:
     condition: state
     entity_id: input_boolean.enable_presence_automations
@@ -20,6 +22,8 @@
     entity_id: binary_sensor.jenni_presence
     from: 'on'
     to: 'off'
+    for:
+      minutes: 5
   condition:
     condition: state
     entity_id: input_boolean.enable_presence_automations
@@ -35,6 +39,8 @@
     entity_id: binary_sensor.jayden_presence
     from: 'on'
     to: 'off'
+    for:
+      minutes: 5
   condition:
     condition: state
     entity_id: input_boolean.enable_presence_automations

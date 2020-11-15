@@ -127,11 +127,11 @@ views:
               artwork: cover
           - type: conditional
             conditions:
-              - entity: media_player.bedroom_tv
+              - entity: media_player.master_bedroom_tv
                 state: 'playing'
             card:
               type: custom:mini-media-player
-              entity: media_player.bedroom_tv
+              entity: media_player.master_bedroom_tv
               artwork: cover
           - type: conditional
             conditions:
@@ -211,7 +211,7 @@ views:
           - script.volume_up
       - type: entities
         entities:
-          - input_boolean.enable_music_automations
+          - input_boolean.bedtime
           - input_boolean.enable_presence_automations
       - type: entities
         entities:

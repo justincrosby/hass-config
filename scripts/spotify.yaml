@@ -4,9 +4,6 @@ start_playlist:
     device_name:
       description: 'The friendly name of the media player to cast to.'
       example: 'Home Audio'
-    entity_id:
-      description: 'The media player to cast to.'
-      example: 'media_player.home_audio'
     playlist_uri:
       description: 'The Spotify playlist URI to play.'
       example: 'spotify:playlist:*'
@@ -40,7 +37,6 @@ play_all_music_var:
       data_template:
         variables:
           device_name: '{{ states("input_select.media_output_select") }}'
-          entity_id: '{{ states("sensor.media_player_selected_output") }}'
           playlist_uri: !secret all_music_playlist_uri
           volume_level: '{{ volume_level }}'
 play_chill_music:
@@ -59,6 +55,5 @@ play_chill_music_var:
       data_template:
         variables:
           device_name: '{{ states("input_select.media_output_select") }}'
-          entity_id: '{{ states("sensor.media_player_selected_output") }}'
           playlist_uri: !secret chill_music_playlist_uri
           volume_level: '{{ volume_level }}'

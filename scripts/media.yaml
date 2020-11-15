@@ -254,7 +254,7 @@ media_shutdown:
     - service: media_player.turn_off
       entity_id: media_player.denon_avr_x1300w
     - service: media_player.turn_off
-      entity_id: media_player.vizio_smartcast
+      entity_id: media_player.shield
     - service: script.turn_on
       entity_id: script.media_player_shutdown
 media_player_shutdown:
