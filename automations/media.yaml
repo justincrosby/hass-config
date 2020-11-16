@@ -138,6 +138,10 @@
   trigger:
     platform: state
     entity_id: input_select.receiver_source_select
+  condition:
+    condition: state
+    entity_id: sensor.media_player_status
+    state: 'playing'
   action:
     service: script.turn_on
     entity_id: script.media_input_select

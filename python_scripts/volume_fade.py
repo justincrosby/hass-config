@@ -7,8 +7,8 @@ start_time = time.time()
 
 # These values must be passed in
 if (step_size is not None) and (end_volume is not None):
-	current_volume = int(hass.states.get('sensor.chromecast_volume').state)
-	entity_id = hass.states.get('sensor.media_output').state
+	current_volume = int(float(hass.states.get('sensor.chromecast_audio_volume').state))
+	entity_id = hass.states.get('sensor.media_player_selected_output').state
 
 	if (current_volume == end_volume):
 		time.sleep(1)
@@ -41,7 +41,6 @@ if (step_size is not None) and (end_volume is not None):
 		
 		time.sleep(1)
 
-	hass.services.call('script', 'turn_on', {'entity_id': 'script.update_chromecast_volume_slider'}, False)
 	if (end_volume != 0):
 		hass.services.call('script', 'turn_on', {'entity_id': 'script.set_default_audio_levels'}, False)
 else:

@@ -5,7 +5,11 @@ sensors:
     icon_template: mdi:thermometer
     unit_of_measurement: "°C"
     value_template: >-
-      {{ ((states("sensor.thermostat_temperature")|float(0) + states("sensor.bedroom_temperature")|float(0) + states("sensor.office_temperature")|float(0)) / 3) | round(1) }}
+      {% if states("zwave.z_wave_plus_usb_stick") != "ready" %}
+        unknown
+      {% else %}
+        {{ ((states("sensor.thermostat_temperature")|float(0) + states("sensor.bedroom_temperature")|float(0) + states("sensor.office_temperature")|float(0)) / 3) | round(1) }}
+      {% endif %}
   target_temp:
     friendly_name: Target Temperature
     icon_template: mdi:thermometer
@@ -46,7 +50,12 @@ sensors:
     friendly_name: Corrected Target Temp
     icon_template: mdi:thermometer
     unit_of_measurement: "°C"
-    value_template: '{{ (float(states("sensor.thermostat_temperature")) - float(states("sensor.current_temp")) + float(states("input_number.thermostat_target_temp"))) | round(0) }}'
+    value_template: >-
+      {% if states("zwave.z_wave_plus_usb_stick") != "ready" or is_state("sensor.current_temp", "unknown") %}
+        unknown
+      {% else %}
+        {{ (float(states("sensor.thermostat_temperature")) - float(states("sensor.current_temp")) + float(states("input_number.thermostat_target_temp"))) | round(0) }}
+      {% endif %}
   hvac_option_choice:
     friendly_name: Thermostat HVAC Action
     icon_template: mdi:thermostat
@@ -54,7 +63,9 @@ sensors:
       {% if is_state("input_select.thermostat_mode_select", "Summer") %}
         cool
       {% else %}
-        {% if float(states("sensor.current_temp")) >= (float(states("sensor.corrected_target_temp")) + 2) %}
+        {% if is_state("sensor.corrected_target_temp", "unknown") %}
+          cool
+        {% elif float(states("sensor.current_temp")) >= (float(states("sensor.corrected_target_temp")) + 2) %}
           cool
         {% else %}
           heat

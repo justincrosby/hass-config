@@ -38,14 +38,17 @@ morning_music:
       data:
         entity_id: input_select.receiver_source_select
         option: 'Cast Audio'
+    - delay:
+        seconds: 1
     - service: script.turn_on
       data:
         entity_id: script.play_chill_music_var
         variables:
           volume_level: 0
-    - condition: state
-      entity_id: script.start_playlist
-      state: 'off'
+    - delay:
+        seconds: 1
+    - wait_template: '{{ is_state("script.start_playlist", "off") }}'
+      timeout: '00:01:00'
     - service: python_script.volume_fade
       data:
         step_size: 1
@@ -70,9 +73,10 @@ morning_music:
         entity_id: script.play_all_music_var
         variables:
           volume_level: 0
-    - condition: state
-      entity_id: script.start_playlist
-      state: 'off'
+    - delay:
+        seconds: 1
+    - wait_template: '{{ is_state("script.start_playlist", "off") }}'
+      timeout: '00:01:00'
     - service: python_script.volume_fade
       data:
         step_size: 5
