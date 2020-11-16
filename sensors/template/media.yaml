@@ -1,9 +1,6 @@
 platform: template
 sensors:
   receiver_source:
-    entity_id:
-      - sensor.media_player_status
-      - media_player.denon_avr_x1300w
     icon_template: mdi:audio-video
     value_template: >-
       {% if is_state("media_player.denon_avr_x1300w", "off") %}
@@ -31,8 +28,6 @@ sensors:
       {% endif %}
     friendly_name: Receiver Source
   receiver_volume:
-    entity_id:
-      - media_player.denon_avr_x1300w
     icon_template: mdi:audio-video
     value_template: >
       {% if is_state("media_player.denon_avr_x1300w", "off") %}
@@ -42,8 +37,6 @@ sensors:
       {% endif %}
     friendly_name: Receiver Volume
   receiver_selected_source:
-    entity_id:
-      - input_select.receiver_source_select
     icon_template: mdi:audio-video
     value_template: >-
       {% if is_state('input_select.receiver_source_select', 'Shield') %}
@@ -63,14 +56,6 @@ sensors:
       {% endif %}
     friendly_name: Receiver Selected Source
   media_player_output:
-    entity_id:
-      - media_player.home_audio
-      - media_player.fake_home_audio
-      - media_player.master_suite_audio
-      - media_player.living_room_audio
-      - media_player.master_bedroom_audio
-      - media_player.master_bathroom_speaker
-      - media_player.bathroom_speaker
     icon_template: mdi:music-box
     value_template: >
       {% if is_state("media_player.home_audio", "playing") %}
@@ -92,8 +77,6 @@ sensors:
       {% endif %}
     friendly_name: Media Player Output
   media_player_selected_output:
-    entity_id:
-      - input_select.media_output_select
     icon_template: mdi:music-box
     value_template: >
       {% if is_state("input_select.media_output_select", "Home Audio") %}
@@ -109,15 +92,6 @@ sensors:
       {% endif %}
     friendly_name: Media Player Selected Output
   media_player_status:
-    entity_id:
-      - sensor.media_player_output
-      - media_player.home_audio
-      - media_player.fake_home_audio
-      - media_player.master_suite_audio
-      - media_player.living_room_audio
-      - media_player.master_bedroom_audio
-      - media_player.master_bathroom_speaker
-      - media_player.bathroom_speaker
     icon_template: mdi:music-box
     value_template: >
       {% if is_state("sensor.media_player_output", "none") %}
@@ -131,15 +105,6 @@ sensors:
       {% endif %}
     friendly_name: Media Player Status
   chromecast_audio_volume:
-    entity_id:
-      - sensor.media_player_output
-      - media_player.home_audio
-      - media_player.fake_home_audio
-      - media_player.master_suite_audio
-      - media_player.living_room_audio
-      - media_player.master_bedroom_audio
-      - media_player.master_bathroom_speaker
-      - media_player.bathroom_speaker
     icon_template: mdi:music-box
     value_template: >
       {% if is_state("sensor.media_player_output", "none") %}

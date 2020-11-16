@@ -8,7 +8,7 @@ start_playlist:
       description: 'The Spotify playlist URI to play.'
       example: 'spotify:playlist:*'
     volume_level:
-      description: 'The volume level to start the playlist at (%).'
+      description: 'The volume level to start the playlist at (decimal percentage).'
       example: '50'
   sequence:
     - service: spotcast.start
@@ -17,6 +17,7 @@ start_playlist:
         uri: '{{ playlist_uri }}'
         random_song: true
         shuffle: true
+        start_volume_pct: '{{ (volume_level|float * 100)|int }}'
 play_all_music:
   alias: Play All Music Playlist
   sequence:
@@ -29,7 +30,7 @@ play_all_music_var:
   alias: Play All Music Playlist with Volume Select
   fields:
     volume_level:
-      description: 'The volume level to start the playlist at (%).'
+      description: 'The volume level to start the playlist at (decimal percentage).'
       example: '50'
   sequence:
     - service: script.turn_on

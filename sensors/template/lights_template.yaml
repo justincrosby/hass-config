@@ -1,9 +1,6 @@
 platform: template
 sensors:
   lights_colour:
-    entity_id:
-      - sensor.time
-      - input_boolean.bedtime
     icon_template: mdi:lightbulb
     value_template: >-
       {% if states("input_boolean.bedtime") == true %}
@@ -13,9 +10,6 @@ sensors:
       {% endif %}
     friendly_name: Chosen Light Colour
   lights_brightness:
-    entity_id:
-      - sensor.time
-      - input_boolean.bedtime
     icon_template: mdi:lightbulb
     value_template: >-
       {% if states("input_boolean.bedtime") == true %}

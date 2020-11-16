@@ -2,9 +2,6 @@ platform: template
 sensors:
   workday_alarm:
     friendly_name: Workday Alarm
-    entity_id:
-      - input_number.workday_hours
-      - input_number.workday_minutes
     value_template: >-
       {%- if states.input_number.workday_minutes.state|int < 10 -%}
         {{ states.input_number.workday_hours.state|int ~ ":0" ~ states.input_number.workday_minutes.state|int}}
@@ -13,9 +10,6 @@ sensors:
       {%- endif -%}
   weekend_alarm:
     friendly_name: Weekend Alarm
-    entity_id:
-      - input_number.weekend_hours
-      - input_number.weekend_minutes
     value_template: >-
       {%- if states.input_number.weekend_minutes.state|int < 10 -%}
          {{ states.input_number.weekend_hours.state|int ~ ":0" ~ states.input_number.weekend_minutes.state|int}}
@@ -24,16 +18,10 @@ sensors:
       {%- endif -%}
   next_alarm_day:
     friendly_name: Next Alarm Day
-    entity_id:
-      - sensor.pixel_3a_next_alarm
     value_template: '{{ (state_attr("sensor.pixel_3a_next_alarm", "Time in Milliseconds")/1000) | timestamp_custom("%h %d") }}'
   next_alarm_hour:
     friendly_name: Next Alarm Hour
-    entity_id:
-      - sensor.pixel_3a_next_alarm
     value_template: '{{ (state_attr("sensor.pixel_3a_next_alarm", "Time in Milliseconds")/1000-60*25) | timestamp_custom("%H") | int }}'
   next_alarm_minute:
     friendly_name: Next Alarm Minute
-    entity_id:
-      - sensor.pixel_3a_next_alarm
     value_template: '{{ (state_attr("sensor.pixel_3a_next_alarm", "Time in Milliseconds")/1000-60*25) | timestamp_custom("%M") | int }}'
