@@ -17,7 +17,7 @@ start_playlist:
         uri: '{{ playlist_uri }}'
         random_song: true
         shuffle: true
-        start_volume_pct: '{{ (volume_level|float * 100)|int }}'
+        start_volume: '{{ (volume_level|float * 100)|int }}'
 play_all_music:
   alias: Play All Music Playlist
   sequence:

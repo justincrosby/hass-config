@@ -234,6 +234,11 @@ switch_to_audio:
       state: 'Cast Audio'
     - service: media_player.turn_off
       entity_id: media_player.vizio_smartcast
+    - service: media_player.turn_off
+      entity_id: media_player.shield
+    - condition: state
+      entity_id: input_select.media_output_select
+      state: 'Home Audio'
     - service: media_player.turn_on
       entity_id: media_player.denon_avr_x1300w
     - wait_template: '{{ is_state("media_player.denon_avr_x1300w", "on") }}'

@@ -102,7 +102,7 @@
     entity_id: binary_sensor.bedroom_motion
     to: 'off'
     for:
-      minutes: 5
+      minutes: 10
   action:
     service: light.turn_off
     entity_id: light.master_suite_lights

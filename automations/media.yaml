@@ -29,48 +29,49 @@
   action:
     - service: script.turn_on
       entity_id: script.media_input_select
-- alias: Living Room TV Started 1
+- alias: Living Room TV Started
   trigger:
+    - platform: state
+      entity_id: media_player.shield
+      from: 'idle'
+      to: 'paused'
+    - platform: state
+      entity_id: media_player.shield
+      from: 'idle'
+      to: 'playing'
+    - platform: state
+      entity_id: media_player.shield
+      from: 'off'
+      to: 'paused'
+    - platform: state
+      entity_id: media_player.shield
+      from: 'off'
+      to: 'playing'
     - platform: state
       entity_id: media_player.shield
       from: 'off'
       to: 'idle'
     - platform: state
       entity_id: media_player.shield
-      from: 'idle'
-      to: 'playing'
-  condition:
-    condition: template
-    value_template: >
-      {% if is_state("input_select.receiver_source_select", "Shield") %}
-        false
-      {% else %}
-        true
-      {% endif %}
-  action:
-    - service: input_select.select_option
-      data:
-        entity_id: input_select.receiver_source_select
-        option: 'Shield'
-- alias: Living Room TV Started 2
-  trigger:
-    - platform: state
-      entity_id: media_player.shield
-      from: 'off'
+      from: 'standby'
       to: 'idle'
     - platform: state
-      entity_id: media_player.shield
-      from: 'idle'
+      entity_id: media_player.shield_cast
       to: 'playing'
   condition:
-    condition: state
-    entity_id: input_select.receiver_source_select
-    state: 'Shield'
+      condition: template
+      value_template: >
+        {% if is_state("input_select.receiver_source_select", "Shield") %}
+          false
+        {% else %}
+          true
+        {% endif %}
   action:
-    - service: input_select.select_option
-      data:
-        entity_id: input_select.receiver_source_select
-        option: 'Shield'
+      - service: input_select.select_option
+        data:
+          entity_id: input_select.receiver_source_select
+          option: 'Shield'
+
 - alias: Bedroom TV Started
   trigger:
     platform: state
@@ -80,6 +81,17 @@
     - service: media_player.turn_off
       data_template:
         entity_id: '{{ states("sensor.media_player_output") }}'
+
+- alias: Bedroom TV Idle
+  trigger:
+    platform: state
+    entity_id: media_player.bedroom_tv
+    to: 'idle'
+    for:
+      minutes: 10
+  action:
+    - service: media_player.turn_off
+      entity_id: media_player.bedroom_tv
 
 ### Volume Sliders ##
 - alias: Living Room Audio Slider Moved
@@ -153,3 +165,5 @@
     - service: spotcast.start
       data_template:
         device_name: '{{ states("input_select.media_output_select") }}'
+    - service: script.turn_on
+      entity_id: script.switch_to_audio
