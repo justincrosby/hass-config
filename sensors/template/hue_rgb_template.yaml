@@ -1,5 +1,5 @@
 platform: template
 sensors:
   hue_colour:
-    value_template: '{{ state_attr("light.living_room", "rgb_color") }}'
+    value_template: '{{ state_attr("light.living_room_lights", "rgb_color") }}'
     friendly_name: 'Hue Colour Sensor'

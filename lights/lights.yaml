@@ -1,14 +1,29 @@
 - platform: group
-  name: Master Suite Lights
+  name: Bedroom Lights
   entities:
     - light.bedroom_light_1
     - light.bedroom_light_2
     - light.bedroom_light_3
-    - light.bathroom
+- platform: group
+  name: Living Room Lights
+  entities:
+    - light.living_room_light
+    - light.living_room_lamp
+- platform: group
+  name: Bathroom Lights
+  entities:
+    - light.hue_white_lamp_1
+    - light.hue_white_lamp_2
     - light.master_bathroom_leds
+- platform: group
+  name: Master Suite Lights
+  entities:
+    - light.bedroom_lights
+    - light.bathroom_lights
 - platform: group
   name: All Lights
   entities:
     - light.master_suite_lights
-    - light.living_room
+    - light.living_room_lights
     - light.fairy_lights
+

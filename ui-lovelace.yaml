@@ -169,7 +169,7 @@ views:
           - type: horizontal-stack
             cards:
               - type: light
-                entity: light.bedroom
+                entity: light.bedroom_lights
               - type: light
                 entity: light.scrub_room
           - type: horizontal-stack
