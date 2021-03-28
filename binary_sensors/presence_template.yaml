@@ -4,7 +4,7 @@ sensors:
     friendly_name: Justin Presence
     device_class: presence
     value_template: >
-      {% if is_state("sensor.justin_home_binary", "home") or is_state("device_tracker.justins_phone", "home") %}
+      {% if is_state("sensor.justin_home_binary", "home") or is_state("device_tracker.justins_phone_tracker", "home") %}
         on
       {% else %}
         off
@@ -13,7 +13,7 @@ sensors:
     friendly_name: Jenni Presence
     device_class: presence
     value_template: >
-      {% if is_state("sensor.jenni_home_binary", "home") or is_state("device_tracker.jennis_phone", "home") %}
+      {% if is_state("sensor.jenni_home_binary", "home") or is_state("device_tracker.jennis_phone_tracker", "home") %}
         on
       {% else %}
         off
