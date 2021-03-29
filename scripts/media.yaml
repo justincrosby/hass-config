@@ -206,12 +206,12 @@ switch_to_chromecast:
     - service: script.turn_on
       entity_id: script.media_player_shutdown
     - service: media_player.turn_on
-      entity_id: media_player.vizio_smartcast
-    - wait_template: '{{ is_state("media_player.vizio_smartcast", "on") }}'
+      entity_id: media_player.vizio
+    - wait_template: '{{ is_state("media_player.vizio", "on") }}'
       timeout: '00:1:00'
     - service: media_player.select_source
       data:
-        entity_id: media_player.vizio_smartcast
+        entity_id: media_player.vizio
         source: HDMI-1
     - service: media_player.turn_on
       entity_id: media_player.denon_avr_x1300w
@@ -233,7 +233,7 @@ switch_to_audio:
       entity_id: input_select.receiver_source_select
       state: 'Cast Audio'
     - service: media_player.turn_off
-      entity_id: media_player.vizio_smartcast
+      entity_id: media_player.vizio
     - service: media_player.turn_off
       entity_id: media_player.shield
     - condition: state
@@ -259,7 +259,7 @@ media_shutdown:
       entity_id: input_select.receiver_source_select
       state: 'Shutdown'
     - service: media_player.turn_off
-      entity_id: media_player.vizio_smartcast
+      entity_id: media_player.vizio
     - service: media_player.turn_off
       entity_id: media_player.denon_avr_x1300w
     - service: media_player.turn_off

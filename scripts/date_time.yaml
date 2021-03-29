@@ -23,7 +23,7 @@ shutoff:
       entity_id: input_boolean.bedtime
       state: 'off'
     - service: switch.turn_off
-      entity_id: switch.bedroom_air_purifier
+      entity_id: switch.air_purifier
 bedroom_light_fade_out:
   alias: Fade out the bedroom lights if they are on
   sequence:
@@ -76,7 +76,7 @@ morning:
         brightness_pct: 100
         transition: 100
     - service: switch.turn_off
-      entity_id: switch.bedroom_air_purifier
+      entity_id: switch.air_purifier
 ringer_on_conditional:
   alias: Phone Ringer On Conditional
   sequence:
@@ -123,7 +123,7 @@ bedtime:
     - service: input_boolean.turn_off
       entity_id: input_boolean.plants_watered_tracker
     - service: switch.turn_on
-      entity_id: switch.bedroom_air_purifier
+      entity_id: switch.air_purifier
 update_weekday_alarm:
   alias: Update Weekday Alarm
   sequence:

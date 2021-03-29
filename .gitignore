@@ -24,3 +24,6 @@ custom_components/
 OZW_Log.txt
 *.sqlite
 *.xml
+Hass-*.json
+blueprints/*
+packages/*

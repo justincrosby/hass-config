@@ -60,14 +60,14 @@ light.living_room_lights:
 switch.justins_pc:
   name: My PC
   expose: true
-media_player.vizio_smartcast:
+media_player.vizio:
   name: TV
   expose: true
 media_player.denon_avrx1300w:
   name: Receiver
   expose: true
 # Switches
-switch.bedroom_air_purifier:
+switch.air_purifier:
   expose: true
 switch.bedroom_fan:
   expose: true

@@ -33,7 +33,7 @@ views:
           #- entity: lock.front_door
           #  tap_action:
           #    action: toggle
-          - entity: switch.bedroom_air_purifier
+          - entity: switch.air_purifier
             name: Air Purifier
             tap_action:
               action: toggle
@@ -41,7 +41,7 @@ views:
           #  name: Fan
           #  tap_action:
           #    action: toggle
-          - entity: media_player.vizio_smartcast
+          - entity: media_player.vizio
             tap_action:
               action: toggle
           - entity: media_player.denon_avr_x1300w
@@ -95,19 +95,19 @@ views:
                     entity_id: script.set_chromecast_volume
           - type: conditional
             conditions:
-              - entity: media_player.vizio_smartcast
+              - entity: media_player.vizio
                 state: 'on'
             card:
               type: entities
               entities:
-                - media_player.vizio_smartcast
+                - media_player.vizio
           - type: conditional
             conditions:
-              - entity: media_player.vizio_smartcast
+              - entity: media_player.vizio
                 state: 'playing'
             card:
               type: custom:mini-media-player
-              entity: media_player.vizio_smartcast
+              entity: media_player.vizio
               artwork: cover
           - type: conditional
             conditions:
@@ -166,12 +166,12 @@ views:
                 entity: light.living_room_light
               - type: light
                 entity: light.living_room_lamp
-          - type: horizontal-stack
-            cards:
-              - type: light
-                entity: light.bedroom_lights
-              - type: light
-                entity: light.scrub_room
+          # - type: horizontal-stack
+          #   cards:
+          #     - type: light
+          #       entity: light.bedroom_lights
+          #     - type: light
+          #       entity: light.scrub_room
           - type: horizontal-stack
             cards:
               - type: light

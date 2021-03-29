@@ -32,50 +32,49 @@
 #   action:
 #     service: script.turn_on
 #     entity_id: script.led_strip_christmas
-- alias: Hue Remote On Button Press
-  trigger:
-    platform: device
-    device_id: da322d02b97e4de5b5ed9702b5a5a924
-    domain: hue
-    type: remote_button_short_release
-    subtype: turn_on
-  action:
-    service: light.toggle
-    entity_id: light.master_suite_lights
-- alias: Hue Remote Dim Up Button Press
-  trigger:
-    platform: device
-    device_id: da322d02b97e4de5b5ed9702b5a5a924
-    domain: hue
-    type: remote_button_short_release
-    subtype: dim_up
-  action:
-    service: light.toggle
-    entity_id: light.bedroom_lights
-- alias: Hue Remote Dim Down Button Press
-  trigger:
-    platform: device
-    device_id: da322d02b97e4de5b5ed9702b5a5a924
-    domain: hue
-    type: remote_button_short_release
-    subtype: dim_down
-  action:
-    service: light.toggle
-    entity_id: light.bathroom_lights
-- alias: Hue Remote Off Button Press
-  trigger:
-    platform: device
-    device_id: da322d02b97e4de5b5ed9702b5a5a924
-    domain: hue
-    type: remote_button_short_release
-    subtype: turn_off
-  action:
-    service: light.toggle
-    entity_id: light.master_bathroom_leds
+# - alias: Hue Remote On Button Press
+#   trigger:
+#     platform: device
+#     device_id: da322d02b97e4de5b5ed9702b5a5a924
+#     domain: hue
+#     type: remote_button_short_release
+#     subtype: turn_on
+#   action:
+#     service: light.toggle
+#     entity_id: light.master_suite_lights
+# - alias: Hue Remote Dim Up Button Press
+#   trigger:
+#     platform: device
+#     device_id: da322d02b97e4de5b5ed9702b5a5a924
+#     domain: hue
+#     type: remote_button_short_release
+#     subtype: dim_up
+#   action:
+#     service: light.toggle
+#     entity_id: light.bedroom_lights
+# - alias: Hue Remote Dim Down Button Press
+#   trigger:
+#     platform: device
+#     device_id: da322d02b97e4de5b5ed9702b5a5a924
+#     domain: hue
+#     type: remote_button_short_release
+#     subtype: dim_down
+#   action:
+#     service: light.toggle
+#     entity_id: light.bathroom_lights
+# - alias: Hue Remote Off Button Press
+#   trigger:
+#     platform: device
+#     device_id: da322d02b97e4de5b5ed9702b5a5a924
+#     domain: hue
+#     type: remote_button_short_release
+#     subtype: turn_off
+#   action:
+#     service: light.toggle
 - alias: Bedroom motion detected
   trigger:
     platform: state
-    entity_id: binary_sensor.bedroom_motion
+    entity_id: binary_sensor.bedroom_sensor_home_security_motion_detection
     to: 'on'
   condition:
     condition: and
@@ -99,7 +98,7 @@
 - alias: Bedroom motion no longer detected
   trigger:
     platform: state
-    entity_id: binary_sensor.bedroom_motion
+    entity_id: binary_sensor.bedroom_sensor_home_security_motion_detection
     to: 'off'
     for:
       minutes: 10

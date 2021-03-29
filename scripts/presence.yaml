@@ -62,7 +62,7 @@ arrive_home_music:
               entity_id: media_player.denon_avr_x1300w
               state: 'off'
             - condition: state
-              entity_id: media_player.vizio_smartcast
+              entity_id: media_player.vizio
               state: 'off'
     - service: input_select.select_option
       data:

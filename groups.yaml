@@ -2,11 +2,11 @@ master_suite:
   name: Master Suite
   entities:
     - light.master_suite_lights
-    - switch.bedroom_air_purifier
+    - switch.air_purifier
 living_room:
   name: Living Room
   entities:
-    - media_player.vizio_smartcast
+    - media_player.vizio
     - media_player.denon_avr_x1300w
     - light.fairy_lights
     - light.living_room_lights

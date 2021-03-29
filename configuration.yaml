@@ -140,7 +140,7 @@ device_tracker:
 tplink:
   discovery: false
   switch:
-    - host: !secret tplink_bedroom_air_purifier_switch_ip
+    - host: !secret tplink_air_purifier_switch_ip
     - host: !secret tplink_betta_light_switch_ip
     - host: !secret tplink_fish_light_switch_ip
     - host: !secret tplink_fairy_lights_switch_ip
@@ -165,10 +165,6 @@ input_number: !include misc/input_number.yaml
 input_boolean: !include misc/input_boolean.yaml
 
 input_select: !include misc/input_select.yaml
-
-zwave:
-  usb_path: !secret zwave_usb_path
-  config_path: !secret zwave_config_path
 
 media_player:
   - platform: androidtv

@@ -3,7 +3,7 @@
   entities:
     - light.bedroom_light_1
     - light.bedroom_light_2
-    - light.bedroom_light_3
+    - light.bedroom_hall_light
 - platform: group
   name: Living Room Lights
   entities:
@@ -12,8 +12,8 @@
 - platform: group
   name: Bathroom Lights
   entities:
-    - light.hue_white_lamp_1
-    - light.hue_white_lamp_2
+    - light.bathroom_light_1
+    - light.bathroom_light_2
     - light.master_bathroom_leds
 - platform: group
   name: Master Suite Lights

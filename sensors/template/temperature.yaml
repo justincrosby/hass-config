@@ -5,11 +5,7 @@ sensors:
     icon_template: mdi:thermometer
     unit_of_measurement: "°C"
     value_template: >-
-      {% if states("zwave.z_wave_plus_usb_stick") != "ready" %}
-        unknown
-      {% else %}
-        {{ ((states("sensor.thermostat_temperature")|float(0) + states("sensor.bedroom_temperature")|float(0) + states("sensor.office_temperature")|float(0)) / 3) | round(1) }}
-      {% endif %}
+      {{ ((states("sensor.thermostat_air_temperature")|float(0) + states("sensor.bedroom_sensor_air_temperature")|float(0) + states("sensor.office_sensor_air_temperature")|float(0)) / 3) | round(1) }}
   target_temp:
     friendly_name: Target Temperature
     icon_template: mdi:thermometer
@@ -51,10 +47,10 @@ sensors:
     icon_template: mdi:thermometer
     unit_of_measurement: "°C"
     value_template: >-
-      {% if states("zwave.z_wave_plus_usb_stick") != "ready" or is_state("sensor.current_temp", "unknown") %}
+      {% if is_state("sensor.current_temp", "unknown") %}
         unknown
       {% else %}
-        {{ (float(states("sensor.thermostat_temperature")) - float(states("sensor.current_temp")) + float(states("input_number.thermostat_target_temp"))) | round(0) }}
+        {{ (float(states("sensor.thermostat_air_temperature")) - float(states("sensor.current_temp")) + float(states("input_number.thermostat_target_temp"))) | round(0) }}
       {% endif %}
   hvac_option_choice:
     friendly_name: Thermostat HVAC Action
