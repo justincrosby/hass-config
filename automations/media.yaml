@@ -1,34 +1,14 @@
 ### Media Starting
-- alias: Music Started 1
+- alias: Music Started
   trigger:
     platform: state
-    entity_id: sensor.media_player_status
+    entity_id: media_player.home_audio
     to: 'playing'
-  condition:
-    condition: template
-    value_template: >
-      {% if is_state("input_select.receiver_source_select", "Cast Audio") %}
-        false
-      {% else %}
-        true
-      {% endif %}
   action:
-    - service: input_select.select_option
+    - service: media_player.select_source
       data:
-        entity_id: input_select.receiver_source_select
-        option: 'Cast Audio'
-- alias: Music Started 2
-  trigger:
-    platform: state
-    entity_id: sensor.media_player_status
-    to: 'playing'
-  condition:
-    condition: state
-    entity_id: input_select.receiver_source_select
-    state: 'Cast Audio'
-  action:
-    - service: script.turn_on
-      entity_id: script.media_input_select
+        entity_id: media_player.denon_avr_x1300w
+        source: CastAudio
 - alias: Living Room TV Started
   trigger:
     - platform: state
@@ -58,20 +38,11 @@
     - platform: state
       entity_id: media_player.shield_cast
       to: 'playing'
-  condition:
-      condition: template
-      value_template: >
-        {% if is_state("input_select.receiver_source_select", "Shield") %}
-          false
-        {% else %}
-          true
-        {% endif %}
   action:
-      - service: input_select.select_option
+      - service: media_player.select_source
         data:
-          entity_id: input_select.receiver_source_select
-          option: 'Shield'
-
+          entity_id: media_player.denon_avr_x1300w
+          source: Shield
 - alias: Bedroom TV Started
   trigger:
     platform: state
@@ -81,7 +52,6 @@
     - service: media_player.turn_off
       data_template:
         entity_id: '{{ states("sensor.media_player_output") }}'
-
 - alias: Bedroom TV Idle
   trigger:
     platform: state
@@ -93,77 +63,26 @@
     - service: media_player.turn_off
       entity_id: media_player.bedroom_tv
 
-### Volume Sliders ##
-- alias: Living Room Audio Slider Moved
+### Receiver Select ###
+- alias: Receiver Input Change Video
   trigger:
-    platform: state
-    entity_id: input_number.living_room_audio_volume
+    - platform: state
+      entity_id: media_player.denon_avr_x1300w
+      to: PC
+    - platform: state
+      entity_id: media_player.denon_avr_x1300w
+      to: Shield
+    - platform: state
+      entity_id: media_player.denon_avr_x1300w
+      to: Switch
   action:
-    service: media_player.volume_set
-    data_template:
-      entity_id: media_player.living_room_audio
-      volume_level: '{{ states("input_number.living_room_audio_volume")|float / 100 }}'
-- alias: Bedroom Audio Slider Moved
+    - service: media_player.turn_on
+      entity_id: media_player.vizio
+- alias: Receiver Input Change Audio
   trigger:
-    platform: state
-    entity_id: input_number.master_bedroom_audio_volume
+    - platform: state
+      entity_id: media_player.denon_avr_x1300w
+      to: CastAudio
   action:
-    service: media_player.volume_set
-    data_template:
-      entity_id: media_player.master_bedroom_audio
-      volume_level: '{{ states("input_number.master_bedroom_audio_volume")|float / 100 }}'
-- alias: Master Bathroom Audio Slider Moved
-  trigger:
-    platform: state
-    entity_id: input_number.master_bathroom_audio_volume
-  action:
-    service: media_player.volume_set
-    data_template:
-      entity_id: media_player.master_bathroom_speaker
-      volume_level: '{{ states("input_number.master_bathroom_audio_volume")|float / 100 }}'
-- alias: Bathroom Audio Slider Moved
-  trigger:
-    platform: state
-    entity_id: input_number.bathroom_audio_volume
-  action:
-    service: media_player.volume_set
-    data_template:
-      entity_id: media_player.bathroom_speaker
-      volume_level: '{{ states("input_number.bathroom_audio_volume")|float / 100 }}'
-- alias: Receiver Volume Slider Moved
-  trigger:
-    platform: state
-    entity_id: input_number.receiver_audio_volume
-  action:
-    service: script.turn_on
-    entity_id: script.set_receiver_volume
-- alias: Chromecast Volume Slider Moved
-  trigger:
-    platform: state
-    entity_id: input_number.chromecast_audio_volume
-  action:
-    service: script.turn_on
-    entity_id: script.set_chromecast_volume
-
-### I/O Select ###
-- alias: Media Input Select Changed
-  trigger:
-    platform: state
-    entity_id: input_select.receiver_source_select
-  condition:
-    condition: state
-    entity_id: sensor.media_player_status
-    state: 'playing'
-  action:
-    service: script.turn_on
-    entity_id: script.media_input_select
-- alias: Media Output Changed
-  trigger:
-    platform: state
-    entity_id: input_select.media_output_select
-  action:
-    - service: spotcast.start
-      data_template:
-        device_name: '{{ states("input_select.media_output_select") }}'
-    - service: script.turn_on
-      entity_id: script.switch_to_audio
+    - service: media_player.turn_off
+      entity_id: media_player.vizio

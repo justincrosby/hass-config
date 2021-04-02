@@ -68,10 +68,6 @@ arrive_home_music:
       data:
         entity_id: input_select.media_output_select
         option: 'Home Audio'
-    - service: input_select.select_option
-      data_template:
-        entity_id: input_select.receiver_source_select
-        option: 'Cast Audio'
     - service: script.turn_on
       entity_id: script.switch_to_audio
     - delay:
@@ -96,10 +92,7 @@ leave_home_justin:
       state: 'off'
     - service: homeassistant.turn_off
       entity_id: group.master_suite
-    - service: input_select.select_option
-      data:
-        entity_id: input_select.receiver_source_select
-        option: Shutdown
+    - service: media_player.turn_off
     - service: homeassistant.turn_off
       entity_id: group.living_room
 leave_home_jenni:
@@ -110,10 +103,7 @@ leave_home_jenni:
       state: 'off'
     - service: homeassistant.turn_off
       entity_id: group.master_suite
-    - service: input_select.select_option
-      data:
-        entity_id: input_select.receiver_source_select
-        option: Shutdown
+    - service: media_player.turn_off
     - service: homeassistant.turn_off
       entity_id: group.living_room
 leave_home_jayden:

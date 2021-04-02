@@ -3,39 +3,39 @@
     betta_light:
       friendly_name: Betta Light
       icon_template: mdi:fish
-      value_template: '{{ is_state("switch.betta_light_switch", "on") }}'
+      value_template: '{{ is_state("switch.betta_light", "on") }}'
       turn_on:
         service: switch.turn_on
-        entity_id: switch.betta_light_switch
+        entity_id: switch.betta_light
       turn_off:
         service: switch.turn_off
-        entity_id: switch.betta_light_switch
+        entity_id: switch.betta_light
     master_bathroom_leds:
       friendly_name: Master Bathroom LEDs
       icon_template: mdi:led-strip
-      value_template: '{{ is_state("switch.master_bathroom_led_switch", "on") }}'
+      value_template: '{{ is_state("switch.master_bathroom_leds", "on") }}'
       turn_on:
         service: switch.turn_on
-        entity_id: switch.master_bathroom_led_switch
+        entity_id: switch.master_bathroom_leds
       turn_off:
         service: switch.turn_off
-        entity_id: switch.master_bathroom_led_switch
+        entity_id: switch.master_bathroom_leds
     fish_light:
       friendly_name: Fish Light
       icon_template: mdi:fish
-      value_template: '{{ is_state("switch.fish_light_switch", "on") }}'
+      value_template: '{{ is_state("switch.fish_light", "on") }}'
       turn_on:
         service: switch.turn_on
-        entity_id: switch.fish_light_switch
+        entity_id: switch.fish_light
       turn_off:
         service: switch.turn_off
-        entity_id: switch.fish_light_switch
+        entity_id: switch.fish_light
     fairy_lights:
       friendly_name: Fairy Lights
-      value_template: '{{ is_state("switch.fairy_lights_switch", "on") }}'
+      value_template: '{{ is_state("switch.fairy_lights", "on") }}'
       turn_on:
         service: switch.turn_on
-        entity_id: switch.fairy_lights_switch
+        entity_id: switch.fairy_lights
       turn_off:
         service: switch.turn_off
-        entity_id: switch.fairy_lights_switch
+        entity_id: switch.fairy_lights

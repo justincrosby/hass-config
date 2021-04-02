@@ -34,9 +34,9 @@
 #     entity_id: script.led_strip_christmas
 # - alias: Hue Remote On Button Press
 #   trigger:
-#     platform: device
-#     device_id: da322d02b97e4de5b5ed9702b5a5a924
+#     device_id: b4f4a268989eb005ffe65f9079a1f59e
 #     domain: hue
+#     platform: device
 #     type: remote_button_short_release
 #     subtype: turn_on
 #   action:
@@ -45,7 +45,7 @@
 # - alias: Hue Remote Dim Up Button Press
 #   trigger:
 #     platform: device
-#     device_id: da322d02b97e4de5b5ed9702b5a5a924
+#     device_id: b4f4a268989eb005ffe65f9079a1f59e
 #     domain: hue
 #     type: remote_button_short_release
 #     subtype: dim_up
@@ -55,7 +55,7 @@
 # - alias: Hue Remote Dim Down Button Press
 #   trigger:
 #     platform: device
-#     device_id: da322d02b97e4de5b5ed9702b5a5a924
+#     device_id: b4f4a268989eb005ffe65f9079a1f59e
 #     domain: hue
 #     type: remote_button_short_release
 #     subtype: dim_down
@@ -65,7 +65,7 @@
 # - alias: Hue Remote Off Button Press
 #   trigger:
 #     platform: device
-#     device_id: da322d02b97e4de5b5ed9702b5a5a924
+#     device_id: b4f4a268989eb005ffe65f9079a1f59e
 #     domain: hue
 #     type: remote_button_short_release
 #     subtype: turn_off

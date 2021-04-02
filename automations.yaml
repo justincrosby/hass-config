@@ -12,3 +12,35 @@
   - data: {}
     entity_id: light.master_suite_lights
     service: light.turn_on
+- id: '1617232740945'
+  alias: Hue Remote On Button Press
+  description: ''
+  trigger:
+  - device_id: b4f4a268989eb005ffe65f9079a1f59e
+    domain: hue
+    platform: device
+    type: remote_button_short_release
+    subtype: turn_on
+  condition: []
+  action:
+  - service: light.toggle
+    data: {}
+    target:
+      entity_id: light.master_suite_lights
+  mode: single
+- id: '1617232835945'
+  alias: Hue Remote On Button Press
+  description: ''
+  trigger:
+  - device_id: b4f4a268989eb005ffe65f9079a1f59e
+    domain: hue
+    platform: device
+    type: remote_button_short_release
+    subtype: turn_on
+  condition: []
+  action:
+  - service: light.toggle
+    data: {}
+    target:
+      entity_id: light.master_suite_lights
+  mode: single

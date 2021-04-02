@@ -13,12 +13,11 @@ homeassistant:
 
   customize: !include misc/customize.yaml
   auth_providers:
-    - type: legacy_api_password
-      api_password: !secret api_password
     - type: trusted_networks
       trusted_networks:
         - 127.0.0.1
         - 192.168.0.0/24
+    - type: homeassistant
 
 # Enables the frontend
 frontend:
@@ -27,6 +26,8 @@ frontend:
 # Enable logging
 logger:
   default: warn
+  logs:
+    custom_components.pyscript: info
 
 recorder:
   purge_keep_days: 2
@@ -65,7 +66,7 @@ api:
   api_password: !secret api_password
 
 # Enable python scripts
-python_script:
+# python_script:
 
 updater:
 
@@ -124,6 +125,10 @@ google_assistant:
     - media_player
   expose_by_default: false
   entity_config: !include googleassistant/entityconfig.yaml
+
+pyscript:
+  allow_all_imports: true
+  hass_is_global: true
 
 device_tracker:
   - platform: ubus

@@ -1,16 +1,3 @@
-receiver_source_select:
-  name: Receiver Source Select
-  icon: mdi:television
-  options:
-    - Shutdown
-    - Cast Audio
-    - Shield
-    - PS3
-    - Record Player
-    - Steam
-    - Switch
-    - WiiU
-  initial: Shutdown
 media_output_select:
   name: Media Output Select
   icon: mdi:volume-high
@@ -20,9 +7,3 @@ media_output_select:
     - Master Suite Audio
     - Master Bedroom Audio
   initial: Home Audio
-thermostat_mode_select:
-  name: Thermostat Mode Select
-  icon: mdi:thermostat
-  options:
-    - Summer
-    - Winter
