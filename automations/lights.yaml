@@ -42,6 +42,7 @@
 #   action:
 #     service: light.toggle
 #     entity_id: light.master_suite_lights
+#   mode: single
 # - alias: Hue Remote Dim Up Button Press
 #   trigger:
 #     platform: device
@@ -52,6 +53,7 @@
 #   action:
 #     service: light.toggle
 #     entity_id: light.bedroom_lights
+#   mode: single
 # - alias: Hue Remote Dim Down Button Press
 #   trigger:
 #     platform: device
@@ -62,6 +64,7 @@
 #   action:
 #     service: light.toggle
 #     entity_id: light.bathroom_lights
+#   mode: single
 # - alias: Hue Remote Off Button Press
 #   trigger:
 #     platform: device
@@ -71,6 +74,7 @@
 #     subtype: turn_off
 #   action:
 #     service: light.toggle
+#   mode: single
 - alias: Bedroom motion detected
   trigger:
     platform: state

@@ -15,3 +15,9 @@ jaydens_room:
   name: Jayden's Room
   entities:
     - light.scrub_room
+media_players:
+  name: All media players
+  entities:
+    - media_player.vizio
+    - media_player.denon_avr_x1300w
+    - media_player.shield

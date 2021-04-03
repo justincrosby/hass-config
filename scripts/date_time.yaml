@@ -63,3 +63,31 @@ update_alarms:
       entity_id: script.update_weekday_alarm
     - service: script.turn_on
       entity_id: script.update_weekend_alarm
+phone_ringer_on:
+  alias: Turn phone ringer on
+  sequence:
+    - service: pyscript.phone_command
+      data:
+        key: !secret autoremote_key
+        cmd: ringerOn
+phone_ringer_off:
+  alias: Turn phone ringer off
+  sequence:
+    - service: pyscript.phone_command
+      data:
+        key: !secret autoremote_key
+        cmd: ringerOff
+phone_bedtime:
+  alias: Activate phone bedtime routine
+  sequence:
+    - service: pyscript.phone_command
+      data:
+        key: !secret autoremote_key
+        cmd: bedtime
+phone_morning:
+  alias: Activate phone morning routine
+  sequence:
+    - service: pyscript.phone_command
+      data:
+        key: !secret autoremote_key
+        cmd: morning

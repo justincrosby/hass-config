@@ -7,7 +7,7 @@ description: Turn everything off
     if(state.get("light.bedroom_lights") == "on"):
         light.turn_on(entity_id="light.bedroom_lights", brightness=0, transition=15)
     light.turn_off(entity_id="light.all_lights")
-    media_player.turn_off()
+    homeassistant.turn_off(entity_id="group.media_players")
     if(state.get("input_boolean.bedtime") == "off"):
         switch.turn_off(entity_id="switch.air_purifier")
 
@@ -18,7 +18,7 @@ name: Morning
 description: Gradually wake up in the morning :)
 """
     if(state.get("binary_sensor.justin_presence") == "on"):
-        switch.turn_on(entity_id="switch.phone_morning")
+        script.turn_on(entity_id="script.phone_morning")
     input_boolean.turn_off(entity_id="input_boolean.bedtime")
     input_boolean.turn_on(entity_id="input_boolean.enable_presence_automations")
     # Only execute the full alarm routine if requested
@@ -42,7 +42,7 @@ description: Good night :)
     shutdown()
     input_boolean.turn_on(entity_id="input_boolean.bedtime")
     input_boolean.turn_off(entity_id="input_boolean.enable_presence_automations")
-    switch.turn_on(entity_id="switch.phone_bedtime")
+    script.turn_on(entity_id="script.phone_bedtime")
     script.turn_on(entity_id="script.forgot_to_feed_fish")
     input_boolean.turn_off(entity_id="input_boolean.fish_fed_tracker")
     script.turn_on(entity_id="script.forgot_to_water_the_plants")

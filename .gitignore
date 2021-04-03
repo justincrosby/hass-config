@@ -27,3 +27,4 @@ OZW_Log.txt
 Hass-*.json
 blueprints/*
 packages/*
+.vscode/*

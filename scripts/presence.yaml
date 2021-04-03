@@ -32,7 +32,7 @@ arrive_home_justin:
   alias: Arrive Home Justin
   sequence:
     - service: switch.turn_on
-      entity_id: switch.phone_ringer_on
+      entity_id: script.phone_ringer_on
     - service: script.turn_on
       entity_id: script.arrive_home_music
     - condition: or
@@ -42,7 +42,7 @@ arrive_home_justin:
         - condition: time
           before: "04:00:00"
     - service: switch.turn_on
-      entity_id: switch.phone_bedtime
+      entity_id: script.phone_bedtime
 arrive_home_music:
   alias: Play music when Justin arrives home
   sequence:
@@ -78,15 +78,16 @@ arrive_home_music:
       timeout: '00:01:00'
     - delay:
         seconds: 1
-    - service: python_script.volume_fade
+    - service: pyscript.volume_fade
       data:
         step_size: 5
+        start_vol: 0
         end_volume: 45
 leave_home_justin:
   alias: Leave Home Justin
   sequence:
     - service: switch.turn_on
-      entity_id: switch.phone_ringer_off
+      entity_id: script.phone_ringer_off
     - condition: state
       entity_id: binary_sensor.jenni_presence
       state: 'off'
