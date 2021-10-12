@@ -3,23 +3,26 @@
   entities:
     - light.bedroom_light_1
     - light.bedroom_light_2
-    - light.bedroom_hall_light
+    - light.closet_light
+    - light.office_light
 - platform: group
   name: Living Room Lights
   entities:
-    - light.living_room_light
     - light.living_room_lamp
 - platform: group
-  name: Bathroom Lights
+  name: Dining Room Lights
   entities:
-    - light.bathroom_light_1
-    - light.bathroom_light_2
-    - light.master_bathroom_leds
+    - light.dining_light_1
+# - platform: group
+#   name: Bathroom Lights
+#   entities:
+#     - light.bathroom_light_1
+#     - light.bathroom_light_2
 - platform: group
   name: Master Suite Lights
   entities:
     - light.bedroom_lights
-    - light.bathroom_lights
+    # - light.bathroom_lights
 - platform: group
   name: All Lights
   entities:

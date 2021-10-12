@@ -162,6 +162,10 @@ hue:
 #  username: !secret august_username
 #  password: !secret august_password
 
+# vizio:
+#   - host: !secret vizio_ip
+#     access_token: !secret vizio_access_token
+
 switch: !include_dir_list switches/
 light: !include_dir_merge_list lights/
 

@@ -4,8 +4,8 @@ arrive_home:
     - condition: state
       entity_id: binary_sensor.presence_should_activate
       state: 'on'
-#    - service: lock.unlock
-#      entity_id: lock.front_door
+    - service: lock.unlock
+      entity_id: lock.front_door
     - service: script.turn_on
       entity_id: script.turn_on_pc_conditional
 #    - service: switch.turn_on
@@ -82,7 +82,7 @@ arrive_home_music:
       data:
         step_size: 5
         start_vol: 0
-        end_volume: 45
+        end_vol: 45
 leave_home_justin:
   alias: Leave Home Justin
   sequence:
@@ -91,6 +91,8 @@ leave_home_justin:
     - condition: state
       entity_id: binary_sensor.jenni_presence
       state: 'off'
+    - service: lock.lock
+      entity_id: lock.front_door
     - service: homeassistant.turn_off
       entity_id: group.master_suite
     - service: media_player.turn_off
@@ -102,6 +104,8 @@ leave_home_jenni:
     - condition: state
       entity_id: binary_sensor.justin_presence
       state: 'off'
+    - service: lock.lock
+      entity_id: lock.front_door
     - service: homeassistant.turn_off
       entity_id: group.master_suite
     - service: media_player.turn_off

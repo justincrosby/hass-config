@@ -10,6 +10,8 @@ description: Turn everything off
     homeassistant.turn_off(entity_id="group.media_players")
     if(state.get("input_boolean.bedtime") == "off"):
         switch.turn_off(entity_id="switch.air_purifier")
+    if(state.get("sensor.media_player_status") == "on"):
+        media_player.stop(entity_id=state.get("sensor.media_player_output"))
 
 @service
 def morning():

@@ -27,3 +27,39 @@ shower_time:
       data:
         entity_id: media_player.master_bathroom_audio
         volume_level: !secret default_bathroom_audio_volume
+select_source_switch:
+  alias: Setup media center for switch
+  sequence:
+    - service: media_player.turn_on
+      entity_id: media_player.vizio
+    - service: media_player.select_source
+      data:
+        entity_id: media_player.denon_avr_x1300w
+        source: Switch
+select_source_pc:
+  alias: Setup media center for PC
+  sequence:
+    - service: media_player.turn_on
+      entity_id: media_player.vizio
+    - service: media_player.select_source
+      data:
+        entity_id: media_player.denon_avr_x1300w
+        source: PC
+select_source_shield:
+  alias: Setup media center for shield
+  sequence:
+    - service: media_player.turn_on
+      entity_id: media_player.vizio
+    - service: media_player.select_source
+      data:
+        entity_id: media_player.denon_avr_x1300w
+        source: Shield
+select_source_audio:
+  alias: Setup media center for audio
+  sequence:
+    - service: media_player.turn_off
+      entity_id: media_player.vizio
+    - service: media_player.select_source
+      data:
+        entity_id: media_player.denon_avr_x1300w
+        source: CastAudio

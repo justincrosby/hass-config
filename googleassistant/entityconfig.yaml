@@ -19,20 +19,7 @@ script.fed_the_fish:
 script.morning:
   name: Good morning
   expose: true
-script.next_track:
-  expose: true
-script.pause_music:
-  expose: true
-script.play_music:
-  expose: true
-script.restart_mopidy_stream:
-  name: Restart stream
-  expose: true
-script.shutoff:
-  expose: true
-script.switch_to_audio:
-  expose: true
-script.switch_to_chromecast:
+script.shutdown:
   expose: true
 script.watered_the_plants:
   name: Watered plants
@@ -42,9 +29,18 @@ script.be_right_back:
 script.shower_time:
   name: Shower Time
   expose: true
+script.select_source_switch:
+  expose: true
+script.select_source_pc:
+  expose: true
+script.select_source_shield:
+  expose: true
+script.select_source_audio:
+  expose: true
 # Lights
-light.bedroom_lights:
-  name: Bedroom Lights
+light.master_suite_lights:
+  expose: true
+light.bathroom_lights:
   expose: true
 light.betta_light:
   expose: true
@@ -53,6 +49,8 @@ light.fairy_lights:
 light.fish_light:
   expose: true
 light.living_room_lamp:
+  expose: true
+light.living_room_light:
   expose: true
 light.living_room_lights:
   expose: true
@@ -68,6 +66,4 @@ media_player.denon_avrx1300w:
   expose: true
 # Switches
 switch.air_purifier:
-  expose: true
-switch.bedroom_fan:
   expose: true

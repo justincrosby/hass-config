@@ -1,0 +1,7 @@
+platform: template
+sensors:
+  home_audio_playing:
+    friendly_name: Is home audio playing?
+    value_template: '{{ is_state("media_player.home_audio", "playing") }}'
+    delay_off:
+      seconds: 30

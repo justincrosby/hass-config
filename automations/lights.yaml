@@ -102,10 +102,8 @@
 - alias: Bedroom motion no longer detected
   trigger:
     platform: state
-    entity_id: binary_sensor.bedroom_sensor_home_security_motion_detection
+    entity_id: sensor.bedroom_presence
     to: 'off'
-    for:
-      minutes: 10
   action:
     service: light.turn_off
     entity_id: light.master_suite_lights
@@ -129,3 +127,82 @@
       rgb_color: '{{ states("sensor.lights_colour") }}'
       brightness: '{{ states("sensor.lights_brightness") }}'
       transition: 15
+- alias: Bedroom lights on
+  trigger:
+    platform: event
+    event_type: zwave_js_value_notification
+    event_data:
+      node_id: 8
+      label: "Scene 001"
+      value: "KeyPressed"
+  action:
+    service: light.turn_on
+    entity_id: light.bedroom_lights
+- alias: Bedroom lights on full
+  trigger:
+    platform: event
+    event_type: zwave_js_value_notification
+    event_data:
+      node_id: 8
+      label: "Scene 001"
+      value: "KeyPressed2x"
+  action:
+    service: light.turn_on
+    data:
+      entity_id: light.bedroom_lights
+      brightness_pct: 100
+- alias: Bedroom lights off
+  trigger:
+    platform: event
+    event_type: zwave_js_value_notification
+    event_data:
+      node_id: 8
+      label: "Scene 002"
+      value: "KeyPressed"
+  action:
+    service: light.turn_off
+    entity_id: light.bedroom_lights
+- alias: Living room lights on
+  trigger:
+    platform: event
+    event_type: zwave_js_value_notification
+    event_data:
+      node_id: 9
+      label: "Scene 001"
+      value: "KeyPressed"
+  action:
+    service: light.turn_on
+    entity_id: light.living_room_lights
+- alias: Living room lights off
+  trigger:
+    platform: event
+    event_type: zwave_js_value_notification
+    event_data:
+      node_id: 9
+      label: "Scene 002"
+      value: "KeyPressed"
+  action:
+    service: light.turn_off
+    entity_id: light.living_room_lights
+- alias: Dining room lights on
+  trigger:
+    platform: event
+    event_type: zwave_js_value_notification
+    event_data:
+      node_id: 11
+      label: "Scene 001"
+      value: "KeyPressed"
+  action:
+    service: light.turn_on
+    entity_id: light.dining_room_lights
+- alias: Dining room lights off
+  trigger:
+    platform: event
+    event_type: zwave_js_value_notification
+    event_data:
+      node_id: 11
+      label: "Scene 002"
+      value: "KeyPressed"
+  action:
+    service: light.turn_off
+    entity_id: light.dining_room_lights

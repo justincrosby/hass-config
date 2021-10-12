@@ -10,7 +10,7 @@ plex.conf
 .uuid
 .storage
 .spotify-token-cache
-.august.conf
+*.august.conf
 .google.token
 home-assistant.log
 home-assistant_v2.db

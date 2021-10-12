@@ -91,3 +91,11 @@ phone_morning:
       data:
         key: !secret autoremote_key
         cmd: morning
+morning:
+  alias: Run the morning routine
+  sequence:
+    - service: pyscript.morning
+shutdown:
+  alias: Run the shutdown routine
+  sequence:
+    - service: pyscript.shutdown

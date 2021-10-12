@@ -3,4 +3,6 @@ mac: !secret justins_pc_mac
 name: justins_pc
 host: !secret justins_pc_ip
 turn_off: 
-  service: shell_command.shutdown_pc
+  service: pyscript.pc_cmd
+  data:
+    cmd: shutdown

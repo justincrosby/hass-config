@@ -2,8 +2,8 @@
 - alias: Music Started
   trigger:
     platform: state
-    entity_id: media_player.home_audio
-    to: 'playing'
+    entity_id: binary_sensor.home_audio_playing
+    to: 'on'
   action:
     - service: media_player.select_source
       data:
@@ -43,6 +43,8 @@
         data:
           entity_id: media_player.denon_avr_x1300w
           source: Shield
+      - service: media_player.turn_on
+        entity_id: media_player.vizio
 - alias: Bedroom TV Started
   trigger:
     platform: state
