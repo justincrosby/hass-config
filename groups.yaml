@@ -11,10 +11,6 @@ living_room:
     - light.fairy_lights
     - light.living_room_lights
     - switch.justins_pc
-jaydens_room:
-  name: Jayden's Room
-  entities:
-    - light.scrub_room
 media_players:
   name: All media players
   entities:

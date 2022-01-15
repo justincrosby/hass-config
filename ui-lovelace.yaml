@@ -7,7 +7,6 @@ views:
     badges:
       - binary_sensor.justin_presence
       - binary_sensor.jenni_presence
-      - binary_sensor.jayden_presence
       - sensor.sunset_time
       - sensor.workday_alarm
       - sensor.weekend_alarm
@@ -163,9 +162,9 @@ views:
           - type: horizontal-stack
             cards:
               - type: light
-                entity: light.dining_room_lights
+                entity: light.dining_room_light
               - type: light
-                entity: light.living_room_lamp
+                entity: light.living_room_lights
           # - type: horizontal-stack
           #   cards:
           #     - type: light
@@ -180,8 +179,8 @@ views:
                 entity: light.kitchen_light
       - type: weather-forecast
         entity: weather.dark_sky
-      - type: thermostat
-        entity: climate.thermostat
+      # - type: thermostat
+      #   entity: climate.thermostat
   - path: alarms
     title: Alarms
     icon: mdi:alarm
@@ -240,10 +239,8 @@ views:
         entities:
           - automation.arrive_home_jenni
           - automation.arrive_home_justin
-          - automation.arrive_home_jayden
           - automation.leave_home_jenni
           - automation.leave_home_justin
-          - automation.leave_home_jayden
           - automation.living_room_tv_started
           - automation.bedroom_tv_started
           - automation.bedroom_tv_idle

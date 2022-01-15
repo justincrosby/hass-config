@@ -1,3 +1,8 @@
+- platform: flux_led
+  devices:
+    192.168.0.28:
+      name: LEDs Behind Couch
+      mode: rgb
 - platform: group
   name: Bedroom Lights
   entities:
@@ -9,6 +14,7 @@
   name: Living Room Lights
   entities:
     - light.living_room_lamp
+    - light.leds_behind_couch
 - platform: group
   name: Dining Room Lights
   entities:
@@ -29,4 +35,3 @@
     - light.master_suite_lights
     - light.living_room_lights
     - light.fairy_lights
-

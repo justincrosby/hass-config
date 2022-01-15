@@ -111,19 +111,6 @@ leave_home_jenni:
     - service: media_player.turn_off
     - service: homeassistant.turn_off
       entity_id: group.living_room
-leave_home_jayden:
-  alias: Leave Home Jayden
-  sequence:
-    - service: homeassistant.turn_off
-      entity_id: group.jaydens_room
-    - condition: state
-      entity_id: binary_sensor.presence_anyone_home
-      state: 'off'
-    - service: script.turn_on
-      entity_id: script.shutoff
-      data:
-        variables:
-          bedtime: false
 be_right_back:
   alias: Be Right Back
   sequence:

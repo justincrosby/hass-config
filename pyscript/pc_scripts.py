@@ -12,7 +12,7 @@ fields:
     required: true
 """
     s = socket()              
-    s.connect(('Justins-PC', 12345))
+    s.connect(('192.168.0.5', 12345))
     s.settimeout(5.0)
     s.send(cmd.encode())
     s.close()

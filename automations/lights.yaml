@@ -132,7 +132,7 @@
     platform: event
     event_type: zwave_js_value_notification
     event_data:
-      node_id: 8
+      node_id: 14
       label: "Scene 001"
       value: "KeyPressed"
   action:
@@ -143,7 +143,7 @@
     platform: event
     event_type: zwave_js_value_notification
     event_data:
-      node_id: 8
+      node_id: 14
       label: "Scene 001"
       value: "KeyPressed2x"
   action:
@@ -156,7 +156,7 @@
     platform: event
     event_type: zwave_js_value_notification
     event_data:
-      node_id: 8
+      node_id: 14
       label: "Scene 002"
       value: "KeyPressed"
   action:
@@ -167,7 +167,7 @@
     platform: event
     event_type: zwave_js_value_notification
     event_data:
-      node_id: 9
+      node_id: 13
       label: "Scene 001"
       value: "KeyPressed"
   action:
@@ -178,31 +178,31 @@
     platform: event
     event_type: zwave_js_value_notification
     event_data:
-      node_id: 9
+      node_id: 13
       label: "Scene 002"
       value: "KeyPressed"
   action:
     service: light.turn_off
     entity_id: light.living_room_lights
-- alias: Dining room lights on
-  trigger:
-    platform: event
-    event_type: zwave_js_value_notification
-    event_data:
-      node_id: 11
-      label: "Scene 001"
-      value: "KeyPressed"
-  action:
-    service: light.turn_on
-    entity_id: light.dining_room_lights
-- alias: Dining room lights off
-  trigger:
-    platform: event
-    event_type: zwave_js_value_notification
-    event_data:
-      node_id: 11
-      label: "Scene 002"
-      value: "KeyPressed"
-  action:
-    service: light.turn_off
-    entity_id: light.dining_room_lights
+# - alias: Dining room lights on
+#   trigger:
+#     platform: event
+#     event_type: zwave_js_value_notification
+#     event_data:
+#       node_id: 12
+#       label: "Scene 001"
+#       value: "KeyPressed"
+#   action:
+#     service: light.turn_on
+#     entity_id: light.dining_room_lights
+# - alias: Dining room lights off
+#   trigger:
+#     platform: event
+#     event_type: zwave_js_value_notification
+#     event_data:
+#       node_id: 12
+#       label: "Scene 002"
+#       value: "KeyPressed"
+#   action:
+#     service: light.turn_off
+#     entity_id: light.dining_room_lights
