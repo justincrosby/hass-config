@@ -36,7 +36,8 @@
       from: 'standby'
       to: 'idle'
     - platform: state
-      entity_id: media_player.shield_cast
+      entity_id: media_player.shield
+      from: 'standby'
       to: 'playing'
   action:
       - service: media_player.select_source
@@ -44,7 +45,7 @@
           entity_id: media_player.denon_avr_x1300w
           source: Shield
       - service: media_player.turn_on
-        entity_id: media_player.vizio
+        entity_id: media_player.lg_tv
 - alias: Bedroom TV Started
   trigger:
     platform: state
@@ -79,7 +80,7 @@
       to: Switch
   action:
     - service: media_player.turn_on
-      entity_id: media_player.vizio
+      entity_id: media_player.lg_tv
 - alias: Receiver Input Change Audio
   trigger:
     - platform: state
@@ -87,4 +88,4 @@
       to: CastAudio
   action:
     - service: media_player.turn_off
-      entity_id: media_player.vizio
+      entity_id: media_player.lg_tv

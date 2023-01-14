@@ -1,19 +1,23 @@
-master_suite:
-  name: Master Suite
+bedroom:
+  name: Bedroom
   entities:
-    - light.master_suite_lights
-    - switch.air_purifier
+    - light.bedroom_lights
 living_room:
   name: Living Room
   entities:
-    - media_player.vizio
+    - media_player.lg_tv
     - media_player.denon_avr_x1300w
-    - light.fairy_lights
+    - media_player.shield
     - light.living_room_lights
-    - switch.justins_pc
 media_players:
   name: All media players
   entities:
-    - media_player.vizio
+    - media_player.lg_tv
     - media_player.denon_avr_x1300w
     - media_player.shield
+    - media_player.backyard_speaker
+    - media_player.kitchen_speaker
+    - media_player.living_room_audio
+    - media_player.master_bathroom_speaker
+    - media_player.master_bedroom_audio
+    - media_player.master_bedroom_tv

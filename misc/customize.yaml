@@ -27,12 +27,12 @@
   switch.bedroom_fan:
     friendly_name: Bedroom Fan
     icon: mdi:fan
-  switch.air_purifier:
-    friendly_name: Bedroom Air Purifier
-    icon: mdi:fan
   switch.christmas_wreath:
     friendly_name: Christmas Wreath
     icon: mdi:pine-tree
+  switch.fish_solenoid:
+    friendly_name: Fish Solenoid
+    icon: mdi:molecule-co2
 # Lights
   light.bedroom:
     friendly_name: Bedroom Lights
@@ -46,8 +46,8 @@
   media_player.denon_avr_x1300w:
     friendly_name: Denon AVR
     icon: mdi:audio-video
-  media_player.vizio:
-    friendly_name: Vizio
+  media_player.lg_tv:
+    friendly_name: LG TV
     icon: mdi:television
   media_player.home_audio:
     hidden: false

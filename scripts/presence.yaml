@@ -6,43 +6,19 @@ arrive_home:
       state: 'on'
     - service: lock.unlock
       entity_id: lock.front_door
-    - service: script.turn_on
-      entity_id: script.turn_on_pc_conditional
-#    - service: switch.turn_on
-#      entity_id: switch.led_strip_switch
+    # - service: script.turn_on
+    #   entity_id: script.turn_on_pc_conditional
+    # - service: switch.turn_on
+    #   entity_id: switch.led_strip_switch
     - service: light.turn_on
-      data_template:
-        entity_id: light.living_room_lights
-        brightness_pct: >
-            {% if now().strftime("%H")|int > 23 %}
-              30
-            {% else %}
-              95
-            {% endif %}
-    - service: script.turn_on
-      entity_id: script.sunset
-turn_on_pc_conditional:
-  alias: Turn On the PC In the Evening
-  sequence:
-    - condition: time
-      after: "17:00:00"
-    - service: switch.turn_on
-      entity_id: switch.justins_pc
-arrive_home_justin:
-  alias: Arrive Home Justin
-  sequence:
-    - service: switch.turn_on
-      entity_id: script.phone_ringer_on
-    - service: script.turn_on
-      entity_id: script.arrive_home_music
-    - condition: or
-      conditions:
-        - condition: time
-          after: "23:30:00"
-        - condition: time
-          before: "04:00:00"
-    - service: switch.turn_on
-      entity_id: script.phone_bedtime
+      entity_id: light.living_room_lights
+# turn_on_pc_conditional:
+#   alias: Turn On the PC In the Evening
+#   sequence:
+#     - condition: time
+#       after: "17:00:00"
+#     - service: switch.turn_on
+#       entity_id: switch.justins_pc
 arrive_home_music:
   alias: Play music when Justin arrives home
   sequence:
@@ -50,9 +26,14 @@ arrive_home_music:
       value_template: '{{ not is_state("sensor.media_player_status", "playing") }}'
     - condition: or
       conditions:
-        - condition: state
-          entity_id: binary_sensor.presence_should_activate
-          state: 'on'
+        - condition: and
+          conditions:
+            - condition: state
+              entity_id: binary_sensor.presence_should_activate
+              state: 'on'
+            - condition: time
+              after: "10:00:00"
+              before: "20:00:00"
         - condition: and
           conditions:
             - condition: state
@@ -62,8 +43,11 @@ arrive_home_music:
               entity_id: media_player.denon_avr_x1300w
               state: 'off'
             - condition: state
-              entity_id: media_player.vizio
+              entity_id: media_player.lg_tv
               state: 'off'
+            - condition: time
+              after: "10:00:00"
+              before: "20:00:00"
     - service: input_select.select_option
       data:
         entity_id: input_select.media_output_select
@@ -83,8 +67,8 @@ arrive_home_music:
         step_size: 5
         start_vol: 0
         end_vol: 45
-leave_home_justin:
-  alias: Leave Home Justin
+leave_home:
+  alias: Leave Home
   sequence:
     - service: switch.turn_on
       entity_id: script.phone_ringer_off
@@ -93,24 +77,9 @@ leave_home_justin:
       state: 'off'
     - service: lock.lock
       entity_id: lock.front_door
-    - service: homeassistant.turn_off
-      entity_id: group.master_suite
+    - service: light.turn_off
+      entity_id: light.all_lights
     - service: media_player.turn_off
-    - service: homeassistant.turn_off
-      entity_id: group.living_room
-leave_home_jenni:
-  alias: Leave Home Jenni
-  sequence:
-    - condition: state
-      entity_id: binary_sensor.justin_presence
-      state: 'off'
-    - service: lock.lock
-      entity_id: lock.front_door
-    - service: homeassistant.turn_off
-      entity_id: group.master_suite
-    - service: media_player.turn_off
-    - service: homeassistant.turn_off
-      entity_id: group.living_room
 be_right_back:
   alias: Be Right Back
   sequence:

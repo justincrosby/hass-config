@@ -31,7 +31,7 @@ select_source_switch:
   alias: Setup media center for switch
   sequence:
     - service: media_player.turn_on
-      entity_id: media_player.vizio
+      entity_id: media_player.lg_tv
     - service: media_player.select_source
       data:
         entity_id: media_player.denon_avr_x1300w
@@ -40,7 +40,7 @@ select_source_pc:
   alias: Setup media center for PC
   sequence:
     - service: media_player.turn_on
-      entity_id: media_player.vizio
+      entity_id: media_player.lg_tv
     - service: media_player.select_source
       data:
         entity_id: media_player.denon_avr_x1300w
@@ -49,7 +49,7 @@ select_source_shield:
   alias: Setup media center for shield
   sequence:
     - service: media_player.turn_on
-      entity_id: media_player.vizio
+      entity_id: media_player.lg_tv
     - service: media_player.select_source
       data:
         entity_id: media_player.denon_avr_x1300w
@@ -58,7 +58,7 @@ select_source_audio:
   alias: Setup media center for audio
   sequence:
     - service: media_player.turn_off
-      entity_id: media_player.vizio
+      entity_id: media_player.lg_tv
     - service: media_player.select_source
       data:
         entity_id: media_player.denon_avr_x1300w

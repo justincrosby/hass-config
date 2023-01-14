@@ -13,7 +13,7 @@
     state: 'on'
   action:
     - service: script.turn_on
-      entity_id: script.leave_home_justin
+      entity_id: script.leave_home
 
 - alias: Leave Home Jenni
   initial_state: true
@@ -30,7 +30,7 @@
     state: 'on'
   action:
     service: script.turn_on
-    entity_id: script.leave_home_jenni
+    entity_id: script.leave_home
 
 - alias: Arrive Home Justin
   initial_state: true
@@ -45,9 +45,9 @@
     state: 'on'
   action:
     - service: script.turn_on
-      entity_id: script.arrive_home_justin
-    - service: script.turn_on
       entity_id: script.arrive_home
+    - service: script.turn_on
+      entity_id: script.arrive_home_music
 
 - alias: Arrive Home Jenni
   initial_state: true

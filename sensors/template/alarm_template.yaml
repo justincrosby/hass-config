@@ -18,10 +18,10 @@ sensors:
       {%- endif -%}
   next_alarm_day:
     friendly_name: Next Alarm Day
-    value_template: '{{ (state_attr("sensor.pixel_3a_next_alarm", "Time in Milliseconds")/1000) | timestamp_custom("%h %d") }}'
+    value_template: '{{ (state_attr("sensor.pixel_4a_5g_next_alarm", "Time in Milliseconds")/1000) | timestamp_custom("%h %d") }}'
   next_alarm_hour:
     friendly_name: Next Alarm Hour
-    value_template: '{{ (state_attr("sensor.pixel_3a_next_alarm", "Time in Milliseconds")/1000-60*15) | timestamp_custom("%H") | int }}'
+    value_template: '{{ (state_attr("sensor.pixel_4a_5g_next_alarm", "Time in Milliseconds")/1000-60*15) | timestamp_custom("%H") | int }}'
   next_alarm_minute:
     friendly_name: Next Alarm Minute
-    value_template: '{{ (state_attr("sensor.pixel_3a_next_alarm", "Time in Milliseconds")/1000-60*15) | timestamp_custom("%M") | int }}'
+    value_template: '{{ (state_attr("sensor.pixel_4a_5g_next_alarm", "Time in Milliseconds")/1000-60*15) | timestamp_custom("%M") | int }}'

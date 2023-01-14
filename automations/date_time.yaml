@@ -7,14 +7,11 @@
     condition: or
     conditions:
       - condition: state
-        entity_id: binary_sensor.justin_presence
-        state: 'on'
-      - condition: state
-        entity_id: binary_sensor.jenni_presence
+        entity_id: binary_sensor.presence_anyone_home
         state: 'on'
   action:
-    - service: script.turn_on
-      entity_id: script.sunset
+    - service: light.turn_on
+      entity_id: light.living_room_lights
 - alias: Night No One Home
   trigger:
     platform: time
@@ -23,10 +20,7 @@
     condition: and
     conditions:
       - condition: state
-        entity_id: binary_sensor.justin_presence
-        state: 'off'
-      - condition: state
-        entity_id: binary_sensor.jenni_presence
+        entity_id: binary_sensor.presence_anyone_home
         state: 'off'
   action:
     - service: script.turn_on

@@ -44,10 +44,6 @@ light.bathroom_lights:
   expose: true
 light.betta_light:
   expose: true
-light.fairy_lights:
-  expose: true
-light.fish_light:
-  expose: true
 light.living_room_lamp:
   expose: true
 light.living_room_light:
@@ -58,12 +54,9 @@ light.living_room_lights:
 switch.justins_pc:
   name: My PC
   expose: true
-media_player.vizio:
+media_player.lg_tv:
   name: TV
   expose: true
 media_player.denon_avrx1300w:
   name: Receiver
-  expose: true
-# Switches
-switch.air_purifier:
   expose: true

@@ -10,13 +10,11 @@ homeassistant:
   unit_system: metric
   # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
   time_zone: America/Vancouver
+  currency: CAD
+  country: CA
 
   customize: !include misc/customize.yaml
   auth_providers:
-    - type: trusted_networks
-      trusted_networks:
-        - 127.0.0.1
-        - 192.168.0.0/24
     - type: homeassistant
 
 # Enables the frontend
@@ -45,6 +43,10 @@ lovelace:
       type: module
     - url: /hacsfiles/mini-media-player/mini-media-player-bundle.js
       type: module
+    - url: /hacsfiles/rgb-light-card/card.js
+      type: module
+    - url: /hacsfiles/lovelace-slider-entity-row/slider-entity-row.js
+      type: module
 
 # Enables configuration UI
 config:
@@ -52,14 +54,13 @@ config:
 mobile_app:
 
 http:
-  ip_ban_enabled: true
-  login_attempts_threshold: 5
-
-mqtt:
-  broker: !secret mosquitto_ip
-  port: !secret mosquitto_port
-  username: !secret mosquitto_username
-  password: !secret mosquitto_password
+  # ip_ban_enabled: true
+  # login_attempts_threshold: 5
+  use_x_forwarded_for: true
+  trusted_proxies:
+    - !secret reverse_proxy_ip_1
+    - !secret reverse_proxy_ip_2
+    - !secret reverse_proxy_ip_3
 
 # Enable RESTful API
 api:
@@ -98,15 +99,10 @@ binary_sensor: !include_dir_list binary_sensors/
 tts:
   platform: google_translate
 
-# Calendar
-google:
-  client_id: !secret google_client_id
-  client_secret: !secret google_client_secret
-
 # Enable iOS app
-ios:
-  push:
-    categories: !include notifications/ios.yaml
+# ios:
+#   push:
+#     categories: !include notifications/ios.yaml
 
 notify:
     - platform: html5
@@ -117,7 +113,7 @@ notify:
 
 google_assistant:
   project_id: !secret assistant_project_id
-  service_account: !include Hass-340f86dbfbd8.json
+  service_account: !include hass-9d73d-ca2bdb903217.json
   exposed_domains:
     - switch
     - light
@@ -136,20 +132,11 @@ device_tracker:
     username: !secret router_username
     password: !secret router_password
 
-#wemo:
-#  discovery: false
-#  static:
-#    - !secret wemo_fairy_lights_switch_ip
-#    - !secret wemo_fish_light_switch_ip
-
 tplink:
   discovery: false
   switch:
-    - host: !secret tplink_air_purifier_switch_ip
     - host: !secret tplink_betta_light_switch_ip
-    - host: !secret tplink_fish_light_switch_ip
-    - host: !secret tplink_fairy_lights_switch_ip
-    - host: !secret tplink_master_bathroom_led_switch_ip
+    - host: !secret tplink_fish_solenoid_switch_ip
 
 hue:
   bridges:
@@ -162,10 +149,6 @@ hue:
 #  username: !secret august_username
 #  password: !secret august_password
 
-# vizio:
-#   - host: !secret vizio_ip
-#     access_token: !secret vizio_access_token
-
 switch: !include_dir_list switches/
 light: !include_dir_merge_list lights/
 
@@ -175,24 +158,10 @@ input_boolean: !include misc/input_boolean.yaml
 
 input_select: !include misc/input_select.yaml
 
-media_player:
-  - platform: androidtv
-    name: Shield
-    host: !secret shield_ip
-
-spotify:
-  client_id: !secret spotify_client_id
-  client_secret: !secret spotify_client_secret
-
 spotcast:
   sp_dc: !secret sp_dc
   sp_key: !secret sp_key
-
-panel_iframe:
-  plex:
-    title: 'Plex'
-    url: !secret plex_url
-    icon: mdi:plex
+  country: CA
 
 group: !include groups.yaml
 automation: !include_dir_merge_list automations/

@@ -13,10 +13,7 @@ views:
     cards:
       - type: glance
         entities:
-          - entity: light.fairy_lights
-            tap_action:
-              action: toggle
-          - entity: light.fish_light
+          - entity: switch.fish_solenoid
             tap_action:
               action: toggle
           - entity: light.betta_light
@@ -29,11 +26,14 @@ views:
           #  name: Wreath
           #  tap_action:
           #    action: toggle
-          - entity: lock.front_door
+          - entity: light.kitchen_hall_light
             tap_action:
               action: toggle
-          - entity: switch.air_purifier
-            name: Air Purifier
+          - entity: light.closet_light
+            name: Closet Light
+            tap_action:
+              action: toggle
+          - entity: lock.front_door
             tap_action:
               action: toggle
           #- entity: switch.bedroom_fan
@@ -97,7 +97,7 @@ views:
                     entity_id: media_player.denon_avr_x1300w
                     source: Switch
           - type: custom:mini-media-player
-            entity: media_player.vizio
+            entity: media_player.lg_tv
             artwork: cover
             icon: mdi:television
             group: true
@@ -174,9 +174,70 @@ views:
           - type: horizontal-stack
             cards:
               - type: light
-                entity: light.master_suite_lights
+                entity: light.bedroom_lights
               - type: light
                 entity: light.kitchen_light
+          - type: entities
+            show_header_toggle: false
+            entities:
+              - type: custom:slider-entity-row
+                entity: light.leds_behind_couch
+                toggle: true
+                name: Couch LEDs
+              - type: custom:rgb-light-card
+                entity: light.leds_behind_couch
+                colors:
+                  - rgb_color:
+                        - 255
+                        - 255
+                        - 255
+                  - rgb_color:
+                        - 255
+                        - 0
+                        - 0
+                  - rgb_color:
+                        - 0
+                        - 255
+                        - 0
+                  - rgb_color:
+                        - 0
+                        - 0
+                        - 255
+                  - type: call-service
+                    icon_color: 'linear-gradient(90deg, red, green, blue)'
+                    service: light.turn_on
+                    service_data:
+                      entity_id: light.leds_behind_couch
+                      effect: seven_color_cross_fade
+              - type: custom:slider-entity-row
+                entity: light.leds_behind_tv
+                toggle: true
+                name: TV LEDs
+              - type: custom:rgb-light-card
+                entity: light.leds_behind_tv
+                colors:
+                  - rgb_color:
+                        - 255
+                        - 255
+                        - 255
+                  - rgb_color:
+                        - 255
+                        - 0
+                        - 0
+                  - rgb_color:
+                        - 0
+                        - 255
+                        - 0
+                  - rgb_color:
+                        - 0
+                        - 0
+                        - 255
+                  - type: call-service
+                    icon_color: 'linear-gradient(90deg, red, green, blue)'
+                    service: light.turn_on
+                    service_data:
+                      entity_id: light.leds_behind_tv
+                      effect: seven_color_cross_fade
       - type: weather-forecast
         entity: weather.dark_sky
       # - type: thermostat
@@ -226,7 +287,6 @@ views:
           - type: entities
             entities:
               - script.be_right_back
-              - script.led_strip_turn_on
               - script.play_all_music
               - script.play_chill_music
               - script.volume_down

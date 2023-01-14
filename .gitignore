@@ -3,7 +3,7 @@ html5_push_registrations.conf
 known_devices.yaml
 entity_registry.yaml
 google_calendars.yaml
-plex.conf
+webostv.conf
 .DS_Store
 .HA_VERSION
 .ios.conf
@@ -12,7 +12,7 @@ plex.conf
 .spotify-token-cache
 *.august.conf
 .google.token
-home-assistant.log
+home-assistant.log*
 home-assistant_v2.db
 home-assistant_v2.db-shm
 home-assistant_v2.db-wal
@@ -24,7 +24,7 @@ custom_components/
 OZW_Log.txt
 *.sqlite
 *.xml
-Hass-*.json
+hass-*.json
 blueprints/*
 packages/*
 .vscode/*

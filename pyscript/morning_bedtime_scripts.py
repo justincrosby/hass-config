@@ -8,8 +8,6 @@ description: Turn everything off
         light.turn_on(entity_id="light.bedroom_lights", brightness=0, transition=15)
     light.turn_off(entity_id="light.all_lights")
     homeassistant.turn_off(entity_id="group.media_players")
-    if(state.get("input_boolean.bedtime") == "off"):
-        switch.turn_off(entity_id="switch.air_purifier")
     if(state.get("sensor.media_player_status") == "on"):
         media_player.stop(entity_id=state.get("sensor.media_player_output"))
 
@@ -48,5 +46,3 @@ description: Good night :)
     script.turn_on(entity_id="script.forgot_to_feed_fish")
     input_boolean.turn_off(entity_id="input_boolean.fish_fed_tracker")
     script.turn_on(entity_id="script.forgot_to_water_the_plants")
-    input_boolean.turn_off(entity_id="input_boolean.plants_watered_tracker")
-    switch.turn_on(entity_id="switch.air_purifier")
