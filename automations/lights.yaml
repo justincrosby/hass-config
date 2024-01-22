@@ -15,34 +15,35 @@
   action:
     service: light.turn_on
     entity_id: light.bedroom_lights
+- alias: Enable bedroom motion detected
+  trigger:
+    platform: state
+    entity_id: light.bedroom_lights
+    to: 'on'
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: input_boolean.bedtime
+        state: 'off'
+      - condition: state
+        entity_id: automation.bedroom_motion_detected
+        state: 'off'
+  action:
+    service: automation.turn_on
+    entity_id: automation.bedroom_motion_detected
 - alias: Bedroom motion no longer detected
   trigger:
     platform: state
     entity_id: sensor.bedroom_presence
     to: 'off'
+    for:
+      minutes: 5
   action:
-    service: light.turn_off
-    entity_id: light.bedroom_lights
-# - alias: Light settings changed
-#   trigger:
-#     platform: state
-#     entity_id: sensor.lights_colour
-#   condition:
-#     condition: state
-#     entity_id: light.master_suite_lights
-#     state: 'on'
-#   action:
-#     service: light.turn_on
-#     data_template:
-#       entity_id: >-
-#         {% if is_state("input_boolean.bedtime", "on") %}
-#           light.bathroom_lights
-#         {% else %}
-#           light.master_suite_lights
-#         {% endif %}
-#       rgb_color: '{{ states("sensor.lights_colour") }}'
-#       brightness: '{{ states("sensor.lights_brightness") }}'
-#       transition: 15
+    - service: light.turn_off
+      entity_id: light.bedroom_lights
+    - service: light.turn_off
+      entity_id: light.closet_light
 - alias: Bedroom lights on
   trigger:
     platform: event
@@ -50,7 +51,7 @@
     event_data:
       node_id: 14
       label: "Scene 001"
-      value: "KeyPressed"
+      value: 0
   action:
     service: light.turn_on
     entity_id: light.bedroom_lights
@@ -61,7 +62,7 @@
     event_data:
       node_id: 14
       label: "Scene 001"
-      value: "KeyPressed2x"
+      value: 3
   action:
     service: light.turn_on
     data:
@@ -74,7 +75,7 @@
     event_data:
       node_id: 14
       label: "Scene 002"
-      value: "KeyPressed"
+      value: 0
   action:
     service: light.turn_off
     entity_id: light.bedroom_lights
@@ -85,7 +86,7 @@
     event_data:
       node_id: 13
       label: "Scene 001"
-      value: "KeyPressed"
+      value: 0
   action:
     service: light.turn_on
     entity_id: light.living_room_lights
@@ -96,7 +97,7 @@
     event_data:
       node_id: 13
       label: "Scene 002"
-      value: "KeyPressed"
+      value: 0
   action:
     service: light.turn_off
     entity_id: light.living_room_lights

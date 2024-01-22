@@ -1,0 +1,8 @@
+pause_pihole:
+  alias: Pause Pi-hole
+  sequence:
+    - service: pi_hole.disable
+      data:
+        duration: '00:01'
+      target:
+        entity_id: all

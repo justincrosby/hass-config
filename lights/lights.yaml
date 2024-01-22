@@ -1,9 +1,13 @@
 - platform: group
+  name: Nightstand Lights
+  entities:
+    - light.bedroom_light_1
+    - light.bedroom_light_2
+- platform: group
   name: Bedroom Lights
   entities:
     - light.bedroom_light_1
     - light.bedroom_light_2
-    - light.closet_light
     - light.office_light
 - platform: group
   name: Living Room Lights
@@ -20,6 +24,7 @@
   name: All Lights
   entities:
     - light.bedroom_lights
+    - light.closet_light
     - light.living_room_lights
     - light.dining_room_light
     - light.kitchen_light

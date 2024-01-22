@@ -4,11 +4,9 @@
     event: sunset
     offset: "-00:20:00"
   condition:
-    condition: or
-    conditions:
-      - condition: state
-        entity_id: binary_sensor.presence_anyone_home
-        state: 'on'
+    condition: state
+    entity_id: binary_sensor.presence_anyone_home
+    state: 'on'
   action:
     - service: light.turn_on
       entity_id: light.living_room_lights

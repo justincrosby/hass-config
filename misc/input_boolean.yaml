@@ -11,9 +11,9 @@ plants_watered_tracker:
   name: Plants Watered Tracker
   icon: mdi:flower
 enable_presence_automations:
-  name: Enable the Presence Automations
+  name: Presence
   initial: false
 bedtime:
-  name: Is it bedtime?
+  name: Bedtime
   initial: false
   icon: mdi:bed

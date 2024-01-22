@@ -12,21 +12,18 @@ homeassistant:
   time_zone: America/Vancouver
   currency: CAD
   country: CA
-
+  internal_url: "http://hass.lan"
   customize: !include misc/customize.yaml
   auth_providers:
     - type: homeassistant
-
 # Enables the frontend
 frontend:
   themes: !include_dir_merge_named themes/
-
 # Enable logging
 logger:
   default: warn
   logs:
     custom_components.pyscript: info
-
 recorder:
   purge_keep_days: 2
   exclude:
@@ -34,25 +31,26 @@ recorder:
       - sensor.time
       - sensor.album_art
       - sensor.mopidy_album_art_url
-
+  db_url: postgresql://home-assistant:4QNwnoiNJvIyX7m9qEd5UpyEKO7pxqaO1Zhi4JtOfCwT00aJmSP2QOu6BaLjB4@home-assistant-cnpg-main-pooler-rw:5432/home-assistant?client_encoding=utf8
 # Enable lovelace
 lovelace:
   mode: yaml
   resources:
-    - url: /hacsfiles/upcoming-media-card/upcoming-media-card.js
-      type: module
     - url: /hacsfiles/mini-media-player/mini-media-player-bundle.js
       type: module
     - url: /hacsfiles/rgb-light-card/card.js
       type: module
     - url: /hacsfiles/lovelace-slider-entity-row/slider-entity-row.js
       type: module
-
+    - url: /hacsfiles/slider-button-card/slider-button-card.js
+      type: module
+    - url: /hacsfiles/hass-swipe-navigation/swipe-navigation.js
+      type: module
+    - url: /hacsfiles/lovelace-card-mod/card-mod.js
+      type: module
 # Enables configuration UI
 config:
-
 mobile_app:
-
 http:
   # ip_ban_enabled: true
   # login_attempts_threshold: 5
@@ -61,56 +59,38 @@ http:
     - !secret reverse_proxy_ip_1
     - !secret reverse_proxy_ip_2
     - !secret reverse_proxy_ip_3
-
 # Enable RESTful API
 api:
   api_password: !secret api_password
-
 # Enable python scripts
 # python_script:
-
 updater:
-
 # Discover some devices automatically
 discovery:
-
 # Allows you to issue voice commands from the frontend in enabled browsers
 conversation:
-
 # Enables support for tracking state changes over time.
 history:
-
 # View all events in a logbook
 logbook:
-
 # Track the sun
 sun:
-
-weather:
-  platform: darksky
-  api_key: !secret darksky_api_key
-  mode: daily
-
 # Include sensors
 sensor: !include_dir_list sensors/
 binary_sensor: !include_dir_list binary_sensors/
-
 # Text to speech
 tts:
   platform: google_translate
-
 # Enable iOS app
 # ios:
 #   push:
 #     categories: !include notifications/ios.yaml
-
 notify:
-    - platform: html5
-      name: html5
-      vapid_pub_key: !secret html5_pub_key
-      vapid_prv_key: !secret html5_priv_key
-      vapid_email: !secret html5_email
-
+  - platform: html5
+    name: html5
+    vapid_pub_key: !secret html5_pub_key
+    vapid_prv_key: !secret html5_priv_key
+    vapid_email: !secret html5_email
 google_assistant:
   project_id: !secret assistant_project_id
   service_account: !include hass-9d73d-ca2bdb903217.json
@@ -121,48 +101,39 @@ google_assistant:
     - media_player
   expose_by_default: false
   entity_config: !include googleassistant/entityconfig.yaml
-
 pyscript:
   allow_all_imports: true
   hass_is_global: true
-
 device_tracker:
   - platform: ubus
     host: !secret router_ip
     username: !secret router_username
     password: !secret router_password
+# tplink:
+#   discovery: false
+#   switch:
+#     - host: !secret tplink_betta_light_switch_ip
+#     - host: !secret tplink_fish_solenoid_switch_ip
 
-tplink:
-  discovery: false
-  switch:
-    - host: !secret tplink_betta_light_switch_ip
-    - host: !secret tplink_fish_solenoid_switch_ip
-
-hue:
-  bridges:
-    - host: !secret hue_bridge_ip
-      allow_unreachable: true
-      allow_hue_groups: true
+# hue:
+#   bridges:
+#     - host: !secret hue_bridge_ip
+#       allow_unreachable: true
+#       allow_hue_groups: true
 
 #august:
 #  login_method: email
 #  username: !secret august_username
 #  password: !secret august_password
-
 switch: !include_dir_list switches/
 light: !include_dir_merge_list lights/
-
 input_number: !include misc/input_number.yaml
-
 input_boolean: !include misc/input_boolean.yaml
-
 input_select: !include misc/input_select.yaml
-
 spotcast:
   sp_dc: !secret sp_dc
   sp_key: !secret sp_key
   country: CA
-
 group: !include groups.yaml
 automation: !include_dir_merge_list automations/
 script: !include_dir_merge_named scripts/

@@ -1,9 +1,7 @@
 - alias: Fish On
   trigger:
     - platform: time
-      at: "09:00:00"
-    - platform: time
-      at: "18:00:00"
+      at: "11:00:00"
   action:
     - service: light.turn_on
       entity_id: light.betta_light
@@ -11,9 +9,7 @@
 - alias: Fish Off
   trigger:
     - platform: time
-      at: "13:00:00"
-    - platform: time
-      at: "23:00:00"
+      at: "20:00:00"
   action:
     - service: light.turn_off
       entity_id: light.betta_light

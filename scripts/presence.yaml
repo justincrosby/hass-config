@@ -24,30 +24,14 @@ arrive_home_music:
   sequence:
     - condition: template
       value_template: '{{ not is_state("sensor.media_player_status", "playing") }}'
-    - condition: or
+    - condition: and
       conditions:
-        - condition: and
-          conditions:
-            - condition: state
-              entity_id: binary_sensor.presence_should_activate
-              state: 'on'
-            - condition: time
-              after: "10:00:00"
-              before: "20:00:00"
-        - condition: and
-          conditions:
-            - condition: state
-              entity_id: binary_sensor.presence_should_activate
-              state: 'off'
-            - condition: state
-              entity_id: media_player.denon_avr_x1300w
-              state: 'off'
-            - condition: state
-              entity_id: media_player.lg_tv
-              state: 'off'
-            - condition: time
-              after: "10:00:00"
-              before: "20:00:00"
+        - condition: state
+          entity_id: binary_sensor.presence_should_activate
+          state: 'on'
+        - condition: time
+          after: "10:00:00"
+          before: "20:00:00"
     - service: input_select.select_option
       data:
         entity_id: input_select.media_output_select
@@ -70,10 +54,8 @@ arrive_home_music:
 leave_home:
   alias: Leave Home
   sequence:
-    - service: switch.turn_on
-      entity_id: script.phone_ringer_off
     - condition: state
-      entity_id: binary_sensor.jenni_presence
+      entity_id: binary_sensor.presence_anyone_home
       state: 'off'
     - service: lock.lock
       entity_id: lock.front_door
