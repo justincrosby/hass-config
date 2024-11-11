@@ -36,8 +36,6 @@ arrive_home_music:
       data:
         entity_id: input_select.media_output_select
         option: 'Home Audio'
-    - service: script.turn_on
-      entity_id: script.switch_to_audio
     - delay:
         seconds: 1
     - service: script.turn_on
@@ -78,3 +76,7 @@ enable_presence_on_boot:
         minutes: 5
     - service: input_boolean.turn_on
       entity_id: input_boolean.enable_presence_automations
+bedtime:
+  alias: Bedtime
+  sequence:
+    - service: pyscript.bedtime

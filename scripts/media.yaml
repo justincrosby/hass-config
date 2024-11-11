@@ -19,13 +19,13 @@ shower_time:
         seconds: 2
     - service: media_player.volume_set
       data:
-        entity_id: media_player.master_bathroom_audio
+        entity_id: media_player.master_bathroom_speaker
         volume_level: 0.5
     - delay:
         minutes: 15
     - service: media_player.volume_set
       data:
-        entity_id: media_player.master_bathroom_audio
+        entity_id: media_player.master_bathroom_speaker
         volume_level: !secret default_bathroom_audio_volume
 select_source_switch:
   alias: Setup media center for switch

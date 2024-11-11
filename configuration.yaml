@@ -31,7 +31,6 @@ recorder:
       - sensor.time
       - sensor.album_art
       - sensor.mopidy_album_art_url
-  db_url: postgresql://home-assistant:4QNwnoiNJvIyX7m9qEd5UpyEKO7pxqaO1Zhi4JtOfCwT00aJmSP2QOu6BaLjB4@home-assistant-cnpg-main-pooler-rw:5432/home-assistant?client_encoding=utf8
 # Enable lovelace
 lovelace:
   mode: yaml
@@ -59,14 +58,7 @@ http:
     - !secret reverse_proxy_ip_1
     - !secret reverse_proxy_ip_2
     - !secret reverse_proxy_ip_3
-# Enable RESTful API
-api:
-  api_password: !secret api_password
-# Enable python scripts
-# python_script:
-updater:
-# Discover some devices automatically
-discovery:
+    - !secret reverse_proxy_ip_4
 # Allows you to issue voice commands from the frontend in enabled browsers
 conversation:
 # Enables support for tracking state changes over time.
@@ -75,6 +67,8 @@ history:
 logbook:
 # Track the sun
 sun:
+# Enable cloud
+cloud:
 # Include sensors
 sensor: !include_dir_list sensors/
 binary_sensor: !include_dir_list binary_sensors/
@@ -139,3 +133,4 @@ automation: !include_dir_merge_list automations/
 script: !include_dir_merge_named scripts/
 shell_command: !include shell_command.yaml
 rest_command: !include_dir_merge_named rest/
+wake_on_lan:

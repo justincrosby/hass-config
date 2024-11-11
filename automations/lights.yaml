@@ -35,7 +35,7 @@
 - alias: Bedroom motion no longer detected
   trigger:
     platform: state
-    entity_id: sensor.bedroom_presence
+    entity_id: binary_sensor.bedroom_presence
     to: 'off'
     for:
       minutes: 5

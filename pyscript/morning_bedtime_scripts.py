@@ -21,11 +21,13 @@ description: Gradually wake up in the morning :)
     input_boolean.turn_on(entity_id="input_boolean.enable_presence_automations")
     # Only execute the full alarm routine if requested
     if(state.get("binary_sensor.alarm_full") == "on"):
-        light.turn_on(entity_id="light.bedroom_lights", rgb_color=[255, 0, 0], brightness_pct=1)
+        light.turn_on(entity_id="light.nightstand_lights", rgb_color=[255, 0, 0], brightness_pct=1)
         task.sleep(1)
-        light.turn_on(entity_id="light.bedroom_lights", rgb_color=[255, 255, 0], brightness_pct=80, transition=300)
+        light.turn_on(entity_id="light.nightstand_lights", rgb_color=[255, 255, 0], brightness_pct=80, transition=300)
         task.sleep(25*60)
-        light.turn_on(entity_id="light.bedroom_lights", rgb_color=[255, 255, 255], brightness_pct=100, transition=100)
+        light.turn_on(entity_id="light.nightstand_lights", rgb_color=[255, 255, 255], brightness_pct=100, transition=100)
+        sleep(100)
+        light.turn_on(entity_id="light.bedroom_lights", rgb_color=[255, 255, 255], brightness_pct=100)
         pyscript.morning_music()
 
 @service
@@ -38,3 +40,4 @@ description: Good night :)
     input_boolean.turn_on(entity_id="input_boolean.bedtime")
     input_boolean.turn_off(entity_id="input_boolean.enable_presence_automations")
     automation.turn_off(entity_id="automation.bedroom_motion_detected")
+    lock.lock(entity_id="lock.front_door")

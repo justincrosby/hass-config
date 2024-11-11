@@ -35,7 +35,7 @@ are_the_fish_fed:
   alias: Are the fish fed?
   sequence:
     - service: tts.google_say
-      entity_id: media_player.master_bedroom_speaker
+      entity_id: media_player.master_bedroom_audio
       data_template:
         message: >-
           {%- if states.input_boolean.fish_fed_tracker.state == 'on' -%}
@@ -58,7 +58,7 @@ forgot_to_water_the_plants:
       entity_id: input_boolean.plants_watered_tracker
       state: 'off'
     #- service: tts.google_say
-    #  entity_id: media_player.master_bedroom_speaker
+    #  entity_id: media_player.master_bedroom_audio
     #  data:
     #   message: 'You forgot to water the plants!'
     - service: notify.ios_jennis_iphone

@@ -4,6 +4,7 @@ known_devices.yaml
 entity_registry.yaml
 google_calendars.yaml
 webostv.conf
+ip_bans.yaml
 .DS_Store
 .HA_VERSION
 .ios.conf
@@ -29,3 +30,4 @@ blueprints/*
 packages/*
 .vscode/*
 deps/
+.cloud/
