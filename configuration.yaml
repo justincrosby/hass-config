@@ -97,11 +97,11 @@ google_assistant:
 pyscript:
   allow_all_imports: true
   hass_is_global: true
-device_tracker:
-  - platform: ubus
-    host: !secret router_ip
-    username: !secret router_username
-    password: !secret router_password
+# device_tracker:
+#   - platform: ubus
+#     host: !secret router_ip
+#     username: !secret router_username
+#     password: !secret router_password
 # tplink:
 #   discovery: false
 #   switch:
