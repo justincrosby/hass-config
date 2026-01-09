@@ -1,5 +1,4 @@
-platform: template
-sensors:
-  hue_colour:
-    value_template: '{{ state_attr("light.living_room_lights", "rgb_color") }}'
-    friendly_name: 'Hue Colour Sensor'
+- sensor:
+  - default_entity_id: sensor.hue_colour
+    state: '{{ state_attr("light.living_room_lights", "rgb_color") }}'
+    name: 'Hue Colour Sensor'

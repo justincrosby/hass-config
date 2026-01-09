@@ -1,18 +1,17 @@
-platform: template
-sensors:
-  fish_fed:
-    friendly_name: Are the fish fed?
-    icon_template: mdi:fish
-    value_template: >-
+- sensor:
+  - default_entity_id: sensor.fish_fed
+    name: Are the fish fed?
+    icon: mdi:fish
+    state: >
       {% if is_state("input_boolean.fish_fed_tracker", "on") %}
         Yes
       {% else %}
         No
       {% endif %}
-  plants_watered:
-    friendly_name: Are the plants watered?
-    icon_template: mdi:water-pump
-    value_template: >-
+  - default_entity_id: sensor.plants_watered
+    name: Are the plants watered?
+    icon: mdi:water-pump
+    state: >-
       {% if is_state("input_boolean.plants_watered_tracker", "on") %}
         Yes
       {% else %}

@@ -1,20 +1,19 @@
-platform: template
-sensors:
-  lights_colour:
-    icon_template: mdi:lightbulb
-    value_template: >-
+- sensor:
+  - default_entity_id: sensor.lights_colour
+    icon: mdi:lightbulb
+    state: >
       {% if states("input_boolean.bedtime") == true %}
         [255, 165, 0]
       {% else %}
         [255, 255, 255]
       {% endif %}
-    friendly_name: Chosen Light Colour
-  lights_brightness:
-    icon_template: mdi:lightbulb
-    value_template: >-
+    name: Chosen Light Colour
+  - default_entity_id: sensor.lights_brightness
+    icon: mdi:lightbulb
+    state: >
       {% if states("input_boolean.bedtime") == true %}
         50
       {% else %}
         255
       {% endif %}
-    friendly_name: Chosen Light Colour
+    name: Chosen Light Colour

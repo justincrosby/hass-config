@@ -1,8 +1,7 @@
-platform: template
-sensors:
-  receiver_source:
-    icon_template: mdi:audio-video
-    value_template: >-
+- sensor:
+  - default_entity_id: sensor.receiver_source
+    icon: mdi:audio-video
+    state: >-
       {% if is_state("media_player.denon_avr_x1300w", "off") %}
         {% if is_state("sensor.media_player_status", "playing") %}
           Cast Audio
@@ -26,19 +25,19 @@ sensors:
       {% else %}
         Shutdown
       {% endif %}
-    friendly_name: Receiver Source
-  receiver_volume:
-    icon_template: mdi:audio-video
-    value_template: >
+    name: Receiver Source
+  - default_entity_id: sensor.receiver_volume
+    icon: mdi:audio-video
+    state: >
       {% if is_state("media_player.denon_avr_x1300w", "off") %}
         0
       {% else %}
         {{ (state_attr("media_player.denon_avr_x1300w", "volume_level") * 100) | round(1) }}
       {% endif %}
-    friendly_name: Receiver Volume
-  media_player_output:
-    icon_template: mdi:music-box
-    value_template: >
+    name: Receiver Volume
+  - default_entity_id: sensor.media_player_output
+    icon: mdi:music-box
+    state: >
       {% if is_state("media_player.home_audio", "playing") %}
         media_player.home_audio
       {% elif is_state("media_player.fake_home_audio", "playing") %}
@@ -56,10 +55,10 @@ sensors:
       {% else %}
         none
       {% endif %}
-    friendly_name: Media Player Output
-  media_player_selected_output:
-    icon_template: mdi:music-box
-    value_template: >
+    name: Media Player Output
+  - default_entity_id: sensor.media_player_selected_output
+    icon: mdi:music-box
+    state: >
       {% if is_state("input_select.media_output_select", "Home Audio") %}
         media_player.home_audio
       {% elif is_state("input_select.media_output_select", "Fake Home Audio") %}
@@ -71,10 +70,10 @@ sensors:
       {% else %}
         none
       {% endif %}
-    friendly_name: Media Player Selected Output
-  media_player_status:
-    icon_template: mdi:music-box
-    value_template: >
+    name: Media Player Selected Output
+  - default_entity_id: sensor.media_player_status
+    icon: mdi:music-box
+    state: >
       {% if is_state("media_player.home_audio", "playing") %}
         playing
       {% elif is_state("media_player.fake_home_audio", "playing") %}
@@ -92,10 +91,10 @@ sensors:
       {% else %}
         off
       {% endif %}
-    friendly_name: Media Player Status
-  chromecast_audio_volume:
-    icon_template: mdi:music-box
-    value_template: >
+    name: Media Player Status
+  - default_entity_id: sensor.chromecast_audio_volume
+    icon: mdi:music-box
+    state: >
       {% if is_state("sensor.media_player_output", "none") %}
         0
       {% elif state_attr(states("sensor.media_player_output"), "volume_level") == None %}
@@ -103,4 +102,4 @@ sensors:
       {% else %}
         {{ (state_attr(states("sensor.media_player_output"), "volume_level") * 100) | round(1) }}
       {% endif %}
-    friendly_name: Chromecast Audio Volume
+    name: Chromecast Audio Volume

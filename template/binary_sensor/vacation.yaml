@@ -1,5 +1,4 @@
-platform: template
-sensors:
-  vacation_time:
-    value_template: !secret vacation_value_template
-    friendly_name: 'Are We On Vacation?'
+- binary_sensor:
+  - default_entity_id: binary_sensor.vacation_time
+    state: !secret vacation_value_template
+    name: 'Are We On Vacation?'

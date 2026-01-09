@@ -1,12 +1,11 @@
-platform: template
-sensors:
-  current_temp:
-    friendly_name: Current Temperature
-    icon_template: mdi:thermometer
+- sensor:
+  - default_entity_id: sensor.current_temp
+    name: Current Temperature
+    icon: mdi:thermometer
     unit_of_measurement: "°C"
-    value_template: >-
+    state: >
       {{ ((states("sensor.thermostat_air_temperature")|float(0) + states("sensor.bedroom_sensor_air_temperature")|float(0) + states("sensor.office_sensor_air_temperature")|float(0)) / 3) | round(1) }}
-  thermostat_target_temp:
-    friendly_name: Thermostat Target Temperature
-    icon_template: mdi:thermometer
-    value_template: '{{ state_attr("climate.thermostat", "temperature") }}'
+  - default_entity_id: sensor.thermostat_target_temp
+    name: Thermostat Target Temperature
+    icon: mdi:thermometer
+    state: '{{ state_attr("climate.thermostat", "temperature") }}'

@@ -1,7 +1,6 @@
-platform: template
-sensors:
-  home_audio_playing:
-    friendly_name: Is home audio playing?
-    value_template: '{{ is_state("media_player.home_audio", "playing") }}'
+- binary_sensor:
+  - default_entity_id: binary_sensor.home_audio_playing
+    name: Is home audio playing?
+    state: '{{ is_state("media_player.home_audio", "playing") }}'
     delay_off:
       seconds: 30
