@@ -80,6 +80,23 @@ views:
                   tap_action:
                     action: more-info
           ### END OF HORIZONTAL STACK ###
+
+          - type: horizontal-stack
+            cards:
+              - type: custom:slider-button-card
+                entity: light.case_light_leds
+                card_mod:
+                  style: |
+                    :host {
+                      --slider-color: rgba(139,180,248,0.4);
+                    }
+                slider:
+                  direction: left-right
+                  background: gradient
+                icon:
+                  use_state_color: true
+                  tap_action:
+                    action: more-info
     ### END OF VERTICAL STACK ###
 
           - type: vertical-stack

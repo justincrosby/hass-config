@@ -58,7 +58,6 @@ http:
     - !secret reverse_proxy_ip_1
     - !secret reverse_proxy_ip_2
     - !secret reverse_proxy_ip_3
-    - !secret reverse_proxy_ip_4
 # Allows you to issue voice commands from the frontend in enabled browsers
 conversation:
 # Enables support for tracking state changes over time.

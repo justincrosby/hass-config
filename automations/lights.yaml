@@ -51,7 +51,7 @@
     event_data:
       node_id: 14
       label: "Scene 001"
-      value: 0
+      value: "KeyPressed"
   action:
     service: light.turn_on
     entity_id: light.bedroom_lights
@@ -62,7 +62,7 @@
     event_data:
       node_id: 14
       label: "Scene 001"
-      value: 3
+      value: "KeyPressed2x"
   action:
     service: light.turn_on
     data:
@@ -75,10 +75,26 @@
     event_data:
       node_id: 14
       label: "Scene 002"
-      value: 0
+      value: "KeyPressed"
   action:
     service: light.turn_off
     entity_id: light.bedroom_lights
+- alias: Closet light on
+  trigger:
+    platform: state
+    entity_id: light.closet_light
+    to: 'on'
+  action:
+    service: light.turn_on
+    entity_id: light.closet_light_hue
+- alias: Closet light off
+  trigger:
+    platform: state
+    entity_id: light.closet_light
+    to: 'off'
+  action:
+    service: light.turn_off
+    entity_id: light.closet_light_hue
 - alias: Living room lights on
   trigger:
     platform: event
@@ -86,7 +102,7 @@
     event_data:
       node_id: 13
       label: "Scene 001"
-      value: 0
+      value: "KeyPressed"
   action:
     service: light.turn_on
     entity_id: light.living_room_lights
@@ -97,7 +113,7 @@
     event_data:
       node_id: 13
       label: "Scene 002"
-      value: 0
+      value: "KeyPressed"
   action:
     service: light.turn_off
     entity_id: light.living_room_lights

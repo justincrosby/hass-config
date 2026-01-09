@@ -11,6 +11,7 @@
     - light.bedroom_wall_lights
     - light.office_light
     - light.closet_light
+    - light.case_light_leds
 - platform: group
   name: Living Room LEDs
   entities:

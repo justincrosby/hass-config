@@ -31,3 +31,4 @@ packages/*
 .vscode/*
 deps/
 .cloud/
+.ha_run.lock
