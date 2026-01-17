@@ -7,6 +7,7 @@ living_room:
   entities:
     - media_player.lg_tv
     - media_player.denon_avr_x1300w
+    - media_player.denon_avr_x1300w_2
     - media_player.shield
     - light.living_room_lights
 media_players:
@@ -14,6 +15,7 @@ media_players:
   entities:
     - media_player.lg_tv
     - media_player.denon_avr_x1300w
+    - media_player.denon_avr_x1300w_2
     - media_player.shield
     - media_player.backyard_speaker
     - media_player.kitchen_speaker

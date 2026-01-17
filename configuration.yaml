@@ -79,11 +79,21 @@ tts:
 #   push:
 #     categories: !include notifications/ios.yaml
 notify:
-  - platform: html5
-    name: html5
-    vapid_pub_key: !secret html5_pub_key
-    vapid_prv_key: !secret html5_priv_key
-    vapid_email: !secret html5_email
+  - name: all_devices
+    platform: group
+    services:
+      - action: mobile_app_jennis_iphone
+      - action: mobile_app_pixel_10_pro
+      - action: mobile_app_pixel_watch
+  - name: justin_devices
+    platform: group
+    services:
+      - action: mobile_app_pixel_10_pro
+      - action: mobile_app_pixel_watch
+  - name: jenni_devices
+    platform: group
+    services:
+      - action: mobile_app_jennis_iphone
 google_assistant:
   project_id: !secret assistant_project_id
   service_account: !include hass-9d73d-ca2bdb903217.json
