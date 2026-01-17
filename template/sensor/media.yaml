@@ -50,8 +50,6 @@
         media_player.master_bedroom_audio
       {% elif is_state("media_player.master_bathroom_speaker", "playing") %}
         media_player.master_bathroom_speaker
-      {% elif is_state("media_player.bathroom_speaker", "playing") %}
-        media_player.bathroom_speaker
       {% else %}
         none
       {% endif %}
@@ -85,8 +83,6 @@
       {% elif is_state("media_player.master_bedroom_audio", "playing") %}
         playing
       {% elif is_state("media_player.master_bathroom_speaker", "playing") %}
-        playing
-      {% elif is_state("media_player.bathroom_speaker", "playing") %}
         playing
       {% else %}
         off

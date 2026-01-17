@@ -51,16 +51,18 @@ description: Sets all audio devices to an optimal volume
                 return
         vol = round(state.getattr("media_player.master_bathroom_speaker")["volume_level"], 2)
         log.info(f"Set master bathroom volume to {vol}")
-    if state.get("media_player.bathroom_speaker") == "playing":
-        retry_count = 0
-        while round(state.getattr("media_player.bathroom_speaker")["volume_level"], 2) != bathroom_vol:
-            media_player.volume_set(entity_id="media_player.bathroom_speaker", volume_level=bathroom_vol)
-            task.sleep(0.5)
-            if retry_count > max_retries:
-                log.warning("Failed to set volume for bathroom speaker")
-                return
-        vol = round(state.getattr("media_player.bathroom_speaker")["volume_level"], 2)
-        log.info(f"Set bathroom volume to {vol}")
+
+@service
+def switch_to_shield():
+    """yaml
+name: Switch to Shield
+description: Turns on the receiver, resets the volume to a known level, and switches to Shield input
+"""
+    if state.get("media_player.denon_avr_x1300w") != "on":
+        media_player.turn_on(entity_id="media_player.denon_avr_x1300w")
+        task.wait_until(state_trigger="media_player.denon_avr_x1300w == 'on'", state_hold=2, timeout=15)
+        media_player.volume_set(entity_id="media_player.denon_avr_x1300w", volume_level=0.55)
+    media_player.select_source(entity_id="media_player.denon_avr_x1300w", source="Shield")
 
 @service
 def volume_fade(step_size=0, start_vol=0, end_vol=0):

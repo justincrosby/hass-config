@@ -17,6 +17,7 @@
       data:
         entity_id: media_player.denon_avr_x1300w
         source: CastAudio
+    - service: pyscript.set_default_audio_levels
 - alias: Living Room TV Started
   trigger:
     - platform: state
@@ -48,10 +49,7 @@
       from: 'standby'
       to: 'playing'
   action:
-      - service: media_player.select_source
-        data:
-          entity_id: media_player.denon_avr_x1300w
-          source: Shield
+      - service: pyscript.switch_to_shield
       - service: media_player.turn_on
         entity_id: media_player.lg_tv
 - alias: Bedroom TV Started
