@@ -59,7 +59,7 @@
     to: 'playing'
   action:
     - service: media_player.turn_off
-      data_template:
+      data:
         entity_id: '{{ states("sensor.media_player_output") }}'
 - alias: Bedroom TV Idle
   trigger:
@@ -71,6 +71,16 @@
   action:
     - service: media_player.turn_off
       entity_id: media_player.master_bedroom_tv
+- alias: Media Output Changed
+  trigger:
+    platform: state
+    entity_id: sensor.media_player_output
+  action:
+    - service: music_assistant.transfer_queue
+      data:
+        auto_play: true
+      target:
+        entity_id: '{{ states("sensor.media_player_output") }}'
 
 ### Receiver Select ###
 - alias: Receiver Input Change Video

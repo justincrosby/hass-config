@@ -422,16 +422,29 @@ views:
             cards:
               - type: button
                 name: Bedtime
+                icon: mdi:bed
                 tap_action:
-                  action: call-service
-                  service: pyscript.bedtime
+                  action: perform-action
+                  perform_action: script.turn_on
+                  data:
+                    entity_id: script.bedtime
+              - type: button
+                name: Bedtime Reading
+                icon: mdi:book-open-variant
+                tap_action:
+                  action: perform-action
+                  perform_action: script.turn_on
+                  data:
+                    entity_id: script.bedtime_reading
               - type: button
                 name: Morning
+                icon: mdi:weather-sunny
                 tap_action:
                   action: call-service
                   service: pyscript.morning
               - type: button
                 name: Shutdown
+                icon: mdi:power
                 tap_action:
                   action: call-service
                   service: pyscript.shutdown

@@ -164,3 +164,29 @@ description: Starts the music quietly in the morning
             break
     # Start music at 0 volume and slowly fade in
     pyscript.volume_fade(step_size=5, start_vol=0, end_vol=45)
+
+@service
+def start_playlist(entity_id="", playlist_uri="", volume_level=None):
+    """yaml
+name: Start Playlist
+description: Starts a playlist on the specified device at the specified volume level
+fields:
+  entity_id:
+    description: the name of the media player entity
+    example: media_player.living_room_audio
+    required: true
+  playlist_uri:
+    description: the URI of the playlist to play
+    example: spotify:playlist:37i9dQZF1DXcBWIGoYBM5M
+    required: true
+  volume_level:
+    description: the volume level to set (0.0 to 1.0)
+    example: 0.5
+    required: false
+"""
+    music_assistant.play_media(media_id=playlist_uri, enqueue='replace', entity_id=entity_id)
+    task.wait_until(state_trigger="{entity_id} == 'playing'".format(entity_id=entity_id), state_hold=2, timeout=15)
+    media_player.shuffle_set(entity_id=entity_id, shuffle=True)
+    media_player.media_next_track(entity_id=entity_id)
+    if volume_level is not None:
+        media_player.volume_set(entity_id=entity_id, volume_level=volume_level)

@@ -58,13 +58,13 @@
     icon: mdi:music-box
     state: >
       {% if is_state("input_select.media_output_select", "Home Audio") %}
-        media_player.home_audio
+        media_player.mass_home_audio
       {% elif is_state("input_select.media_output_select", "Fake Home Audio") %}
-        media_player.fake_home_audio
+        media_player.mass_fake_home_audio
       {% elif is_state("input_select.media_output_select", "Master Suite Audio") %}
-        media_player.master_suite_audio
+        media_player.mass_master_suite_audio
       {% elif is_state("input_select.media_output_select", "Master Bedroom Audio") %}
-        media_player.master_bedroom_audio
+        media_player.mass_master_bedroom_audio
       {% else %}
         none
       {% endif %}

@@ -59,7 +59,8 @@ leave_home:
       entity_id: lock.front_door
     - service: light.turn_off
       entity_id: light.all_lights
-    - service: media_player.turn_off
+    - service: homeassistant.turn_off
+      entity_id: group.media_players
 be_right_back:
   alias: Be Right Back
   sequence:
@@ -80,3 +81,9 @@ bedtime:
   alias: Bedtime
   sequence:
     - service: pyscript.bedtime
+bedtime_reading:
+  alias: Bedtime Reading
+  sequence:
+    - service: pyscript.bedtime
+      data:
+        reading: true

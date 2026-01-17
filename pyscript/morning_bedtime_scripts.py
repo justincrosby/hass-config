@@ -31,7 +31,7 @@ description: Gradually wake up in the morning :)
         pyscript.morning_music()
 
 @service
-def bedtime():
+def bedtime(reading=False):
     """yaml
 name: Bedtime
 description: Good night :)
@@ -41,3 +41,7 @@ description: Good night :)
     input_boolean.turn_off(entity_id="input_boolean.enable_presence_automations")
     automation.turn_off(entity_id="automation.bedroom_motion_detected")
     lock.lock(entity_id="lock.front_door")
+    if reading:
+        light.turn_on(entity_id="light.bedroom_light_2", rgb_color=[255, 244, 229], brightness_pct=30)
+        task.sleep(1800)
+        light.turn_off(entity_id="light.bedroom_light_2")

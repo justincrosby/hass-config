@@ -2,14 +2,14 @@ volume_up:
   alias: Volume Up
   sequence:
     - service: media_player.volume_set
-      data_template:
+      data:
         entity_id: media_player.denon_avr_x1300w
         volume_level: '{{ state_attr("media_player.denon_avr_x1300w", "volume_level") + 0.05 }}'
 volume_down:
   alias: Volume Down
   sequence:
     - service: media_player.volume_set
-      data_template:
+      data:
         entity_id: media_player.denon_avr_x1300w
         volume_level: '{{ state_attr("media_player.denon_avr_x1300w", "volume_level") - 0.05 }}'
 shower_time:

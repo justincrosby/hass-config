@@ -15,11 +15,11 @@ update_weekday_alarm:
       entity_id: input_boolean.workday_alarm
       state: 'on'
     - service: input_number.set_value
-      data_template:
+      data:
         entity_id: input_number.workday_hours
         value: '{{ states("sensor.next_alarm_hour") }}'
     - service: input_number.set_value
-      data_template:
+      data:
         entity_id: input_number.workday_minutes
         value: '{{ states("sensor.next_alarm_minute") }}'
 update_weekend_alarm:
@@ -39,11 +39,11 @@ update_weekend_alarm:
       entity_id: input_boolean.weekend_alarm
       state: 'on'
     - service: input_number.set_value
-      data_template:
+      data:
         entity_id: input_number.weekend_hours
         value: '{{ states("sensor.next_alarm_hour") }}'
     - service: input_number.set_value
-      data_template:
+      data:
         entity_id: input_number.weekend_minutes
         value: '{{ states("sensor.next_alarm_minute") }}'
 update_alarms:
