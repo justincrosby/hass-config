@@ -2,3 +2,39 @@
 # notify.mobile_app_jennis_iphone
 # notify.mobile_app_pixel_10_pro
 # notify.mobile_app_pixel_watch
+
+- alias: Automation Fail Detector
+  triggers:
+    - trigger: event
+      event_type: system_log_event
+      event_data:
+        level: ERROR
+  conditions:
+    - condition: template
+      value_template: >
+        {{ ['automation.', 'script.'] | select('in', (trigger.event.data.name |
+        lower)) | list | count > 0 }}
+      enabled: true
+    - condition: template
+      value_template: >-
+        {{ not ['.automation_script_fail_detector'] |
+        select('in', trigger.event.data.name | lower) | list }}
+  actions:
+    - action: notify.mobile_app_pixel_10_pro
+      data:
+        title: >-
+          Warning: {{ trigger.event.data.name.split('.')[2] }} has failed: {{
+          trigger.event.data.name }}
+        message: >-
+          A {{ trigger.event.data.name.split('.')[2] }} has failed!
+          >> {{ trigger.event.data.name }} <<
+          Error Message: {{ trigger.event.data.message }}
+          Source File: {{ trigger.event.data.source }}
+          Time: {{ now().strftime('%Y-%m-%d %H:%M:%S') }}
+          {% if trigger.event.data.exception != '' %}Exception Details:
+          {{ trigger.event.data.exception }}{% endif %}
+    - delay:
+        seconds: 5
+  mode: queued
+  max: 20
+  max_exceeded: silent

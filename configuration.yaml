@@ -64,6 +64,9 @@ conversation:
 history:
 # View all events in a logbook
 logbook:
+# Enable system log events
+system_log:
+  fire_event: true
 # Track the sun
 sun:
 # Enable cloud
@@ -133,10 +136,6 @@ light: !include_dir_merge_list lights/
 input_number: !include misc/input_number.yaml
 input_boolean: !include misc/input_boolean.yaml
 input_select: !include misc/input_select.yaml
-spotcast:
-  sp_dc: !secret sp_dc
-  sp_key: !secret sp_key
-  country: CA
 group: !include groups.yaml
 automation: !include_dir_merge_list automations/
 script: !include_dir_merge_named scripts/
