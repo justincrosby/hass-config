@@ -18,11 +18,15 @@
   - default_entity_id: binary_sensor.justin_presence
     name: Justin Presence
     device_class: presence
-    state: '{{ (not is_state("device_tracker.justin_phone", "away") and not is_state("device_tracker.justin_phone", "unknown")) or (not is_state("device_tracker.justin_watch", "away") and not is_state("device_tracker.justin_watch", "unknown")) or is_state("device_tracker.justins_phone_router", "home") }}'
+    delay_off:
+      minutes: 5
+    state: '{{ (not is_state("device_tracker.justin_phone", "not_home") and not is_state("device_tracker.justin_phone", "unknown")) or (not is_state("device_tracker.justin_watch", "not_home") and not is_state("device_tracker.justin_watch", "unknown")) }}'
   - default_entity_id: binary_sensor.jenni_presence
     name: Jenni Presence
     device_class: presence
-    state: '{{ (not is_state("device_tracker.jenni_phone", "away") and not is_state("device_tracker.jenni_phone", "unknown")) or (not is_state("device_tracker.jenni_watch", "away") and not is_state("device_tracker.jenni_watch", "unknown")) or is_state("device_tracker.jennis_phone_router", "home") }}'
+    delay_off:
+      minutes: 5
+    state: '{{ (not is_state("device_tracker.jenni_phone", "not_home") and not is_state("device_tracker.jenni_phone", "unknown")) or (not is_state("device_tracker.jenni_watch", "not_home") and not is_state("device_tracker.jenni_watch", "unknown")) }}'
   - default_entity_id: binary_sensor.bedroom_presence
     name: Bedroom Presence
     state: '{{ is_state("device_tracker.justin_phone", "bedroom") or is_state("device_tracker.jenni_phone", "bedroom") or is_state("binary_sensor.bedroom_sensor_motion_detection", "on") }}'
