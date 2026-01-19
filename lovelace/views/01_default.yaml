@@ -14,240 +14,86 @@ cards:
       - type: horizontal-stack
         title: Bedroom
         cards:
-          - type: custom:slider-button-card
-            entity: light.closet_light
-            card_mod:
-              style: |
-                :host {
-                  --slider-color: rgba(139,180,248,0.4);
-                }
-            slider:
-              direction: left-right
-              background: gradient
-            icon:
-              use_state_color: true
-              tap_action:
-                action: more-info
-
-          - type: custom:slider-button-card
-            entity: light.nightstand_lights
-            card_mod:
-              style: |
-                :host {
-                  --slider-color: rgba(139,180,248,0.4);
-                }
-            slider:
-              direction: left-right
-              background: gradient
-            icon:
-              use_state_color: true
-              tap_action:
-                action: more-info
+          - type: custom:decluttering-card
+            template: slider_button
+            variables:
+              - entity: light.closet_light
+          - type: custom:decluttering-card
+            template: slider_button
+            variables:
+              - entity: light.nightstand_lights
       ### END OF HORIZONTAL STACK ###
 
       - type: horizontal-stack
         cards:
-          - type: custom:slider-button-card
-            entity: light.office_light
-            card_mod:
-              style: |
-                :host {
-                  --slider-color: rgba(139,180,248,0.4);
-                }
-            slider:
-              direction: left-right
-              background: gradient
-            icon:
-              use_state_color: true
-              tap_action:
-                action: more-info
-
-          - type: custom:slider-button-card
-            entity: light.bedroom_wall_lights
-            card_mod:
-              style: |
-                :host {
-                  --slider-color: rgba(139,180,248,0.4);
-                }
-            slider:
-              direction: left-right
-              background: gradient
-            icon:
-              use_state_color: true
-              tap_action:
-                action: more-info
+          - type: custom:decluttering-card
+            template: slider_button
+            variables:
+              - entity: light.office_light
+          - type: custom:decluttering-card
+            template: slider_button
+            variables:
+              - entity: light.bedroom_wall_lights
       ### END OF HORIZONTAL STACK ###
 
       - type: horizontal-stack
         cards:
-          - type: custom:slider-button-card
-            entity: light.case_light_leds
-            card_mod:
-              style: |
-                :host {
-                  --slider-color: rgba(139,180,248,0.4);
-                }
-            slider:
-              direction: left-right
-              background: gradient
-            icon:
-              use_state_color: true
-              tap_action:
-                action: more-info
-### END OF VERTICAL STACK ###
+          - type: custom:decluttering-card
+            template: slider_button
+            variables:
+              - entity: light.case_light_leds
+    ### END OF VERTICAL STACK ###
 
       - type: vertical-stack
         cards:
           - type: horizontal-stack
             title: Living Room
             cards:
-              - type: custom:slider-button-card
-                entity: light.living_room_leds
-                card_mod:
-                  style: |
-                    :host {
-                      --slider-color: rgba(139,180,248,0.4);
-                    }
-                slider:
-                  direction: left-right
-                  background: gradient
-                icon:
-                  use_state_color: true
-                  tap_action:
-                    action: more-info
-
-              - type: custom:slider-button-card
-                entity: light.living_room_lamp
-                card_mod:
-                  style: |
-                    :host {
-                      --slider-color: rgba(139,180,248,0.4);
-                    }
-                slider:
-                  direction: left-right
-                  background: gradient
-                icon:
-                  use_state_color: true
-                  tap_action:
-                    action: more-info
+              - type: custom:decluttering-card
+                template: slider_button
+                variables:
+                  - entity: light.living_room_leds
+              - type: custom:decluttering-card
+                template: slider_button
+                variables:
+                  - entity: light.living_room_lamp
           ### END OF HORIZONTAL STACK ###
 
           - type: horizontal-stack
             cards:
-              - type: custom:slider-button-card
-                entity: light.dining_room_light
-                card_mod:
-                  style: |
-                    :host {
-                      --slider-color: rgba(139,180,248,0.4);
-                    }
-                slider:
-                  direction: left-right
-                  background: gradient
-                icon:
-                  use_state_color: true
-                  tap_action:
-                    action: more-info
-
-              - type: custom:slider-button-card
-                entity: light.kitchen_light
-                card_mod:
-                  style: |
-                    :host {
-                      --slider-color: rgba(139,180,248,0.4);
-                    }
-                slider:
-                  direction: left-right
-                  background: gradient
-                icon:
-                  use_state_color: true
-                  tap_action:
-                    action: more-info
+              - type: custom:decluttering-card
+                template: slider_button
+                variables:
+                  - entity: light.dining_room_light
+              - type: custom:decluttering-card
+                template: slider_button
+                variables:
+                  - entity: light.kitchen_light
           ### END OF HORIZONTAL STACK ###
 
           - type: horizontal-stack
             cards:
-              - type: custom:slider-button-card
-                entity: light.kitchen_hall_light
-                card_mod:
-                  style: |
-                    :host {
-                      --slider-color: rgba(139,180,248,0.4);
-                    }
-                slider:
-                  direction: left-right
-                  background: gradient
-                icon:
-                  use_state_color: true
-                  tap_action:
-                    action: more-info
+              - type: custom:decluttering-card
+                template: slider_button
+                variables:
+                  - entity: light.kitchen_hall_light
           ### END OF HORIZONTAL STACK ###
-  ### END OF VERTICAL STACK ###
+      ### END OF VERTICAL STACK ###
 
   ### LEDs ###
   - type: vertical-stack
     cards:
-      - type: entities
-        show_header_toggle: false
-        entities:
-          - type: custom:slider-entity-row
-            entity: light.leds_behind_couch
-            toggle: true
-            name: Couch LEDs
-          - type: custom:rgb-light-card
-            entity: light.leds_behind_couch
-            colors:
-              - rgb_color:
-                    - 255
-                    - 255
-                    - 255
-              - rgb_color:
-                    - 255
-                    - 0
-                    - 0
-              - rgb_color:
-                    - 0
-                    - 255
-                    - 0
-              - rgb_color:
-                    - 0
-                    - 0
-                    - 255
-              - type: call-service
-                icon_color: 'linear-gradient(90deg, red, green, blue)'
-                service: light.turn_on
-                service_data:
-                  entity_id: light.leds_behind_couch
-                  effect: seven_color_cross_fade
-          - type: custom:slider-entity-row
-            entity: light.leds_behind_tv
-            toggle: true
-            name: TV LEDs
-          - type: custom:rgb-light-card
-            entity: light.leds_behind_tv
-            colors:
-              - rgb_color:
-                    - 255
-                    - 255
-                    - 255
-              - rgb_color:
-                    - 255
-                    - 0
-                    - 0
-              - rgb_color:
-                    - 0
-                    - 255
-                    - 0
-              - rgb_color:
-                    - 0
-                    - 0
-                    - 255
-              - type: call-service
-                icon_color: 'linear-gradient(90deg, red, green, blue)'
-                service: light.turn_on
-                service_data:
-                  entity_id: light.leds_behind_tv
-                  effect: seven_color_cross_fade
+      - type: custom:decluttering-card
+        template: led_strip
+        variables:
+          - entity: light.leds_behind_couch
+          - name: Couch LEDs
+      - type: custom:decluttering-card
+        template: led_strip
+        variables:
+          - entity: light.leds_behind_tv
+          - name: TV LEDs
+  ### END OF VERTICAL STACK ###
   - type: vertical-stack
     title: Toggles
     cards:

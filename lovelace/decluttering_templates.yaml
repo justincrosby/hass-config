@@ -1,0 +1,50 @@
+slider_button:
+  card:
+    type: custom:slider-button-card
+    entity: '[[entity]]'
+    card_mod:
+      style: |
+        :host {
+          --slider-color: rgba(139,180,248,0.4);
+        }
+    slider:
+      direction: left-right
+      background: gradient
+    icon:
+      use_state_color: true
+      tap_action:
+        action: more-info
+led_strip:
+  card:
+    type: entities
+    show_header_toggle: false
+    entities:
+      - type: custom:slider-entity-row
+        entity: '[[entity]]'
+        toggle: true
+        name: '[[name]]'
+      - type: custom:rgb-light-card
+        entity: '[[entity]]'
+        colors:
+          - rgb_color:
+                - 255
+                - 255
+                - 255
+          - rgb_color:
+                - 255
+                - 0
+                - 0
+          - rgb_color:
+                - 0
+                - 255
+                - 0
+          - rgb_color:
+                - 0
+                - 0
+                - 255
+          - type: call-service
+            icon_color: 'linear-gradient(90deg, red, green, blue)'
+            service: light.turn_on
+            service_data:
+              entity_id: '[[entity]]'
+              effect: seven_color_cross_fade
