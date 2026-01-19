@@ -68,13 +68,3 @@ enable_presence_on_boot:
         minutes: 5
     - service: input_boolean.turn_on
       entity_id: input_boolean.enable_presence_automations
-bedtime:
-  alias: Bedtime
-  sequence:
-    - service: pyscript.bedtime
-bedtime_reading:
-  alias: Bedtime Reading
-  sequence:
-    - service: pyscript.bedtime
-      data:
-        reading: true
