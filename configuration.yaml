@@ -114,6 +114,7 @@ google_assistant:
 pyscript:
   allow_all_imports: true
   hass_is_global: true
+grad_vol:
 # device_tracker:
 #   - platform: ubus
 #     host: !secret router_ip

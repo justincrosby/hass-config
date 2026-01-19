@@ -27,19 +27,20 @@ cards:
             icon: mdi:weather-sunny
             tap_action:
               action: call-service
-              service: pyscript.morning
+              service: script.turn_on
+              entity_id: script.morning
           - type: button
             name: Shutdown
             icon: mdi:power
             tap_action:
               action: call-service
               service: pyscript.shutdown
-          - entity: script.pause_pihole
-            name: Disable Blocking
-            icon: mdi:dns
-            show_state: false
-            tap_action:
-              action: toggle
+          # - entity: script.pause_pihole
+          #   name: Disable Blocking
+          #   icon: mdi:dns
+          #   show_state: false
+          #   tap_action:
+          #     action: toggle
       - type: entities
         entities:
           - script.be_right_back

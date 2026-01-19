@@ -1,25 +1,11 @@
 play_all_music:
   alias: Play All Music Playlist
   sequence:
-    - service: script.turn_on
-      entity_id: script.play_all_music_var
-      data:
-        variables:
-          volume_level: !secret default_home_audio_volume
-          volume_step: 5
-play_all_music_var:
-  alias: Play All Music Playlist with Volume Select
-  fields:
-    volume_level:
-      description: 'The volume level to start the playlist at (decimal percentage).'
-      example: '50'
-  sequence:
     - service: pyscript.start_playlist
       data:
         entity_id: '{{ states("sensor.media_player_selected_output") }}'
         playlist_uri: !secret all_music_playlist_uri
-        volume_level: '{{ volume_level }}'
-        volume_step: '{{ volume_step }}'
+        volume_level: !secret default_home_audio_volume
 play_chill_music:
   alias: Play Chill Music Playlist
   sequence:
@@ -28,7 +14,7 @@ play_chill_music:
         entity_id: script.play_chill_music_var
         variables:
           volume_level: !secret default_home_audio_volume
-          volume_step: 5
+          duration: 20
 play_chill_music_var:
   alias: Play Chill Music Playlist with Volume Select
   sequence:
@@ -37,7 +23,7 @@ play_chill_music_var:
         entity_id: '{{ states("sensor.media_player_selected_output") }}'
         playlist_uri: !secret chill_music_playlist_uri
         volume_level: '{{ volume_level }}'
-        volume_step: '{{ volume_step }}'
+        duration: '{{ duration }}'
 play_daily_mix:
   alias: Play Daily Mix Playlist
   sequence:
@@ -54,4 +40,3 @@ play_daily_mix:
         entity_id: '{{ states("sensor.media_player_selected_output") }}'
         playlist_uri: "{{ random_playlist['items'][0]['uri'] }}"
         volume_level: !secret default_home_audio_volume
-        volume_step: 5
