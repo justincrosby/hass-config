@@ -74,13 +74,17 @@
 - alias: Media Output Changed
   trigger:
     platform: state
-    entity_id: sensor.media_player_output
+    entity_id: sensor.media_player_selected_output
+  condition:
+    condition: state
+    entity_id: sensor.media_player_status
+    state: 'playing'
   action:
     - service: music_assistant.transfer_queue
       data:
         auto_play: true
       target:
-        entity_id: '{{ states("sensor.media_player_output") }}'
+        entity_id: '{{ states("sensor.media_player_selected_output") }}'
 
 ### Receiver Select ###
 - alias: Receiver Input Change Video

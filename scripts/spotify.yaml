@@ -6,6 +6,7 @@ play_all_music:
       data:
         variables:
           volume_level: !secret default_home_audio_volume
+          volume_step: 5
 play_all_music_var:
   alias: Play All Music Playlist with Volume Select
   fields:
@@ -18,6 +19,7 @@ play_all_music_var:
         entity_id: '{{ states("sensor.media_player_selected_output") }}'
         playlist_uri: !secret all_music_playlist_uri
         volume_level: '{{ volume_level }}'
+        volume_step: '{{ volume_step }}'
 play_chill_music:
   alias: Play Chill Music Playlist
   sequence:
@@ -26,6 +28,7 @@ play_chill_music:
         entity_id: script.play_chill_music_var
         variables:
           volume_level: !secret default_home_audio_volume
+          volume_step: 5
 play_chill_music_var:
   alias: Play Chill Music Playlist with Volume Select
   sequence:
@@ -34,3 +37,21 @@ play_chill_music_var:
         entity_id: '{{ states("sensor.media_player_selected_output") }}'
         playlist_uri: !secret chill_music_playlist_uri
         volume_level: '{{ volume_level }}'
+        volume_step: '{{ volume_step }}'
+play_daily_mix:
+  alias: Play Daily Mix Playlist
+  sequence:
+    - service: music_assistant.get_library
+      data:
+        media_type: playlist
+        search: "Daily Mix"
+        order_by: random
+        config_entry_id: !secret music_assistant_config_entry_id
+        limit: 1
+      response_variable: random_playlist
+    - service: pyscript.start_playlist
+      data:
+        entity_id: '{{ states("sensor.media_player_selected_output") }}'
+        playlist_uri: "{{ random_playlist['items'][0]['uri'] }}"
+        volume_level: !secret default_home_audio_volume
+        volume_step: 5

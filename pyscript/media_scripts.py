@@ -121,52 +121,19 @@ description: Starts the music quietly in the morning
     # Start music with bedroom audio
     input_select.select_option(entity_id="input_select.media_output_select", option="Master Bedroom Audio")
     # Start up playlist
-    playing = False
-    curr_time = 0
-    retries = 2
-    while not playing:
-        script.turn_on(entity_id="script.play_chill_music_var", variables={"volume_level":"0"})
-        # Timeout after 10s
-        while curr_time < 10:
-            task.sleep(1)
-            if state.get("sensor.media_player_status") == "playing":
-                playing = True
-                break
-            curr_time += 1
-        curr_time = 0
-        retries += 1
-        if retries > 2:
-            break
-    # Start music at 0 volume and slowly fade in
-    pyscript.volume_fade(step_size=1, start_vol=0, end_vol=35)
+    script.turn_on(entity_id="script.play_chill_music_var", variables={"volume_level":"0.35", "volume_step":1})
     # Let the music play for 15 mins
     task.sleep(60*15)
     # Fade back down to 0
     pyscript.volume_fade(step_size=5, start_vol=35, end_vol=0)
-    media_player.media_stop(entity_id="media_player.master_bedroom_audio")
+    media_player.media_stop(entity_id="media_player.mass_master_bedroom")
     # Switch to whole suite
     input_select.select_option(entity_id="input_select.media_output_select", option="Master Suite Audio")
     # Start up playlist
-    playing = False
-    curr_time = 0
-    while not playing:
-        script.turn_on(entity_id="script.play_all_music_var", variables={"volume_level":"0"})
-        # Timeout after 10s
-        while curr_time < 10:
-            task.sleep(1)
-            if state.get("sensor.media_player_status") == "playing":
-                playing = True
-                break
-            curr_time += 1
-        curr_time = 0
-        retries += 1
-        if retries > 2:
-            break
-    # Start music at 0 volume and slowly fade in
-    pyscript.volume_fade(step_size=5, start_vol=0, end_vol=45)
+    script.turn_on(entity_id="script.play_all_music_var", variables={"volume_level":"0.45", "volume_step":5})
 
 @service
-def start_playlist(entity_id="", playlist_uri="", volume_level=None):
+def start_playlist(entity_id="", playlist_uri="", volume_level=None, volume_step=5):
     """yaml
 name: Start Playlist
 description: Starts a playlist on the specified device at the specified volume level
@@ -183,10 +150,17 @@ fields:
     description: the volume level to set (0.0 to 1.0)
     example: 0.5
     required: false
+  volume_step:
+    description: the volume step size for fading in
+    example: 5
+    required: false
 """
+    if volume_level is not None:
+        media_player.volume_set(entity_id=entity_id, volume_level=0.01)
+    media_player.shuffle_set(entity_id=entity_id, shuffle=True)
     music_assistant.play_media(media_id=playlist_uri, enqueue='replace', entity_id=entity_id)
     task.wait_until(state_trigger="{entity_id} == 'playing'".format(entity_id=entity_id), state_hold=2, timeout=15)
-    media_player.shuffle_set(entity_id=entity_id, shuffle=True)
-    media_player.media_next_track(entity_id=entity_id)
     if volume_level is not None:
-        media_player.volume_set(entity_id=entity_id, volume_level=volume_level)
+        pyscript.volume_fade(step_size=volume_step, start_vol=0, end_vol=int(volume_level * 100))
+        task.sleep(5)
+        pyscript.set_default_audio_levels()

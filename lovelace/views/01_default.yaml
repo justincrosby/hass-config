@@ -109,9 +109,9 @@ cards:
           - entity: lock.front_door
             tap_action:
               action: toggle
-          - entity: script.pause_pihole
-            name: Disable Blocking
-            icon: mdi:dns
+          - entity: script.play_daily_mix
+            name: Daily Mix
+            icon: mdi:music
             show_state: false
             tap_action:
               action: toggle
