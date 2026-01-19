@@ -179,59 +179,18 @@ cards:
           - input_select.media_output_select
       - type: conditional
         conditions:
-          - entity: media_player.shield
-            state: 'idle'
+          - entity: sensor.media_player_status
+            state: 'playing'
         card:
-          type: entities
+          type: 'custom:config-template-card'
+          variables:
+            - 'states["sensor.active_media_player"].state'
           entities:
-            - media_player.shield
-      - type: conditional
-        conditions:
-          - entity: media_player.shield
-            state: 'playing'
-        card:
-          type: custom:mini-media-player
-          entity: media_player.shield
-          artwork: cover
-      - type: conditional
-        conditions:
-          - entity: media_player.master_bedroom_tv
-            state: 'playing'
-        card:
-          type: custom:mini-media-player
-          entity: media_player.master_bedroom_tv
-          artwork: cover
-      - type: conditional
-        conditions:
-          - entity: media_player.home_audio
-            state: 'playing'
-        card:
-          type: custom:mini-media-player
-          entity: media_player.home_audio
-          artwork: cover
-      - type: conditional
-        conditions:
-          - condition: state
-            entity: media_player.master_suite_audio
-            state: 'playing'
-          - condition: state
-            entity: media_player.home_audio
-            state_not: 'playing'
-        card:
-          type: custom:mini-media-player
-          entity: media_player.master_suite_audio
-          artwork: cover
-      - type: conditional
-        conditions:
-          - entity: media_player.master_bedroom_audio
-            state: 'playing'
-          - condition: state
-            entity: media_player.home_audio
-            state_not: 'playing'
-        card:
-          type: custom:mini-media-player
-          entity: media_player.master_bedroom_audio
-          artwork: cover
+          - '${vars[0]}'
+          card:
+            type: custom:mini-media-player
+            entity: '${vars[0]}'
+            artwork: cover
   
   - type: weather-forecast
     entity: weather.pirateweather

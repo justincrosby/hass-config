@@ -58,13 +58,13 @@
     icon: mdi:music-box
     state: >
       {% if is_state("input_select.media_output_select", "Home Audio") %}
-        media_player.mass_home_audio
+        media_player.mass_home
       {% elif is_state("input_select.media_output_select", "Fake Home Audio") %}
-        media_player.mass_fake_home_audio
+        media_player.mass_fake_home
       {% elif is_state("input_select.media_output_select", "Master Suite Audio") %}
-        media_player.mass_master_suite_audio
+        media_player.mass_master_suite
       {% elif is_state("input_select.media_output_select", "Master Bedroom Audio") %}
-        media_player.mass_master_bedroom_audio
+        media_player.mass_master_bedroom
       {% else %}
         none
       {% endif %}
@@ -72,7 +72,9 @@
   - default_entity_id: sensor.media_player_status
     icon: mdi:music-box
     state: >
-      {% if is_state("media_player.home_audio", "playing") %}
+      {% if is_state("media_player.shield", "playing") %}
+        playing
+      {% elif is_state("media_player.home_audio", "playing") %}
         playing
       {% elif is_state("media_player.fake_home_audio", "playing") %}
         playing
@@ -99,3 +101,48 @@
         {{ (state_attr(states("sensor.media_player_output"), "volume_level") * 100) | round(1) }}
       {% endif %}
     name: Chromecast Audio Volume
+  - default_entity_id: sensor.active_media_player
+    icon: mdi:music-box
+    state: >
+      {% if is_state("media_player.shield", "playing") %}
+        media_player.shield
+      {% elif is_state("media_player.home_audio", "playing") %}
+        {% if state_attr("media_player.home_audio", "app_name") == "Music Assistant" %}
+          media_player.mass_home
+        {% else %}
+          media_player.home_audio
+        {% endif %}
+      {% elif is_state("media_player.fake_home_audio", "playing") %}
+        {% if state_attr("media_player.fake_home_audio", "app_name") == "Music Assistant" %}
+          media_player.mass_fake_home
+        {% else %}
+          media_player.fake_home_audio
+        {% endif %}
+      {% elif is_state("media_player.master_suite_audio", "playing") %}
+        {% if state_attr("media_player.master_suite_audio", "app_name") == "Music Assistant" %}
+          media_player.mass_master_suite
+        {% else %}
+          media_player.master_suite_audio
+        {% endif %}
+      {% elif is_state("media_player.living_room_audio", "playing") %}
+        {% if state_attr("media_player.living_room_audio", "app_name") == "Music Assistant" %}
+          media_player.mass_living_room
+        {% else %}
+          media_player.living_room_audio
+        {% endif %}
+      {% elif is_state("media_player.master_bedroom_audio", "playing") %}
+        {% if state_attr("media_player.master_bedroom_audio", "app_name") == "Music Assistant" %}
+          media_player.master_bedroom
+        {% else %}
+          media_player.master_bedroom_audio
+        {% endif %}
+      {% elif is_state("media_player.master_bathroom_speaker", "playing") %}
+        {% if state_attr("media_player.master_bathroom_speaker", "app_name") == "Music Assistant" %}
+          media_player.mass_master_bathroom
+        {% else %}
+          media_player.master_bathroom_speaker
+        {% endif %}
+      {% else %}
+        media_player.home_audio
+      {% endif %}
+    name: Active Media Player

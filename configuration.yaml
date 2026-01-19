@@ -49,6 +49,8 @@ lovelace:
       type: module
     - url: /hacsfiles/decluttering-card/decluttering-card.js
       type: module
+    - url: /hacsfiles/config-template-card/config-template-card.js
+      type: module
 # Enables configuration UI
 config:
 mobile_app:
