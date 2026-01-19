@@ -1,0 +1,65 @@
+title: Automations
+path: automations
+icon: mdi:code-braces
+cards:
+  - type: vertical-stack
+    cards:
+      - type: horizontal-stack
+        cards:
+          - type: button
+            name: Bedtime
+            icon: mdi:bed
+            tap_action:
+              action: perform-action
+              perform_action: script.turn_on
+              data:
+                entity_id: script.bedtime
+          - type: button
+            name: Bedtime Reading
+            icon: mdi:book-open-variant
+            tap_action:
+              action: perform-action
+              perform_action: script.turn_on
+              data:
+                entity_id: script.bedtime_reading
+          - type: button
+            name: Morning
+            icon: mdi:weather-sunny
+            tap_action:
+              action: call-service
+              service: pyscript.morning
+          - type: button
+            name: Shutdown
+            icon: mdi:power
+            tap_action:
+              action: call-service
+              service: pyscript.shutdown
+      - type: entities
+        entities:
+          - script.be_right_back
+          - script.play_all_music
+          - script.play_chill_music
+          - script.volume_down
+          - script.volume_up
+      - type: entities
+        entities:
+          - input_boolean.bedtime
+          - input_boolean.enable_presence_automations
+  - type: entities
+    entities:
+      - automation.arrive_home_jenni
+      - automation.arrive_home_justin
+      - automation.leave_home_jenni
+      - automation.leave_home_justin
+      - automation.living_room_tv_started
+      - automation.bedroom_tv_started
+      - automation.bedroom_tv_idle
+      - automation.music_started
+      - automation.receiver_input_change_video
+      - automation.receiver_input_change_audio
+      - automation.night_no_one_home
+      - automation.sunset
+      # - automation.update_google_assistant
+      # - automation.update_led_strip_colour_when_hue_colour_changed
+      # - automation.periodically_change_the_led_strip_to_a_random_colour
+      # - automation.its_christmas

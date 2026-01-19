@@ -1,0 +1,45 @@
+title: Media Control
+path: media
+icon: mdi:music
+cards:
+  - type: custom:mini-media-player
+    entity: media_player.home_audio
+    icon: mdi:music
+    group: true
+    source: icon
+    info: short
+  - type: custom:mini-media-player
+    entity: media_player.master_bedroom_audio
+    icon: mdi:music
+    group: true
+  - type: custom:mini-media-player
+    entity: media_player.master_bathroom_speaker
+    icon: mdi:music
+    group: true
+  - type: custom:mini-media-player
+    entity: media_player.master_bathroom_speaker
+    icon: mdi:music
+    group: true
+  - type: custom:mini-media-player
+    entity: media_player.living_room_audio
+    icon: mdi:music
+    group: true
+  - type: custom:mini-media-player
+    entity: media_player.backyard_speaker
+    icon: mdi:music
+    group: true
+  - type: custom:mini-media-player
+    entity: media_player.denon_avr_x1300w
+    group: true
+  - type: custom:mini-media-player
+    entity: media_player.master_suite_audio
+    icon: mdi:music
+    group: true
+    source: icon
+    info: short
+  - type: custom:mini-media-player
+    entity: media_player.fake_home_audio
+    icon: mdi:music
+    group: true
+    source: icon
+    info: short

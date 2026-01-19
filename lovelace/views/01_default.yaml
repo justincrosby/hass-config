@@ -1,0 +1,391 @@
+title: default_view
+icon: 'mdi:home'
+path: home
+badges:
+  - binary_sensor.justin_presence
+  - binary_sensor.jenni_presence
+  - sensor.sunset_time
+  - sensor.workday_alarm
+  - sensor.weekend_alarm
+cards:
+  ### LIGHTS ###
+  - type: vertical-stack
+    cards:
+      - type: horizontal-stack
+        title: Bedroom
+        cards:
+          - type: custom:slider-button-card
+            entity: light.closet_light
+            card_mod:
+              style: |
+                :host {
+                  --slider-color: rgba(139,180,248,0.4);
+                }
+            slider:
+              direction: left-right
+              background: gradient
+            icon:
+              use_state_color: true
+              tap_action:
+                action: more-info
+
+          - type: custom:slider-button-card
+            entity: light.nightstand_lights
+            card_mod:
+              style: |
+                :host {
+                  --slider-color: rgba(139,180,248,0.4);
+                }
+            slider:
+              direction: left-right
+              background: gradient
+            icon:
+              use_state_color: true
+              tap_action:
+                action: more-info
+      ### END OF HORIZONTAL STACK ###
+
+      - type: horizontal-stack
+        cards:
+          - type: custom:slider-button-card
+            entity: light.office_light
+            card_mod:
+              style: |
+                :host {
+                  --slider-color: rgba(139,180,248,0.4);
+                }
+            slider:
+              direction: left-right
+              background: gradient
+            icon:
+              use_state_color: true
+              tap_action:
+                action: more-info
+
+          - type: custom:slider-button-card
+            entity: light.bedroom_wall_lights
+            card_mod:
+              style: |
+                :host {
+                  --slider-color: rgba(139,180,248,0.4);
+                }
+            slider:
+              direction: left-right
+              background: gradient
+            icon:
+              use_state_color: true
+              tap_action:
+                action: more-info
+      ### END OF HORIZONTAL STACK ###
+
+      - type: horizontal-stack
+        cards:
+          - type: custom:slider-button-card
+            entity: light.case_light_leds
+            card_mod:
+              style: |
+                :host {
+                  --slider-color: rgba(139,180,248,0.4);
+                }
+            slider:
+              direction: left-right
+              background: gradient
+            icon:
+              use_state_color: true
+              tap_action:
+                action: more-info
+### END OF VERTICAL STACK ###
+
+      - type: vertical-stack
+        cards:
+          - type: horizontal-stack
+            title: Living Room
+            cards:
+              - type: custom:slider-button-card
+                entity: light.living_room_leds
+                card_mod:
+                  style: |
+                    :host {
+                      --slider-color: rgba(139,180,248,0.4);
+                    }
+                slider:
+                  direction: left-right
+                  background: gradient
+                icon:
+                  use_state_color: true
+                  tap_action:
+                    action: more-info
+
+              - type: custom:slider-button-card
+                entity: light.living_room_lamp
+                card_mod:
+                  style: |
+                    :host {
+                      --slider-color: rgba(139,180,248,0.4);
+                    }
+                slider:
+                  direction: left-right
+                  background: gradient
+                icon:
+                  use_state_color: true
+                  tap_action:
+                    action: more-info
+          ### END OF HORIZONTAL STACK ###
+
+          - type: horizontal-stack
+            cards:
+              - type: custom:slider-button-card
+                entity: light.dining_room_light
+                card_mod:
+                  style: |
+                    :host {
+                      --slider-color: rgba(139,180,248,0.4);
+                    }
+                slider:
+                  direction: left-right
+                  background: gradient
+                icon:
+                  use_state_color: true
+                  tap_action:
+                    action: more-info
+
+              - type: custom:slider-button-card
+                entity: light.kitchen_light
+                card_mod:
+                  style: |
+                    :host {
+                      --slider-color: rgba(139,180,248,0.4);
+                    }
+                slider:
+                  direction: left-right
+                  background: gradient
+                icon:
+                  use_state_color: true
+                  tap_action:
+                    action: more-info
+          ### END OF HORIZONTAL STACK ###
+
+          - type: horizontal-stack
+            cards:
+              - type: custom:slider-button-card
+                entity: light.kitchen_hall_light
+                card_mod:
+                  style: |
+                    :host {
+                      --slider-color: rgba(139,180,248,0.4);
+                    }
+                slider:
+                  direction: left-right
+                  background: gradient
+                icon:
+                  use_state_color: true
+                  tap_action:
+                    action: more-info
+          ### END OF HORIZONTAL STACK ###
+  ### END OF VERTICAL STACK ###
+
+  ### LEDs ###
+  - type: vertical-stack
+    cards:
+      - type: entities
+        show_header_toggle: false
+        entities:
+          - type: custom:slider-entity-row
+            entity: light.leds_behind_couch
+            toggle: true
+            name: Couch LEDs
+          - type: custom:rgb-light-card
+            entity: light.leds_behind_couch
+            colors:
+              - rgb_color:
+                    - 255
+                    - 255
+                    - 255
+              - rgb_color:
+                    - 255
+                    - 0
+                    - 0
+              - rgb_color:
+                    - 0
+                    - 255
+                    - 0
+              - rgb_color:
+                    - 0
+                    - 0
+                    - 255
+              - type: call-service
+                icon_color: 'linear-gradient(90deg, red, green, blue)'
+                service: light.turn_on
+                service_data:
+                  entity_id: light.leds_behind_couch
+                  effect: seven_color_cross_fade
+          - type: custom:slider-entity-row
+            entity: light.leds_behind_tv
+            toggle: true
+            name: TV LEDs
+          - type: custom:rgb-light-card
+            entity: light.leds_behind_tv
+            colors:
+              - rgb_color:
+                    - 255
+                    - 255
+                    - 255
+              - rgb_color:
+                    - 255
+                    - 0
+                    - 0
+              - rgb_color:
+                    - 0
+                    - 255
+                    - 0
+              - rgb_color:
+                    - 0
+                    - 0
+                    - 255
+              - type: call-service
+                icon_color: 'linear-gradient(90deg, red, green, blue)'
+                service: light.turn_on
+                service_data:
+                  entity_id: light.leds_behind_tv
+                  effect: seven_color_cross_fade
+  - type: vertical-stack
+    title: Toggles
+    cards:
+      - type: glance
+        columns: 3
+        entities:
+          - entity: switch.fish_solenoid
+            tap_action:
+              action: toggle
+          - entity: light.betta_light
+            tap_action:
+              action: toggle
+          - entity: lock.front_door
+            tap_action:
+              action: toggle
+          - entity: script.pause_pihole
+            name: Disable Blocking
+            icon: mdi:dns
+            show_state: false
+            tap_action:
+              action: toggle
+          - entity: script.play_all_music
+            name: All Music
+            icon: mdi:music
+            show_state: false
+            tap_action:
+              action: toggle
+          - entity: script.play_chill_music
+            name: Chill Music
+            icon: mdi:music
+            show_state: false
+            tap_action:
+              action: toggle
+  ## Media Control ##
+  - type: vertical-stack
+    title: Media
+    cards:
+      - type: custom:mini-media-player
+        entity: media_player.denon_avr_x1300w
+        icon: mdi:audio-video
+        group: true
+        hide:
+          source: true
+          play_pause: true
+        shortcuts:
+          buttons:
+            - name: Music
+              type: service
+              id: media_player.select_source
+              data:
+                entity_id: media_player.denon_avr_x1300w
+                source: CastAudio
+            - name: PC
+              type: service
+              id: media_player.select_source
+              data:
+                entity_id: media_player.denon_avr_x1300w
+                source: PC
+            - name: Shield
+              type: service
+              id: media_player.select_source
+              data:
+                entity_id: media_player.denon_avr_x1300w
+                source: Shield
+            - name: Switch
+              type: service
+              id: media_player.select_source
+              data:
+                entity_id: media_player.denon_avr_x1300w
+                source: Switch
+      - type: custom:mini-media-player
+        entity: media_player.lg_tv
+        artwork: cover
+        icon: mdi:television
+        group: true
+        toggle_power: false
+        hide:
+          info: true
+          volume: true
+          controls: true
+      - type: entities
+        entities:
+          - input_select.media_output_select
+      - type: conditional
+        conditions:
+          - entity: media_player.shield
+            state: 'idle'
+        card:
+          type: entities
+          entities:
+            - media_player.shield
+      - type: conditional
+        conditions:
+          - entity: media_player.shield
+            state: 'playing'
+        card:
+          type: custom:mini-media-player
+          entity: media_player.shield
+          artwork: cover
+      - type: conditional
+        conditions:
+          - entity: media_player.master_bedroom_tv
+            state: 'playing'
+        card:
+          type: custom:mini-media-player
+          entity: media_player.master_bedroom_tv
+          artwork: cover
+      - type: conditional
+        conditions:
+          - entity: media_player.home_audio
+            state: 'playing'
+        card:
+          type: custom:mini-media-player
+          entity: media_player.home_audio
+          artwork: cover
+      - type: conditional
+        conditions:
+          - condition: state
+            entity: media_player.master_suite_audio
+            state: 'playing'
+          - condition: state
+            entity: media_player.home_audio
+            state_not: 'playing'
+        card:
+          type: custom:mini-media-player
+          entity: media_player.master_suite_audio
+          artwork: cover
+      - type: conditional
+        conditions:
+          - entity: media_player.master_bedroom_audio
+            state: 'playing'
+          - condition: state
+            entity: media_player.home_audio
+            state_not: 'playing'
+        card:
+          type: custom:mini-media-player
+          entity: media_player.master_bedroom_audio
+          artwork: cover
+  
+  - type: weather-forecast
+    entity: weather.pirateweather

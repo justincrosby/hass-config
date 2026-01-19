@@ -1,0 +1,19 @@
+title: Alarms
+path: alarms
+icon: mdi:alarm
+badges:
+  - sensor.workday_alarm
+  - sensor.weekend_alarm
+cards:
+  - type: vertical-stack
+    cards:
+      - type: entities
+        entities:
+          - input_boolean.workday_alarm
+          - input_number.workday_hours
+          - input_number.workday_minutes
+      - type: entities
+        entities:
+          - input_boolean.weekend_alarm
+          - input_number.weekend_hours
+          - input_number.weekend_minutes
