@@ -34,7 +34,8 @@ cards:
             icon: mdi:power
             tap_action:
               action: call-service
-              service: pyscript.shutdown
+              service: script.turn_on
+              entity_id: script.shutdown
           # - entity: script.pause_pihole
           #   name: Disable Blocking
           #   icon: mdi:dns

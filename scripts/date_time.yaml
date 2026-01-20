@@ -117,7 +117,8 @@ bedtime_var:
       description: 'If true, set lights for reading'
       example: false
   sequence:
-    - service: pyscript.shutdown
+    - service: script.turn_on
+      entity_id: script.shutdown
     - service: input_boolean.turn_on
       entity_id: input_boolean.bedtime
     - service: input_boolean.turn_off
@@ -163,3 +164,7 @@ shutdown:
       entity_id: light.all_lights
     - service: homeassistant.turn_off
       entity_id: group.media_players
+    - service: button.press
+      entity_id: button.justins_pc_shutdown
+    - service: button.press
+      entity_id: button.jennis_pc_shutdown
