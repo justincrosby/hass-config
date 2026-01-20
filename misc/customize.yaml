@@ -40,5 +40,4 @@
     friendly_name: LG TV
     icon: mdi:television
   media_player.home_audio:
-    hidden: false
     icon: mdi:music

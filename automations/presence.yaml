@@ -1,65 +1,68 @@
 - alias: Leave Home Justin
-  initial_state: true
   trigger:
     platform: state
     entity_id: binary_sensor.justin_presence
-    from: 'on'
-    to: 'off'
+    from: "on"
+    to: "off"
     for:
       minutes: 5
   condition:
     condition: state
     entity_id: input_boolean.enable_presence_automations
-    state: 'on'
+    state: "on"
   action:
     - service: script.turn_on
-      entity_id: script.leave_home
+      target:
+        entity_id: script.leave_home
 
 - alias: Leave Home Jenni
-  initial_state: true
   trigger:
     platform: state
     entity_id: binary_sensor.jenni_presence
-    from: 'on'
-    to: 'off'
+    from: "on"
+    to: "off"
     for:
       minutes: 5
   condition:
     condition: state
     entity_id: input_boolean.enable_presence_automations
-    state: 'on'
+    state: "on"
   action:
-    service: script.turn_on
-    entity_id: script.leave_home
+    - service: script.turn_on
+      target:
+        entity_id: script.leave_home
 
 - alias: Arrive Home Justin
   initial_state: true
   trigger:
     platform: state
     entity_id: binary_sensor.justin_presence
-    from: 'off'
-    to: 'on'
+    from: "off"
+    to: "on"
   condition:
     condition: state
     entity_id: input_boolean.enable_presence_automations
-    state: 'on'
+    state: "on"
   action:
     - service: script.turn_on
-      entity_id: script.arrive_home
+      target:
+        entity_id: script.arrive_home
     - service: script.turn_on
-      entity_id: script.arrive_home_music
+      target:
+        entity_id: script.arrive_home_music
 
 - alias: Arrive Home Jenni
   initial_state: true
   trigger:
     platform: state
     entity_id: binary_sensor.jenni_presence
-    from: 'off'
-    to: 'on'
+    from: "off"
+    to: "on"
   condition:
     condition: state
     entity_id: input_boolean.enable_presence_automations
-    state: 'on'
+    state: "on"
   action:
-    service: script.turn_on
-    entity_id: script.arrive_home
+    - service: script.turn_on
+      target:
+        entity_id: script.arrive_home

@@ -2,118 +2,129 @@
   trigger:
     platform: state
     entity_id: binary_sensor.bedroom_sensor_motion_detection
-    to: 'on'
-  condition:
-    condition: and
-    conditions:
-    - condition: state
-      entity_id: input_boolean.bedtime
-      state: 'off'
-    - condition: time
-      after: "10:00:00"
-      before: "23:30:00"
-  action:
-    service: light.turn_on
-    entity_id: light.bedroom_lights
-- alias: Enable bedroom motion detected
-  trigger:
-    platform: state
-    entity_id: light.bedroom_lights
-    to: 'on'
+    to: "on"
   condition:
     condition: and
     conditions:
       - condition: state
         entity_id: input_boolean.bedtime
-        state: 'off'
+        state: "off"
+      - condition: time
+        after: "10:00:00"
+        before: "23:30:00"
+  action:
+    - service: light.turn_on
+      target:
+        entity_id: light.bedroom_lights
+- alias: Enable bedroom motion detected
+  trigger:
+    platform: state
+    entity_id: light.bedroom_lights
+    to: "on"
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: input_boolean.bedtime
+        state: "off"
       - condition: state
         entity_id: automation.bedroom_motion_detected
-        state: 'off'
+        state: "off"
   action:
-    service: automation.turn_on
-    entity_id: automation.bedroom_motion_detected
+    - service: automation.turn_on
+      target:
+        entity_id: automation.bedroom_motion_detected
 - alias: Bedroom motion no longer detected
   trigger:
     platform: state
     entity_id: binary_sensor.bedroom_presence
-    to: 'off'
+    to: "off"
     for:
       minutes: 5
   action:
     - service: light.turn_off
-      entity_id: light.bedroom_lights
+      target:
+        entity_id: light.bedroom_lights
     - service: light.turn_off
-      entity_id: light.closet_light
+      target:
+        entity_id: light.closet_light
 - alias: Bedroom lights on
   trigger:
     platform: event
     event_type: zwave_js_value_notification
     event_data:
       node_id: 14
-      label: "Scene 001"
-      value: "KeyPressed"
+      label: Scene 001
+      value: KeyPressed
   action:
-    service: light.turn_on
-    entity_id: light.bedroom_lights
+    - service: light.turn_on
+      target:
+        entity_id: light.bedroom_lights
 - alias: Bedroom lights on full
   trigger:
     platform: event
     event_type: zwave_js_value_notification
     event_data:
       node_id: 14
-      label: "Scene 001"
-      value: "KeyPressed2x"
+      label: Scene 001
+      value: KeyPressed2x
   action:
-    service: light.turn_on
-    data:
-      entity_id: light.bedroom_lights
-      brightness_pct: 100
+    - service: light.turn_on
+      target:
+        entity_id: light.bedroom_lights
+      data:
+        brightness_pct: 100
 - alias: Bedroom lights off
   trigger:
     platform: event
     event_type: zwave_js_value_notification
     event_data:
       node_id: 14
-      label: "Scene 002"
-      value: "KeyPressed"
+      label: Scene 002
+      value: KeyPressed
   action:
-    service: light.turn_off
-    entity_id: light.bedroom_lights
+    - service: light.turn_off
+      target:
+        entity_id: light.bedroom_lights
 - alias: Closet light on
   trigger:
     platform: state
     entity_id: light.closet_light
-    to: 'on'
+    to: "on"
   action:
-    service: light.turn_on
-    entity_id: light.closet_light_hue
+    - service: light.turn_on
+      target:
+        entity_id: light.closet_light_hue
 - alias: Closet light off
   trigger:
     platform: state
     entity_id: light.closet_light
-    to: 'off'
+    to: "off"
   action:
-    service: light.turn_off
-    entity_id: light.closet_light_hue
+    - service: light.turn_off
+      target:
+        entity_id: light.closet_light_hue
 - alias: Living room lights on
   trigger:
     platform: event
     event_type: zwave_js_value_notification
     event_data:
       node_id: 13
-      label: "Scene 001"
-      value: "KeyPressed"
+      label: Scene 001
+      value: KeyPressed
   action:
-    service: light.turn_on
-    entity_id: light.living_room_lights
+    - service: light.turn_on
+      target:
+        entity_id: light.living_room_lights
 - alias: Living room lights off
   trigger:
     platform: event
     event_type: zwave_js_value_notification
     event_data:
       node_id: 13
-      label: "Scene 002"
-      value: "KeyPressed"
+      label: Scene 002
+      value: KeyPressed
   action:
-    service: light.turn_off
-    entity_id: light.living_room_lights
+    - service: light.turn_off
+      target:
+        entity_id: light.living_room_lights

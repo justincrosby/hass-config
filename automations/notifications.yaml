@@ -14,7 +14,6 @@
       value_template: >
         {{ ['automation.', 'script.'] | select('in', (trigger.event.data.name |
         lower)) | list | count > 0 }}
-      enabled: true
     - condition: template
       value_template: >-
         {{ not ['.automation_script_fail_detector'] |

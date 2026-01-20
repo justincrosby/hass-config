@@ -3,15 +3,16 @@ play_all_music:
   sequence:
     - service: pyscript.start_playlist
       data:
-        entity_id: '{{ states("sensor.media_player_selected_output") }}'
+        entity_id: "{{ states('sensor.media_player_selected_output') }}"
         playlist_uri: !secret all_music_playlist_uri
         volume_level: !secret default_home_audio_volume
 play_chill_music:
   alias: Play Chill Music Playlist
   sequence:
     - service: script.turn_on
-      data:
+      target:
         entity_id: script.play_chill_music_var
+      data:
         variables:
           volume_level: !secret default_home_audio_volume
           duration: 20
@@ -20,10 +21,10 @@ play_chill_music_var:
   sequence:
     - service: pyscript.start_playlist
       data:
-        entity_id: '{{ states("sensor.media_player_selected_output") }}'
+        entity_id: "{{ states('sensor.media_player_selected_output') }}"
         playlist_uri: !secret chill_music_playlist_uri
-        volume_level: '{{ volume_level }}'
-        duration: '{{ duration }}'
+        volume_level: "{{ volume_level }}"
+        duration: "{{ duration }}"
 play_daily_mix:
   alias: Play Daily Mix Playlist
   sequence:

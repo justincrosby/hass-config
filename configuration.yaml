@@ -12,7 +12,6 @@ homeassistant:
   time_zone: America/Vancouver
   currency: CAD
   country: CA
-  internal_url: "http://hass.lan"
   customize: !include misc/customize.yaml
   auth_providers:
     - type: homeassistant
@@ -115,27 +114,6 @@ pyscript:
   allow_all_imports: true
   hass_is_global: true
 grad_vol:
-# device_tracker:
-#   - platform: ubus
-#     host: !secret router_ip
-#     username: !secret router_username
-#     password: !secret router_password
-# tplink:
-#   discovery: false
-#   switch:
-#     - host: !secret tplink_betta_light_switch_ip
-#     - host: !secret tplink_fish_solenoid_switch_ip
-
-# hue:
-#   bridges:
-#     - host: !secret hue_bridge_ip
-#       allow_unreachable: true
-#       allow_hue_groups: true
-
-#august:
-#  login_method: email
-#  username: !secret august_username
-#  password: !secret august_password
 switch: !include_dir_list switches/
 light: !include_dir_merge_list lights/
 input_number: !include misc/input_number.yaml
@@ -145,6 +123,5 @@ group: !include groups.yaml
 automation: !include_dir_merge_list automations/
 script: !include_dir_merge_named scripts/
 shell_command: !include shell_command.yaml
-rest_command: !include_dir_merge_named rest/
 wake_on_lan:
 template: !include_dir_merge_list template/

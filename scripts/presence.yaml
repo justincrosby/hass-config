@@ -3,57 +3,66 @@ arrive_home:
   sequence:
     - condition: state
       entity_id: binary_sensor.presence_should_activate
-      state: 'on'
+      state: "on"
     - service: lock.unlock
-      entity_id: lock.front_door
+      target:
+        entity_id: lock.front_door
     - service: light.turn_on
-      entity_id: light.living_room_lights
+      target:
+        entity_id: light.living_room_lights
 arrive_home_music:
   alias: Play music when Justin arrives home
   sequence:
     - condition: template
-      value_template: '{{ not is_state("sensor.media_player_status", "playing") }}'
+      value_template: "{{ not is_state('sensor.media_player_status', 'playing') }}"
     - condition: and
       conditions:
         - condition: state
           entity_id: binary_sensor.presence_should_activate
-          state: 'on'
+          state: "on"
         - condition: time
           after: "10:00:00"
           before: "20:00:00"
     - service: input_select.select_option
       data:
         entity_id: input_select.media_output_select
-        option: 'Home Audio'
+        option: "Home Audio"
     - delay:
         seconds: 1
     - service: script.turn_on
-      entity_id: script.play_daily_mix
+      target:
+        entity_id: script.play_daily_mix
 leave_home:
   alias: Leave Home
   sequence:
     - condition: state
       entity_id: binary_sensor.presence_anyone_home
-      state: 'off'
+      state: "off"
     - service: lock.lock
-      entity_id: lock.front_door
+      target:
+        entity_id: lock.front_door
     - service: light.turn_off
-      entity_id: light.all_lights
+      target:
+        entity_id: light.all_lights
     - service: homeassistant.turn_off
-      entity_id: group.media_players
+      target:
+        entity_id: group.media_players
 be_right_back:
   alias: Be Right Back
   sequence:
     - service: input_boolean.turn_off
-      entity_id: input_boolean.enable_presence_automations
+      target:
+        entity_id: input_boolean.enable_presence_automations
     - delay:
         minutes: 15
     - service: input_boolean.turn_on
-      entity_id: input_boolean.enable_presence_automations
+      target:
+        entity_id: input_boolean.enable_presence_automations
 enable_presence_on_boot:
   alias: Enable Presence on Boot After Some Time
   sequence:
     - delay:
         minutes: 5
     - service: input_boolean.turn_on
-      entity_id: input_boolean.enable_presence_automations
+      target:
+        entity_id: input_boolean.enable_presence_automations

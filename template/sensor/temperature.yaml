@@ -8,4 +8,4 @@
   - default_entity_id: sensor.thermostat_target_temp
     name: Thermostat Target Temperature
     icon: mdi:thermometer
-    state: '{{ state_attr("climate.thermostat", "temperature") }}'
+    state: "{{ state_attr('climate.thermostat', 'temperature') }}"

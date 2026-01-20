@@ -11,7 +11,7 @@
   trigger:
     platform: state
     entity_id: binary_sensor.home_audio_playing
-    to: 'on'
+    to: "on"
   action:
     - service: media_player.select_source
       data:
@@ -24,55 +24,57 @@
   trigger:
     - platform: state
       entity_id: media_player.shield
-      from: 'idle'
-      to: 'paused'
+      from: idle
+      to: "paused"
     - platform: state
       entity_id: media_player.shield
-      from: 'idle'
-      to: 'playing'
+      from: idle
+      to: "playing"
     - platform: state
       entity_id: media_player.shield
-      from: 'off'
-      to: 'paused'
+      from: "off"
+      to: "paused"
     - platform: state
       entity_id: media_player.shield
-      from: 'off'
-      to: 'playing'
+      from: "off"
+      to: "playing"
     - platform: state
       entity_id: media_player.shield
-      from: 'off'
-      to: 'idle'
+      from: "off"
+      to: "idle"
     - platform: state
       entity_id: media_player.shield
-      from: 'standby'
-      to: 'idle'
+      from: standby
+      to: "idle"
     - platform: state
       entity_id: media_player.shield
-      from: 'standby'
-      to: 'playing'
+      from: standby
+      to: "playing"
   action:
-      - service: pyscript.switch_to_shield
-      - service: media_player.turn_on
+    - service: pyscript.switch_to_shield
+    - service: media_player.turn_on
+      target:
         entity_id: media_player.lg_tv
 - alias: Bedroom TV Started
   trigger:
     platform: state
     entity_id: media_player.master_bedroom_tv
-    to: 'playing'
+    to: "playing"
   action:
     - service: media_player.turn_off
-      data:
-        entity_id: '{{ states("sensor.media_player_output") }}'
+      target:
+        entity_id: "{{ states('sensor.media_player_output') }}"
 - alias: Bedroom TV Idle
   trigger:
     platform: state
     entity_id: media_player.master_bedroom_tv
-    to: 'idle'
+    to: "idle"
     for:
       minutes: 10
   action:
     - service: media_player.turn_off
-      entity_id: media_player.master_bedroom_tv
+      target:
+        entity_id: media_player.master_bedroom_tv
 - alias: Media Output Changed
   trigger:
     platform: state
@@ -80,13 +82,13 @@
   condition:
     condition: state
     entity_id: sensor.media_player_status
-    state: 'playing'
+    state: "playing"
   action:
     - service: music_assistant.transfer_queue
       data:
         auto_play: true
       target:
-        entity_id: '{{ states("sensor.media_player_selected_output") }}'
+        entity_id: "{{ states('sensor.media_player_selected_output') }}"
 
 ### Receiver Select ###
 - alias: Receiver Input Change Video
@@ -102,7 +104,8 @@
       to: Switch
   action:
     - service: media_player.turn_on
-      entity_id: media_player.lg_tv
+      target:
+        entity_id: media_player.lg_tv
 - alias: Receiver Input Change Audio
   trigger:
     - platform: state
@@ -110,4 +113,5 @@
       to: CastAudio
   action:
     - service: media_player.turn_off
-      entity_id: media_player.lg_tv
+      target:
+        entity_id: media_player.lg_tv

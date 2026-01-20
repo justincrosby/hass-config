@@ -1,4 +1,4 @@
 - sensor:
   - default_entity_id: sensor.sunset_time
-    state: '{{ as_timestamp(states.sun.sun.attributes.next_setting) | timestamp_custom("%H:%M") }}'
+    state: "{{ as_timestamp(state_attr('sun.sun', 'next_setting')) | timestamp_custom('%H:%M') }}"
     name: Sunset

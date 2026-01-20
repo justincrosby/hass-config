@@ -6,10 +6,11 @@
   condition:
     condition: state
     entity_id: binary_sensor.presence_anyone_home
-    state: 'on'
+    state: "on"
   action:
     - service: light.turn_on
-      entity_id: light.living_room_lights
+      target:
+        entity_id: light.living_room_lights
 - alias: Night No One Home
   trigger:
     platform: time
@@ -19,10 +20,11 @@
     conditions:
       - condition: state
         entity_id: binary_sensor.presence_anyone_home
-        state: 'off'
+        state: "off"
   action:
     - service: script.turn_on
-      entity_id: script.shutdown
+      target:
+        entity_id: script.shutdown
       data:
         variables:
           bedtime: false
@@ -31,9 +33,6 @@
     platform: homeassistant
     event: start
   action:
-    #- service: google_assistant.request_sync
-    #- service: frontend.set_theme
-    #  data:
-    #    name: dark_theme
     - service: script.turn_on
-      entity_id: script.enable_presence_on_boot
+      target:
+        entity_id: script.enable_presence_on_boot

@@ -6,7 +6,8 @@
       at: "18:30:00"
   action:
     - service: light.turn_on
-      entity_id: light.betta_light
+      target:
+        entity_id: light.betta_light
 
 - alias: Betta Light Off
   trigger:
@@ -16,7 +17,8 @@
       at: "22:00:00"
   action:
     - service: light.turn_off
-      entity_id: light.betta_light
+      target:
+        entity_id: light.betta_light
 
 - alias: CO2 On
   trigger:
@@ -26,7 +28,8 @@
       at: "17:30:00"
   action:
     - service: switch.turn_on
-      entity_id: switch.fish_solenoid
+      target:
+        entity_id: switch.fish_solenoid
 
 - alias: CO2 Off
   trigger:
@@ -36,4 +39,5 @@
       at: "22:00:00"
   action:
     - service: switch.turn_off
-      entity_id: switch.fish_solenoid
+      target:
+        entity_id: switch.fish_solenoid

@@ -2,7 +2,7 @@
   - default_entity_id: sensor.lights_colour
     icon: mdi:lightbulb
     state: >
-      {% if states("input_boolean.bedtime") == true %}
+      {% if states("input_boolean.bedtime") == "on" %}
         [255, 165, 0]
       {% else %}
         [255, 255, 255]
@@ -11,7 +11,7 @@
   - default_entity_id: sensor.lights_brightness
     icon: mdi:lightbulb
     state: >
-      {% if states("input_boolean.bedtime") == true %}
+      {% if states("input_boolean.bedtime") == "on" %}
         50
       {% else %}
         255

@@ -3,93 +3,107 @@ update_weekday_alarm:
   sequence:
     - condition: state
       entity_id: binary_sensor.workday_sensor
-      state: 'on'
-    - service_template: >
-        {% if now().strftime("%h %d") == states("sensor.next_alarm_day") %}
-          input_boolean.turn_on
-        {% else %}
-          input_boolean.turn_off
-        {% endif %}
-      entity_id: input_boolean.workday_alarm
+      state: "on"
+    - choose:
+        - conditions: "{{ now().strftime('%h %d') == states('sensor.next_alarm_day') }}"
+          sequence:
+            - service: input_boolean.turn_on
+              target:
+                entity_id: input_boolean.workday_alarm
+      default:
+        - service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.workday_alarm
     - condition: state
       entity_id: input_boolean.workday_alarm
-      state: 'on'
+      state: "on"
     - service: input_number.set_value
       data:
         entity_id: input_number.workday_hours
-        value: '{{ states("sensor.next_alarm_hour") }}'
+        value: "{{ states('sensor.next_alarm_hour') }}"
     - service: input_number.set_value
       data:
         entity_id: input_number.workday_minutes
-        value: '{{ states("sensor.next_alarm_minute") }}'
+        value: "{{ states('sensor.next_alarm_minute') }}"
 update_weekend_alarm:
   alias: Update Weekend Alarm
   sequence:
     - condition: state
       entity_id: binary_sensor.workday_sensor
-      state: 'off'
-    - service_template: >
-        {% if now().strftime("%h %d") == states("sensor.next_alarm_day") %}
-          input_boolean.turn_on
-        {% else %}
-          input_boolean.turn_off
-        {% endif %}
-      entity_id: input_boolean.weekend_alarm
+      state: "off"
+    - choose:
+        - conditions: "{{ now().strftime('%h %d') == states('sensor.next_alarm_day') }}"
+          sequence:
+            - service: input_boolean.turn_on
+              target:
+                entity_id: input_boolean.weekend_alarm
+      default:
+        - service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.weekend_alarm
     - condition: state
       entity_id: input_boolean.weekend_alarm
-      state: 'on'
+      state: "on"
     - service: input_number.set_value
       data:
         entity_id: input_number.weekend_hours
-        value: '{{ states("sensor.next_alarm_hour") }}'
+        value: "{{ states('sensor.next_alarm_hour') }}"
     - service: input_number.set_value
       data:
         entity_id: input_number.weekend_minutes
-        value: '{{ states("sensor.next_alarm_minute") }}'
+        value: "{{ states('sensor.next_alarm_minute') }}"
 update_alarms:
   alias: Update Alarms
   sequence:
     - service: script.turn_on
-      entity_id: script.update_weekday_alarm
+      target:
+        entity_id: script.update_weekday_alarm
     - service: script.turn_on
-      entity_id: script.update_weekend_alarm
+      target:
+        entity_id: script.update_weekend_alarm
 morning:
   alias: Run the morning routine
   sequence:
     - service: input_boolean.turn_off
-      entity_id: input_boolean.bedtime
+      target:
+        entity_id: input_boolean.bedtime
     - service: input_boolean.turn_on
-      entity_id: input_boolean.enable_presence_automations
+      target:
+        entity_id: input_boolean.enable_presence_automations
     - condition: state
       entity_id: binary_sensor.alarm_full
-      state: 'on'
+      state: "on"
     - service: light.turn_on
-      data:
+      target:
         entity_id: light.nightstand_lights
+      data:
         rgb_color: [255, 0, 0]
         brightness_pct: 1
     - delay:
         seconds: 1
     - service: light.turn_on
-      data:
+      target:
         entity_id: light.nightstand_lights
+      data:
         rgb_color: [255, 255, 0]
         brightness_pct: 80
         transition: 300
     - delay:
         minutes: 25
     - service: light.turn_on
-      data:
+      target:
         entity_id: light.nightstand_lights
+      data:
         rgb_color: [255, 255, 255]
         brightness_pct: 100
         transition: 100
     - service: input_select.select_option
       data:
         entity_id: input_select.media_output_select
-        option: Master Bedroom Audio
+        option: "Master Bedroom Audio"
     - service: script.turn_on
-      entity_id: script.play_chill_music_var
+      target:
+        entity_id: script.play_chill_music_var
       data:
         variables:
           volume_level: 0.35
@@ -98,49 +112,57 @@ morning:
         minutes: 15
     - service: grad_vol.set_volume
       data:
-        entity_id: '{{ states("sensor.media_player_selected_output") }}'
+        entity_id: "{{ states('sensor.media_player_selected_output') }}"
         volume_level: 0.01
         duration: 20
     - service: media_player.media_stop
-      data:
-        entity_id: '{{ states("sensor.media_player_selected_output") }}'
+      target:
+        entity_id: "{{ states('sensor.media_player_selected_output') }}"
     - service: input_select.select_option
       data:
         entity_id: input_select.media_output_select
-        option: Master Suite Audio
+        option: "Master Suite Audio"
     - service: script.turn_on
-      entity_id: script.play_daily_mix
+      target:
+        entity_id: script.play_daily_mix
 bedtime_var:
   alias: Bedtime
   fields:
     reading:
-      description: 'If true, set lights for reading'
+      description: "If true, set lights for reading"
       example: false
   sequence:
     - service: script.turn_on
-      entity_id: script.shutdown
+      target:
+        entity_id: script.shutdown
     - service: input_boolean.turn_on
-      entity_id: input_boolean.bedtime
+      target:
+        entity_id: input_boolean.bedtime
     - service: input_boolean.turn_off
-      entity_id: input_boolean.enable_presence_automations
+      target:
+        entity_id: input_boolean.enable_presence_automations
     - service: automation.turn_off
-      entity_id: automation.bedroom_motion_detected
+      target:
+        entity_id: automation.bedroom_motion_detected
     - service: lock.lock
-      entity_id: lock.front_door
+      target:
+        entity_id: lock.front_door
     - condition: template
-      value_template: '{{ reading }}'
+      value_template: "{{ reading }}"
     - wait_template: "{{ is_state('light.bedroom_light_2', 'off') }}"
       timeout:
         seconds: 15
     - service: light.turn_on
-      data:
+      target:
         entity_id: light.bedroom_light_2
+      data:
         brightness_pct: 30
         rgb_color: [255, 244, 229]
     - delay:
         minutes: 30
     - service: light.turn_off
-      entity_id: light.bedroom_light_2
+      target:
+        entity_id: light.bedroom_light_2
 bedtime_reading:
   alias: Bedtime Reading
   sequence:
@@ -161,10 +183,14 @@ shutdown:
   alias: Run the shutdown routine
   sequence:
     - service: light.turn_off
-      entity_id: light.all_lights
+      target:
+        entity_id: light.all_lights
     - service: homeassistant.turn_off
-      entity_id: group.media_players
+      target:
+        entity_id: group.media_players
     - service: button.press
-      entity_id: button.justins_pc_shutdown
+      target:
+        entity_id: button.justins_pc_shutdown
     - service: button.press
-      entity_id: button.jennis_pc_shutdown
+      target:
+        entity_id: button.jennis_pc_shutdown

@@ -1,26 +1,26 @@
 - sensor:
   - default_entity_id: sensor.workday_alarm
     name: Workday Alarm
-    state: >-
-      {%- if states.input_number.workday_minutes.state|int < 10 -%}
-        {{ states.input_number.workday_hours.state|int ~ ":0" ~ states.input_number.workday_minutes.state|int}}
+    state: >
+      {%- if states("input_number.workday_minutes") | int < 10 -%}
+        {{ states("input_number.workday_hours") | int }}:0{{ states("input_number.workday_minutes") | int }}
       {%- else -%}
-        {{ states.input_number.workday_hours.state|int ~ ":" ~ states.input_number.workday_minutes.state|int}}
+        {{ states("input_number.workday_hours") | int }}:{{ states("input_number.workday_minutes") | int }}
       {%- endif -%}
   - default_entity_id: sensor.weekend_alarm
     name: Weekend Alarm
-    state: >-
-      {%- if states.input_number.weekend_minutes.state|int < 10 -%}
-        {{ states.input_number.weekend_hours.state|int ~ ":0" ~ states.input_number.weekend_minutes.state|int}}
+    state: >
+      {%- if states("input_number.weekend_minutes") | int < 10 -%}
+        {{ states("input_number.weekend_hours") | int }}:0{{ states("input_number.weekend_minutes") | int }}
       {%- else -%}
-        {{ states.input_number.weekend_hours.state|int ~ ":" ~ states.input_number.weekend_minutes.state|int}}
+        {{ states("input_number.weekend_hours") | int }}:{{ states("input_number.weekend_minutes") | int }}
       {%- endif -%}
   - default_entity_id: sensor.next_alarm_day
     name: Next Alarm Day
-    state: '{{ (state_attr("sensor.pixel_next_alarm", "Time in Milliseconds")/1000) | timestamp_custom("%h %d") }}'
+    state: "{{ (state_attr('sensor.pixel_next_alarm', 'Time in Milliseconds')/1000) | timestamp_custom('%h %d') }}"
   - default_entity_id: sensor.next_alarm_hour
     name: Next Alarm Hour
-    state: '{{ (state_attr("sensor.pixel_next_alarm", "Time in Milliseconds")/1000-60*15) | timestamp_custom("%H") | int }}'
+    state: "{{ (state_attr('sensor.pixel_next_alarm', 'Time in Milliseconds')/1000-60*15) | timestamp_custom('%H') | int }}"
   - default_entity_id: sensor.next_alarm_minute
     name: Next Alarm Minute
-    state: '{{ (state_attr("sensor.pixel_next_alarm", "Time in Milliseconds")/1000-60*15) | timestamp_custom("%M") | int }}'
+    state: "{{ (state_attr('sensor.pixel_next_alarm', 'Time in Milliseconds')/1000-60*15) | timestamp_custom('%M') | int }}"

@@ -1,4 +1,4 @@
 - sensor:
   - default_entity_id: sensor.hue_colour
-    state: '{{ state_attr("light.living_room_lights", "rgb_color") }}'
-    name: 'Hue Colour Sensor'
+    state: "{{ state_attr('light.living_room_lights', 'rgb_color') }}"
+    name: "Hue Colour Sensor"
