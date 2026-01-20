@@ -12,14 +12,14 @@
     platform: state
     entity_id: binary_sensor.home_audio_playing
     to: "on"
+  condition:
+    condition: template
+    value_template: >
+      {{ not is_state('media_player.denon_avr_x1300w', 'on') or state_attr('media_player.denon_avr_x1300w', 'source') != 'CastAudio' }}
   action:
-    - service: media_player.select_source
-      data:
-        entity_id: media_player.denon_avr_x1300w
-        source: CastAudio
     - service: pyscript.set_default_audio_levels
       data:
-        group_name: media_player.home_audio
+        group_name: media_player.denon_avr_x1300w
 - alias: Living Room TV Started
   trigger:
     - platform: state

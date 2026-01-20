@@ -1,3 +1,13 @@
+# List of all google cast media players
+MEDIA_PLAYERS = {
+    "media_player.backyard_speaker",
+    "media_player.denon_avr_x1300w",
+    "media_player.kitchen_speaker",
+    "media_player.living_room_audio",
+    "media_player.master_bathroom_speaker",
+    "media_player.master_bedroom_audio"
+}
+
 # Convert from music assistant media player to google cast media player
 MEDIA_PLAYER_MASS_TRANSLATION = {
     "media_player.mass_home": "media_player.home_audio",
@@ -18,31 +28,40 @@ MEDIA_PLAYER_DEFAULT_VOLUME = {
     "media_player.kitchen_speaker": 0.8,
     "media_player.living_room_audio": 0.8,
     "media_player.master_bathroom_speaker": 0.5,
-    "media_player.master_bedroom_audio": 0.8,
+    "media_player.master_bedroom_audio": 0.8
 }
+
+# Define speaker groups
+MASTER_SUITE_SPEAKERS = [
+    "media_player.master_bathroom_speaker",
+    "media_player.master_bedroom_audio"
+]
+
+HOME_SPEAKERS = [
+    "media_player.backyard_speaker",
+    "media_player.denon_avr_x1300w",
+    "media_player.kitchen_speaker",
+    "media_player.living_room_audio",
+    "media_player.master_bathroom_speaker",
+    "media_player.master_bedroom_audio"
+]
+
+FAKE_HOME_SPEAKERS = [
+    "media_player.backyard_speaker",
+    "media_player.kitchen_speaker",
+    "media_player.living_room_audio",
+    "media_player.master_bathroom_speaker",
+    "media_player.master_bedroom_audio"
+]
 
 # Media player groups definition
 MEDIA_PLAYER_GROUPS = {
-    "media_player.mass_home": [
-        "media_player.backyard_speaker",
-        "media_player.denon_avr_x1300w",
-        "media_player.kitchen_speaker",
-        "media_player.living_room_audio",
-        "media_player.master_bathroom_speaker",
-        "media_player.master_bedroom_audio"
-    ],
-    "media_player.mass_fake_home": [
-        "media_player.backyard_speaker",
-        "media_player.kitchen_speaker",
-        "media_player.living_room_audio",
-        "media_player.master_bathroom_speaker",
-        "media_player.master_bedroom_audio"
-    ],
-
-    "master_suite": [
-        "media_player.master_bathroom_speaker",
-        "media_player.master_bedroom_audio"
-    ]
+    "media_player.mass_home": HOME_SPEAKERS,
+    "media_player.home_audio": HOME_SPEAKERS,
+    "media_player.mass_fake_home": FAKE_HOME_SPEAKERS,
+    "media_player.fake_home_audio": FAKE_HOME_SPEAKERS,
+    "media_player.mass_master_suite": MASTER_SUITE_SPEAKERS,
+    "media_player.master_suite_audio": MASTER_SUITE_SPEAKERS
 }
 
 @service
@@ -57,18 +76,25 @@ def set_default_audio_levels(group_name=""):
         entities = MEDIA_PLAYER_GROUPS[group_name]
     elif group_name in MEDIA_PLAYER_MASS_TRANSLATION:
         entities = [MEDIA_PLAYER_MASS_TRANSLATION[group_name]]
+    elif group_name in MEDIA_PLAYERS:
+        entities = [MEDIA_PLAYERS[group_name]]
     else:
         log.error(f"Group '{group_name}' not found.")
         return
     
     for entity_id in entities:
         default_volume = MEDIA_PLAYER_DEFAULT_VOLUME.get(entity_id)
-        task.wait_until(state_trigger="{entity_id} == 'playing'".format(entity_id=entity_id), timeout=5)
+        if entity_id == "media_player.denon_avr_x1300w":
+            media_player.select_source(entity_id=entity_id, source="CastAudio")
+            expected_state = "on"
+        else:
+            expected_state = "playing"
+        task.wait_until(state_trigger="{entity_id} == '{expected_state}'".format(entity_id=entity_id, expected_state=expected_state), timeout=5)
         if default_volume is not None:
             grad_vol.set_volume(data={"volume": default_volume, "duration": 10}, target={"entity_id": entity_id})
             log.info(f"Set {entity_id} to default volume level {default_volume}")
         else:
-            log.warning(f"No default volume level defined for {entity_id}")
+            log.error(f"No default volume level defined for {entity_id}")
 
 @service
 def switch_to_shield():
