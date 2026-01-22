@@ -115,6 +115,8 @@ morning:
         entity_id: "{{ states('sensor.media_player_selected_output') }}"
         volume_level: 0.01
         duration: 20
+    - delay:
+        seconds: 20
     - service: media_player.media_stop
       target:
         entity_id: "{{ states('sensor.media_player_selected_output') }}"
