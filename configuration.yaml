@@ -50,6 +50,12 @@ lovelace:
       type: module
     - url: /hacsfiles/config-template-card/config-template-card.js
       type: module
+    - url: /hacsfiles/vertical-stack-in-card/vertical-stack-in-card.js
+      type: module
+    - url: /hacsfiles/lovelace-mushroom/mushroom.js
+      type: module
+    - url: /hacsfiles/mini-graph-card/mini-graph-card-bundle.js
+      type: module
 # Enables configuration UI
 config:
 mobile_app:

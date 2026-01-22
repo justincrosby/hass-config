@@ -48,3 +48,51 @@ led_strip:
             service_data:
               entity_id: '[[entity]]'
               effect: seven_color_cross_fade
+graph_display_2:
+  card:
+    type: custom:vertical-stack-in-card 
+    cards:
+      - type: grid
+        square: false
+        columns: 2
+        cards:
+          - type: custom:mushroom-entity-card
+            entity: '[[entity_1]]'
+            primary_info: state
+            secondary_info: name
+            name: '[[name_1]]'
+            icon_color: "#06bfeb"
+            icon: '[[icon_1]]'
+            card_mod:
+              style: |
+                ha-card { box-shadow: none; border: none; }
+          - type: custom:mushroom-entity-card
+            entity: '[[entity_2]]'
+            primary_info: state
+            secondary_info: name
+            name: '[[name_2]]'
+            icon_color: "#dc76f6"
+            icon: '[[icon_2]]'
+            card_mod:
+              style: |
+                ha-card { box-shadow: none; border: none; }
+      - type: custom:mini-graph-card
+        entities:
+          - entity: '[[entity_1]]'
+            name: '[[name_1]]'
+            color: "#06bfeb"
+          - entity: '[[entity_1]]'
+            name: '[[name_2]]'
+            color: "#dc76f6"
+            y_axis: secondary
+        hours_to_show: 24
+        line_width: 3
+        font_size: 50
+        animate: true
+        show: 
+          name: false
+          icon: false
+          state: false
+          legend: false
+          fill: fade
+

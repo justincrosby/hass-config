@@ -191,6 +191,25 @@ cards:
             type: custom:mini-media-player
             entity: '${vars[0]}'
             artwork: cover
-  
+  - type: custom:vertical-stack-in-card 
+    cards:
+      - type: custom:decluttering-card
+        template: graph_display_2
+        variables:
+          - name_1: Bedroom Temp
+          - entity_1: sensor.bedroom_temperature_humidity_sensor_air_temperature
+          - icon_1: mdi:bed
+          - name_2: Living Room Temp
+          - entity_2: sensor.living_room_temperature_humidity_sensor_air_temperature
+          - icon_2: mdi:sofa
+      - type: custom:decluttering-card
+        template: graph_display_2
+        variables:
+          - name_1: Bedroom Humidity
+          - entity_1: sensor.bedroom_temperature_humidity_sensor_humidity
+          - icon_1: mdi:bed
+          - name_2: Living Room Humidity
+          - entity_2: sensor.living_room_temperature_humidity_sensor_humidity
+          - icon_2: mdi:sofa
   - type: weather-forecast
     entity: weather.pirateweather
