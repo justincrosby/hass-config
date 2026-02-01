@@ -81,7 +81,7 @@ graph_display_2:
           - entity: '[[entity_1]]'
             name: '[[name_1]]'
             color: "#06bfeb"
-          - entity: '[[entity_1]]'
+          - entity: '[[entity_2]]'
             name: '[[name_2]]'
             color: "#dc76f6"
             y_axis: secondary

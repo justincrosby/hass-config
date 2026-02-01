@@ -9,6 +9,9 @@
       - condition: state
         entity_id: input_boolean.bedtime
         state: "off"
+      - condition: state
+        entity_id: binary_sensor.bedroom_presence
+        state: "off"
       - condition: time
         after: "10:00:00"
         before: "23:30:00"

@@ -29,4 +29,4 @@
     state: '{{ (not is_state("device_tracker.jenni_phone", "not_home") and not is_state("device_tracker.jenni_phone", "unknown")) or (not is_state("device_tracker.jenni_watch", "not_home") and not is_state("device_tracker.jenni_watch", "unknown")) }}'
   - default_entity_id: binary_sensor.bedroom_presence
     name: Bedroom Presence
-    state: '{{ is_state("device_tracker.justin_phone", "bedroom") or is_state("device_tracker.jenni_phone", "bedroom") or is_state("binary_sensor.bedroom_sensor_motion_detection", "on") }}'
+    state: '{{ is_state("device_tracker.justin_phone", "Bedroom") or (is_state("device_tracker.justin_watch", "Bedroom") and not is_state("sensor.pixel_watch_battery_state", "discharging")) or is_state("device_tracker.jenni_phone", "Bedroom") or is_state("device_tracker.jenni_watch", "Bedroom") }}'

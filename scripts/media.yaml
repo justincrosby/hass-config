@@ -89,3 +89,9 @@ gradually_set_volume:
         duration: "{{ duration }}"
       target:
         entity_id: "{{ entity_id }}"
+set_default_audio_levels:
+  alias: Set Default Audio Levels
+  sequence:
+    - service: pyscript.set_default_audio_levels
+      data:
+        group_name: "{{ states('sensor.media_player_selected_output') }}"
