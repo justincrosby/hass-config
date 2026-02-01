@@ -1,3 +1,7 @@
 title: Home
+kiosk_mode:
+  mobile_settings:
+    hide_header: true
 decluttering_templates: !include lovelace/decluttering_templates.yaml
-views: !include_dir_list lovelace/views/
+streamline_templates: !include dashboard/streamline_templates/streamline_templates.yaml
+views: !include_dir_list dashboard/views/

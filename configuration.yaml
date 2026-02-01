@@ -18,6 +18,14 @@ homeassistant:
 # Enables the frontend
 frontend:
   themes: !include_dir_merge_named themes/
+  extra_module_url:
+    - /hacsfiles/material-you-utilities/material-you-utilities.min.js
+panel_custom:
+  - name: material-you-panel
+    url_path: material-you-configuration
+    sidebar_title: Material You Utilities
+    sidebar_icon: m3of:colors
+    module_url: /hacsfiles/material-you-utilities/material-you-utilities.min.js
 # Enable logging
 logger:
   default: warn
@@ -30,31 +38,86 @@ recorder:
       - sensor.time
       - sensor.album_art
       - sensor.mopidy_album_art_url
+      - sensor.hourly_weather_data
+      - sensor.daily_weather_data
+      - sensor.weather_hourly_forecasts_full_hourly_forecast
+      - sensor.outdoor_temperature
+      - sensor.outdoor_humidity
+      - sensor.weather_condition_icon
+      - sensor.rainfall_forecast_today
+      - sensor.forecast_uv_index
+      - sensor.forecast_cloud_coverage
+      - sensor.forecast_rainfall
+      - sensor.forecast_wind_speed
+      - sensor.forecast_wind_direction
+      - sensor.forecast_temperature
+      - sensor.next_rain_summary
+      - sensor.24h_rainfall_summary
+      - sensor.uv_and_cloud_summary
+      - sensor.wind_summary
+      - sensor.moon_summary
+      - sensor.vancouver_summary
 # Enable lovelace
 lovelace:
   mode: yaml
   resources:
-    - url: /hacsfiles/mini-media-player/mini-media-player-bundle.js
+    - url: /hacsfiles/apexcharts-card/apexcharts-card.js
       type: module
-    - url: /hacsfiles/rgb-light-card/card.js
+    - url: /hacsfiles/Bubble-Card/bubble-card.js
       type: module
-    - url: /hacsfiles/lovelace-slider-entity-row/slider-entity-row.js
+    - url: /hacsfiles/button-card/button-card.js
       type: module
-    - url: /hacsfiles/slider-button-card/slider-button-card.js
+    - url: /hacsfiles/calendar-card-pro/calendar-card-pro.js
       type: module
-    - url: /hacsfiles/hass-swipe-navigation/swipe-navigation.js
+    - url: /hacsfiles/lovelace-expander-card/expander-card.js
       type: module
-    - url: /hacsfiles/lovelace-card-mod/card-mod.js
+    - url: /hacsfiles/llmvision-card/llmvision-card.js
       type: module
-    - url: /hacsfiles/decluttering-card/decluttering-card.js
-      type: module
-    - url: /hacsfiles/config-template-card/config-template-card.js
-      type: module
-    - url: /hacsfiles/vertical-stack-in-card/vertical-stack-in-card.js
+    - url: /hacsfiles/mediocre-hass-media-player-cards/mediocre-hass-media-player-cards.js
       type: module
     - url: /hacsfiles/lovelace-mushroom/mushroom.js
       type: module
     - url: /hacsfiles/mini-graph-card/mini-graph-card-bundle.js
+      type: module
+    - url: /hacsfiles/lovelace-navbar-card/navbar-card.js
+      type: module
+    - url: /hacsfiles/simple-swipe-card/simple-swipe-card.js
+      type: module
+    - url: /hacsfiles/home-assistant-simple-tabs/simple-tabs.js
+      type: module
+    - url: /hacsfiles/timer-bar-card/timer-bar-card.js
+      type: module
+    - url: /hacsfiles/lovelace-auto-entities/auto-entities.js
+      type: module
+    - url: /hacsfiles/lovelace-card-mod/card-mod.js
+      type: module
+    - url: /hacsfiles/config-template-card/config-template-card.js
+      type: module
+    - url: /hacsfiles/kiosk-mode/kiosk-mode.js
+      type: module
+    - url: /hacsfiles/lovelace-layout-card/layout-card.js
+      type: module
+    - url: /hacsfiles/lovelace-material-components/material-components.js
+      type: module
+    - url: /hacsfiles/material-you-utilities/material-you-utilities.min.js
+      type: module
+    - url: /hacsfiles/my-cards/my-cards.js
+      type: module
+    - url: /hacsfiles/lovelace-paper-buttons-row/paper-buttons-row.js
+      type: module
+    - url: /hacsfiles/stack-in-card/stack-in-card.js
+      type: module
+    - url: /hacsfiles/streamline-card/streamline-card.js
+      type: module
+    - url: /hacsfiles/vertical-stack-in-card/vertical-stack-in-card.js
+      type: module
+    - url: /hacsfiles/lunar-phase-card/lunar-phase-card.js
+      type: module
+    - url: /hacsfiles/weather-forecast-extended/weatherforecastextended.js
+      type: module
+    - url: /hacsfiles/clock-weather-card-hui-icons/clock-weather-card-hui-icons.js
+      type: module
+    - url: /hacsfiles/mini-media-player/mini-media-player-bundle.js
       type: module
 # Enables configuration UI
 config:
@@ -131,3 +194,4 @@ script: !include_dir_merge_named scripts/
 shell_command: !include shell_command.yaml
 wake_on_lan:
 template: !include_dir_merge_list template/
+alert: !include_dir_merge_named alerts/

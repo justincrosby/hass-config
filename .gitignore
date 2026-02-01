@@ -31,3 +31,4 @@ packages/*
 deps/
 .cloud/
 .ha_run.lock
+themes/

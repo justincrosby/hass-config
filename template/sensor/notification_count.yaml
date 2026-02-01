@@ -1,0 +1,22 @@
+- sensor:
+    - name: "Active Notification Count"
+      state: >
+        {% set count = 0 %}
+        {% if is_state('sensor.media_player_status', 'playing') %}
+          {% set count = count + 1 %}
+        {% endif %}
+        {{ count }}
+- sensor:
+    - name: "Active Weather Warnings Count"
+      state: >
+        {% set count = 0 %}
+        {% if states('sensor.vancouver_warnings') is defined %}
+          {% set count = count + (states('sensor.vancouver_warnings') | int) %}
+        {% endif %}
+        {% if states('sensor.vancouver_watches') is defined %}
+          {% set count = count + (states('sensor.vancouver_watches') | int) %}
+        {% endif %}
+        {% if states('sensor.vancouver_advisories') is defined %}
+          {% set count = count + (states('sensor.vancouver_advisories') | int) %}
+        {% endif %}
+        {{ count }}

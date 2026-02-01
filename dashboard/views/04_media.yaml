@@ -1,0 +1,273 @@
+type: sections
+max_columns: 4
+title: Media
+path: media
+icon: m3of:music-video
+sections:
+  - type: grid
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: custom:paper-buttons-row
+            styles:
+              gap: 8px
+              justify-content: flex-start
+              overflow: scroll
+              margin: 12px 0 12px -18px
+              padding-left: 18px
+              width: 100%
+            extra_styles: |
+              ::-webkit-scrollbar {
+                display: none;
+              }
+            buttons:
+              - entity: script.play_daily_mix
+                icon: m3of:music-note
+                layout: icon_name
+                name: Daily Mix
+                tap_action:
+                  action: call-service
+                  service: script.turn_on
+                  target:
+                    entity_id: script.play_daily_mix
+                styles:
+                  name:
+                    color: grey
+                  button:
+                    padding: 12px
+                    width: 76px
+                    height: 76px
+                    flex-basis: 1
+                    flex-shrink: 0
+                    display: flex
+                    background-color: var(--popupBG)
+                    border-radius: 24px
+                    color: var(--white)
+                  icon:
+                    '--mdc-icon-size': 26px
+                    color: grey
+                state_styles:
+                  'on':
+                    icon:
+                      color: var(--primary-text-color)
+                    name:
+                      color: var(--primary-text-color)
+              - entity: script.play_all_music
+                icon: m3of:music-note
+                layout: icon_name
+                name: All Music
+                tap_action:
+                  action: call-service
+                  service: script.turn_on
+                  target:
+                    entity_id: script.play_all_music
+                styles:
+                  name:
+                    color: grey
+                  button:
+                    padding: 12px
+                    width: 76px
+                    height: 76px
+                    flex-basis: 1
+                    flex-shrink: 0
+                    display: flex
+                    background-color: var(--popupBG)
+                    border-radius: 24px
+                    color: var(--white)
+                  icon:
+                    '--mdc-icon-size': 26px
+                    color: grey
+                state_styles:
+                  'on':
+                    icon:
+                      color: var(--primary-text-color)
+                    name:
+                      color: var(--primary-text-color)
+              - entity: script.play_chill_music
+                icon: m3of:music-note
+                layout: icon_name
+                name: Chill Music
+                tap_action:
+                  action: call-service
+                  service: script.turn_on
+                  target:
+                    entity_id: script.play_chill_music
+                styles:
+                  name:
+                    color: grey
+                  button:
+                    padding: 12px
+                    width: 76px
+                    height: 76px
+                    flex-basis: 1
+                    flex-shrink: 0
+                    display: flex
+                    background-color: var(--popupBG)
+                    border-radius: 24px
+                    color: var(--white)
+                  icon:
+                    '--mdc-icon-size': 26px
+                    color: grey
+                state_styles:
+                  'on':
+                    icon:
+                      color: var(--primary-text-color)
+                    name:
+                      color: var(--primary-text-color)
+              - entity: script.set_default_audio_levels
+                icon: m3of:volume-up
+                layout: icon_name
+                name: Reset Volume
+                tap_action:
+                  action: call-service
+                  service: script.turn_on
+                  target:
+                    entity_id: script.set_default_audio_levels
+                styles:
+                  name:
+                    color: grey
+                  button:
+                    padding: 12px
+                    width: 76px
+                    height: 76px
+                    flex-basis: 1
+                    flex-shrink: 0
+                    display: flex
+                    background-color: var(--popupBG)
+                    border-radius: 24px
+                    color: var(--white)
+                  icon:
+                    '--mdc-icon-size': 26px
+                    color: grey
+                state_styles:
+                  'on':
+                    icon:
+                      color: var(--primary-text-color)
+                    name:
+                      color: var(--primary-text-color)
+          - type: entities
+            entities:
+              - input_select.media_output_select
+          - type: custom:mini-media-player
+            entity: media_player.denon_avr_x1300w
+            icon: mdi:audio-video
+            group: true
+            hide:
+              source: true
+              play_pause: true
+            shortcuts:
+              buttons:
+                - name: Music
+                  type: service
+                  id: media_player.select_source
+                  data:
+                    entity_id: media_player.denon_avr_x1300w
+                    source: CastAudio
+                - name: PC
+                  type: service
+                  id: media_player.select_source
+                  data:
+                    entity_id: media_player.denon_avr_x1300w
+                    source: PC
+                - name: Shield
+                  type: service
+                  id: media_player.select_source
+                  data:
+                    entity_id: media_player.denon_avr_x1300w
+                    source: Shield
+                - name: Switch
+                  type: service
+                  id: media_player.select_source
+                  data:
+                    entity_id: media_player.denon_avr_x1300w
+                    source: Switch
+          - type: custom:mini-media-player
+            entity: media_player.lg_tv
+            artwork: cover
+            icon: mdi:television
+            group: true
+            toggle_power: false
+            hide:
+              info: true
+              volume: true
+              controls: true
+          - type: custom:streamline-card
+            template: media_volume_tile_card
+            variables:
+              entity: media_player.home_audio
+          - type: custom:streamline-card
+            template: media_volume_tile_card
+            variables:
+              entity: media_player.backyard_speaker
+          - type: custom:streamline-card
+            template: media_volume_tile_card
+            variables:
+              entity: media_player.kitchen_speaker
+          - type: custom:streamline-card
+            template: media_volume_tile_card
+            variables:
+              entity: media_player.living_room_audio
+          - type: custom:streamline-card
+            template: media_volume_tile_card
+            variables:
+              entity: media_player.master_bathroom_speaker
+          - type: custom:streamline-card
+            template: media_volume_tile_card
+            variables:
+              entity: media_player.master_bedroom_audio
+  - type: grid
+    cards:
+      - type: custom:navbar-card
+        mobile:
+          show_labels: true
+        desktop:
+          show_labels: true
+          position: left
+          min_width: 768
+        routes:
+          - url: /lovelace/overview
+            label: Home
+            icon: m3o:home
+            icon_selected: m3of:home
+          - url: /lovelace/rooms
+            label: Rooms
+            icon: m3o:chair
+            icon_selected: mdi:sofa
+          - url: /lovelace/media
+            label: Media
+            icon: m3o:music-video
+            icon_selected: m3of:music-video
+          - icon: mdi:dots-horizontal
+            label: More
+            tap_action:
+              action: open-popup
+            popup:
+              - icon: m3of:tools-wrench
+                url: /config/dashboard
+        styles: |
+          .navbar {
+            --navbar-primary-color: var(--md-sys-color-primary);
+          }
+          .navbar-card {
+            background: color-mix(in srgb, var(--md-sys-color-on-primary) 70%, transparent);
+            backdrop-filter: blur(50px);
+            -webkit-backdrop-filter: blur(20px) !important;
+            background-blend-mode: overlay;
+            border-radius: 20px;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 15px;
+            overflow: hidden;
+badges:
+  - type: custom:streamline-card
+    template: back_button_card
+    variables:
+      navigation_path: /lovelace/overview
+cards: []
+background:
+  opacity: 75
+  alignment: center
+  size: cover
+  repeat: no-repeat
+  attachment: fixed
+  image:
+    media_content_id: /local/Monochrome - Portrait.webp

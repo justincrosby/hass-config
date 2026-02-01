@@ -1,0 +1,2366 @@
+title: Overview
+header:
+  card:
+    type: custom:stack-in-card
+    mode: vertical
+    cards:
+      - type: custom:streamline-card
+        template: date_clock_text_card
+        variables:
+          - title: '{{ now().strftime(''%a %b %-d - %I:%M %p'') }}'
+      - type: custom:mushroom-chips-card
+        chips:
+          - type: conditional
+            conditions:
+              - condition: state
+                entity: sensor.active_weather_warnings_count
+                state_not: unknown
+            chip:
+              type: template
+              entity: sensor.active_weather_warnings_count
+              tap_action:
+                action: navigate
+                navigation_path: '#weather-panel'
+              icon: m3of:warning
+              icon_color: orange
+            card_mod:
+              style: >
+                ha-card {
+                  position: relative;
+                }
+
+
+                {% set notifications =
+                states('sensor.active_weather_warnings_count') | int %}
+
+                {% if notifications > 0 %}
+
+                ha-card:after {
+                  content: "{{ notifications }}";
+                  position: absolute;
+                  top: -3px;
+                  right: -3px;
+                  background-color: var(--md-sys-color-on-primary);
+                  color: var(--md-sys-color-primary);
+                  border-radius: 50%;
+                  width: 16px;
+                  height: 16px;
+                  font-size: 10px;
+                  line-height: 16px;
+                  text-align: center;
+                  display: inline-block;
+                  font-weight: bold;
+                } {% endif %}
+          - type: template
+            entity: sensor.active_notification_count
+            icon: m3of:notifications
+            tap_action:
+              action: navigate
+              navigation_path: '#notifications'
+            hold_action:
+              action: none
+            card_mod:
+              style: >
+                ha-card {
+                  position: relative;
+                }
+
+
+                {% set notifications =
+                states('sensor.active_notification_count') | int %}
+
+                {% if notifications > 0 %}
+
+                ha-card:after {
+                  content: "{{ notifications }}";
+                  position: absolute;
+                  top: -3px;
+                  right: -3px;
+                  background-color: var(--md-sys-color-on-primary);
+                  color: var(--md-sys-color-primary);
+                  border-radius: 50%;
+                  width: 16px;
+                  height: 16px;
+                  font-size: 10px;
+                  line-height: 16px;
+                  text-align: center;
+                  display: inline-block;
+                  font-weight: bold;
+                } {% endif %}
+        card_mod:
+          style: |
+            ha-card {
+              position: absolute;
+              top: 20px;
+              right: 5px;
+            }
+  layout: responsive
+  badges_position: bottom
+  badges_wrap: wrap
+type: sections
+max_columns: 4
+path: overview
+sections:
+  - type: grid
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: custom:mushroom-title-card
+            title: |
+              {% set time = now().hour %} {% if time >= 18 %}
+                🌙 Evening, {{ user | title }}!
+              {% elif time >= 12 %}
+                ☀️ Afternoon, {{ user | title }}!
+              {% elif time >= 5 %}
+                🌅 Morning, {{ user | title }}!
+              {% else %}
+                🌌 Welcome, {{ user | title }}!
+              {% endif %}
+          - type: custom:paper-buttons-row
+            styles:
+              justify-content: flex-start
+              flex-wrap: wrap
+              font-size: 0.9em
+              line-height: 1.2em
+              margin: 6px 0 20px 0
+              width: 100%
+            buttons:
+              - layout: name
+                name: Outside is
+                styles:
+                  button:
+                    flex-basis: 1
+                    flex-shrink: 0
+                  name:
+                    color: var(--primary-text-color)
+                tap_action:
+                  action: none
+              - layout: name|icon
+                entity: weather.pirateweather
+                name: >-
+                  {% set temp = state_attr('weather.pirateweather', 'temperature') %}
+                  {% set unit = state_attr('weather.pirateweather', 'temperature_unit') %}
+                  {% set condition = states('weather.pirateweather') | title %}
+                    {{ temp }} {{ unit }}, {{ condition }}
+                icon: >-
+                  {{ states('sensor.weather_condition_icon') }}
+                tap_action:
+                  action: navigate
+                  navigation_path: '#weather-panel'
+                styles:
+                  icon:
+                    color: var(--md-sys-color-primary)
+                  name:
+                    color: var(--md-sys-color-primary)
+                    font-weight: bold
+                  button:
+                    padding: 2px 8px
+                    background-color: var(--md-sys-color-on-primary)
+                    border-radius: 24px
+                    flex-basis: 1
+                    flex-shrink: 0
+                    display: flex
+              - layout: name
+                name: · Wind
+                styles:
+                  button:
+                    flex-basis: 1
+                    flex-shrink: 0
+                  name:
+                    color: var(--primary-text-color)
+                tap_action:
+                  action: none
+              - layout: name
+                entity: weather.pirateweather
+                name: >-
+                  {% set weather = states.weather.pirateweather.attributes %}
+                  {% if weather is defined and
+                  weather.wind_speed is defined and weather.wind_speed_unit is defined %}
+                    {{ weather.wind_speed }} {{ weather.wind_speed_unit }}
+                  {% else %}
+                    N/A
+                  {% endif %}
+                tap_action:
+                  action: navigate
+                  navigation_path: '#weather-panel'
+                styles:
+                  name:
+                    color: var(--md-sys-color-primary)
+                    font-weight: bold
+                  button:
+                    padding: 2px 8px
+                    background-color: var(--md-sys-color-on-primary)
+                    border-radius: 24px
+                    flex-basis: 1
+                    flex-shrink: 0
+                    display: flex
+              - layout: name
+                name: · High
+                styles:
+                  button:
+                    flex-basis: 1
+                    flex-shrink: 0
+                  name:
+                    color: var(--primary-text-color)
+                tap_action:
+                  action: none
+              - layout: name
+                entity: weather.pirateweather
+                name: >-
+                  {% set forecast =
+                  state_attr('sensor.daily_weather_data',
+                  'forecast_data') %} {% if forecast is defined and
+                  forecast.temperature is defined %}
+                    {{ forecast.temperature }} {{ state_attr('weather.pirateweather', 'temperature_unit') }}🔺
+                  {% else %}
+                    N/A {{ state_attr('weather.pirateweather', 'temperature_unit') }}🔺
+                  {% endif %}
+                tap_action:
+                  action: navigate
+                  navigation_path: '#weather-panel'
+                styles:
+                  name:
+                    color: var(--md-sys-color-primary)
+                    font-weight: bold
+                  button:
+                    padding: 2px 8px
+                    background-color: var(--md-sys-color-on-primary)
+                    border-radius: 24px
+                    flex-basis: 1
+                    flex-shrink: 0
+                    display: flex
+              - layout: name
+                name: Low
+                styles:
+                  button:
+                    flex-basis: 1
+                    flex-shrink: 0
+                  name:
+                    color: var(--primary-text-color)
+                tap_action:
+                  action: none
+              - layout: name
+                entity: weather.pirateweather
+                name: >-
+                  {% set forecast =
+                  state_attr('sensor.daily_weather_data',
+                  'forecast_data') %} {% if forecast is defined and
+                  forecast.temperature is defined %}
+                    {{ forecast.templow }} {{ state_attr('weather.pirateweather', 'temperature_unit') }}🔻
+                  {% else %}
+                    N/A {{ state_attr('weather.pirateweather', 'temperature_unit') }}🔻
+                  {% endif %}
+                tap_action:
+                  action: navigate
+                  navigation_path: '#weather-panel'
+                styles:
+                  name:
+                    color: var(--md-sys-color-primary)
+                    font-weight: bold
+                  button:
+                    padding: 2px 8px
+                    background-color: var(--md-sys-color-on-primary)
+                    border-radius: 24px
+                    flex-basis: 1
+                    flex-shrink: 0
+                    display: flex
+      - type: custom:simple-tabs
+        pre-load: true
+        active-background: var(--md-sys-color-on-primary)
+        active-text-color: var(--md-sys-color-primary)
+        text-color: var(--primary-text-color)
+        tabs:
+          - title: Home
+            icon: m3of:home
+            card:
+              type: vertical-stack
+              cards:
+                - type: custom:vertical-stack-in-card
+                  cards:
+                    - type: grid
+                      square: false
+                      columns: 2
+                      cards:
+                        - type: custom:mushroom-template-card
+                          entity: sensor.house_average_temperature
+                          primary: >
+                            {{ states(entity) | round(1) }} {{
+                            state_attr('weather.pirateweather', 'temperature_unit')
+                            }}
+                          secondary: |
+                            Indoor
+                          icon: m3of:thermometer
+                          icon_color: >
+                            {% set temp = states('sensor.house_average_temperature') | float %}
+                            {% if temp < 13 %}
+                              #B4A5B7
+                            {% elif temp < 16 %}          
+                              #DBC9DE
+                            {% elif temp < 19 %}
+                              #ACDCF6
+                            {% elif temp < 22 %}
+                              #D2E5DE
+                            {% elif temp < 24 %}
+                              #FFE7A3
+                            {% elif temp < 27 %}
+                              #F7C48D
+                            {% else %}
+                              #E37575
+                            {% endif %}
+                          tap_action:
+                            action: more-info
+                        - type: custom:mushroom-template-card
+                          entity: sensor.outdoor_temperature
+                          primary: >
+                            {{ states(entity) | round(1) }} {{
+                            state_attr('weather.pirateweather', 'temperature_unit')
+                            }}
+                          secondary: |
+                            Outdoor
+                          icon: '{{ states(''sensor.weather_condition_icon'') }}'
+                          icon_color: >
+                            {% set temp = state_attr('weather.pirateweather', 'temperature') | float %}
+                            {% if temp < 13 %}
+                              #988C9B
+                            {% elif temp < 16 %}          
+                              #BAABBD
+                            {% elif temp < 19 %}
+                              #92BB D1
+                            {% elif temp < 22 %}
+                              #B2C4BD
+                            {% elif temp < 24 %}
+                              #D8C48A
+                            {% elif temp < 27 %}
+                              #D2A676
+                            {% else %}
+                              #C26161
+                            {% endif %}
+                          tap_action:
+                            action: more-info
+                    - type: custom:config-template-card
+                      entities:
+                        - sensor.house_average_temperature
+                        - sensor.outdoor_temperature
+                      variables:
+                        - states['sensor.house_average_temperature'].state
+                        - states['sensor.outdoor_temperature'].state
+                      card:
+                        type: custom:mini-graph-card
+                        entities:
+                          - entity: sensor.house_average_temperature
+                            name: Indoor
+                            color: |-
+                              ${vars[0] < 13 ? '#B4A5B7' :
+                                (vars[0] < 16 ? '#DBC9DE' :
+                                (vars[0] < 19 ? '#ACDCF6' :
+                                (vars[0] < 22 ? '#D2E5DE' :
+                                (vars[0] < 24 ? '#FFE7A3' :
+                                (vars[0] < 27 ? '#F7C48D' : '#E37575')))))}
+                          - entity: sensor.outdoor_temperature
+                            name: Outdoor
+                            color: |-
+                              ${vars[1] < 13 ? '#988C9B' :
+                                (vars[1] < 16 ? '#BAABBD' :        
+                                (vars[1] < 19 ? '#92BBD1' :
+                                (vars[1] < 22 ? '#B2C4BD' :
+                                (vars[1] < 24 ? '#D8C48A' :
+                                (vars[1] < 27 ? '#D2A676' :'#C26161')))))}
+                            y_axis: secondary
+                        hours_to_show: 24
+                        line_width: 3
+                        font_size: 50
+                        animate: true
+                        show:
+                          name: false
+                          icon: false
+                          state: false
+                          legend: false
+                          fill: fade
+                - type: custom:vertical-stack-in-card 
+                  cards:
+                    - type: grid
+                      square: false
+                      columns: 2
+                      cards:
+                        - type: custom:mushroom-entity-card
+                          entity: sensor.bedroom_temperature_humidity_sensor_humidity
+                          primary_info: state
+                          secondary_info: name
+                          name: Bedroom Humidity
+                          icon_color: "#06bfeb"
+                          icon: mdi:bed
+                          card_mod:
+                            style: |
+                              ha-card { box-shadow: none; border: none; }
+                        - type: custom:mushroom-entity-card
+                          entity: sensor.living_room_temperature_humidity_sensor_humidity
+                          primary_info: state
+                          secondary_info: name
+                          name: Living Room Humidity
+                          icon_color: "#dc76f6"
+                          icon: mdi:sofa
+                          card_mod:
+                            style: |
+                              ha-card { box-shadow: none; border: none; }
+                    - type: custom:mini-graph-card
+                      entities:
+                        - entity: sensor.bedroom_temperature_humidity_sensor_humidity
+                          name: Bedroom Humidity
+                          color: "#06bfeb"
+                        - entity: sensor.living_room_temperature_humidity_sensor_humidity
+                          name: Living Room Humidity
+                          color: "#dc76f6"
+                          y_axis: secondary
+                      hours_to_show: 24
+                      line_width: 3
+                      font_size: 50
+                      animate: true
+                      show: 
+                        name: false
+                        icon: false
+                        state: false
+                        legend: false
+                        fill: fade
+                    # - type: horizontal-stack
+                    #   cards:
+                    #     - type: custom:mushroom-climate-card
+                    #       entity: climate.heat_pump
+                    #       primary_info: none
+                    #       secondary_info: none
+                    #       icon_type: none
+                    #       show_temperature_control: true
+                    #     - type: custom:mushroom-climate-card
+                    #       entity: climate.heat_pump
+                    #       primary_info: none
+                    #       secondary_info: none
+                    #       icon_type: none
+                    #       hvac_modes:
+                    #         - cool
+                    #         - heat
+                    #         - fan_only
+                    #         - 'off'
+                    # - type: custom:simple-swipe-card
+                    #   auto_hide_pagination: 0
+                    #   auto_height: true
+                    #   cards:
+                    #     - type: custom:vertical-stack-in-card
+                    #       cards:
+                    #         - type: custom:button-card
+                    #           entity: sensor.disabled_room_occupancy_count
+                    #           name: Room Occupancy
+                    #           show_state: false
+                    #           show_icon: false
+                    #           show_label: true
+                    #           label: |-
+                    #             [[[ 
+                    #               const disabled = parseInt(entity.state);
+                    #               if (disabled === 0) return 'All rooms active';
+                    #               if (disabled === 1) return '1 room disabled';
+                    #               return `${disabled} rooms disabled`;
+                    #             ]]]
+                    #           styles:
+                    #             card:
+                    #               - background: >-
+                    #                   var(--ha-card-background,
+                    #                   var(--card-background-color, white))
+                    #               - border-radius: var(--ha-card-border-radius, 12px)
+                    #               - padding: 12px
+                    #             name:
+                    #               - text-align: center
+                    #               - font-size: 16px
+                    #               - font-weight: bold
+                    #             label:
+                    #               - text-align: center
+                    #               - font-size: 14px
+                    #               - color: var(--secondary-text-color)
+                    #           tap_action:
+                    #             action: none
+                    #         - type: custom:mushroom-chips-card
+                    #           alignment: center
+                    #           chips:
+                    #             - type: template
+                    #               entity: input_boolean.baby_room_occupancy
+                    #               icon: m3of:stroller
+                    #               icon_color: >-
+                    #                 {% if is_state(entity, 'on') %}#f385bc{%
+                    #                 else %}var(--primary-text-color){% endif
+                    #                 %}
+                    #               tap_action:
+                    #                 action: toggle
+                    #               content: >-
+                    #                 {% if is_state(entity, 'on') %}Baby{%
+                    #                 endif %}
+                    #             - type: template
+                    #               entity: input_boolean.master_bedroom_occupancy
+                    #               icon: m3of:bed
+                    #               icon_color: >-
+                    #                 {% if is_state(entity, 'on') %}#89CFF0{%
+                    #                 else %}var(--primary-text-color){% endif
+                    #                 %}
+                    #               tap_action:
+                    #                 action: toggle
+                    #               content: >-
+                    #                 {% if is_state(entity, 'on') %}Master{%
+                    #                 endif %}
+                    #             - type: template
+                    #               entity: >-
+                    #                 input_boolean.single_guest_room_occupancy
+                    #               icon: m3of:person-3
+                    #               icon_color: >-
+                    #                 {% if is_state(entity, 'on') %}#FFA500{%
+                    #                 else %}var(--primary-text-color){% endif
+                    #                 %}
+                    #               tap_action:
+                    #                 action: toggle
+                    #               content: >-
+                    #                 {% if is_state(entity, 'on') %}Single{%
+                    #                 endif %}
+                    #             - type: template
+                    #               entity: >-
+                    #                 input_boolean.multiple_guest_room_occupancy
+                    #               icon: m3of:groups-2
+                    #               icon_color: >-
+                    #                 {% if is_state(entity, 'on') %}#A52A2A{%
+                    #                 else %}var(--primary-text-color){% endif
+                    #                 %}
+                    #               tap_action:
+                    #                 action: toggle
+                    #               content: >-
+                    #                 {% if is_state(entity, 'on')
+                    #                 %}Multiple{% endif %}
+                    #             - type: template
+                    #               entity: input_boolean.play_room_occupancy
+                    #               icon: mdi:gamepad-variant
+                    #               icon_color: >-
+                    #                 {% if is_state(entity, 'on') %}#9F2B68{%
+                    #                 else %}var(--primary-text-color){% endif
+                    #                 %}
+                    #               tap_action:
+                    #                 action: toggle
+                    #               content: >-
+                    #                 {% if is_state(entity, 'on') %}Play{%
+                    #                 endif %}
+                    #         - type: custom:streamline-card
+                    #           template: spacer_card
+                    #           variables:
+                    #             padding: 20px
+                    #     - type: custom:vertical-stack-in-card
+                    #       cards:
+                    #         - type: custom:button-card
+                    #           entity: sensor.disabled_presence_automation_count
+                    #           name: Presence Status
+                    #           show_state: false
+                    #           show_icon: false
+                    #           show_label: true
+                    #           label: |-
+                    #             [[[ 
+                    #               const disabled = parseInt(entity.state);
+                    #               if (disabled === 0) return 'All rooms active';
+                    #               if (disabled === 1) return '1 room disabled';
+                    #               return `${disabled} rooms disabled`;
+                    #             ]]]
+                    #           styles:
+                    #             card:
+                    #               - background: >-
+                    #                   var(--ha-card-background,
+                    #                   var(--card-background-color, white))
+                    #               - border-radius: var(--ha-card-border-radius, 12px)
+                    #               - padding: 12px
+                    #             name:
+                    #               - text-align: center
+                    #               - font-size: 16px
+                    #               - font-weight: bold
+                    #             label:
+                    #               - text-align: center
+                    #               - font-size: 14px
+                    #               - color: var(--secondary-text-color)
+                    #           tap_action:
+                    #             action: none
+                    #           features_position: bottom
+                    #         - type: custom:mushroom-chips-card
+                    #           chips:
+                    #             - type: template
+                    #               entity: binary_sensor.presence_active_la
+                    #               icon: mdi:sofa
+                    #               icon_color: |-
+                    #                 {% if is_state(entity, 'on') %} 
+                    #                 {% else %}
+                    #                   var(--primary-text-color)
+                    #                 {% endif %}
+                    #               tap_action:
+                    #                 action: perform-action
+                    #                 perform_action: script.toggle_presence_sensor_la
+                    #                 target: {}
+                    #               content: |-
+                    #                 {% if is_state(entity, 'on') %} 
+                    #                   Living
+                    #                 {% else %}
+                    #                 {% endif %}
+                    #             - type: template
+                    #               entity: automation.room_presence_master_bedroom
+                    #               icon: m3of:bed
+                    #               icon_color: |-
+                    #                 {% if is_state(entity, 'on') %} 
+                    #                 {% else %}
+                    #                   var(--primary-text-color)
+                    #                 {% endif %}
+                    #               tap_action:
+                    #                 action: toggle
+                    #               content: |-
+                    #                 {% if is_state(entity, 'on') %} 
+                    #                   Master
+                    #                 {% else %}
+                    #                 {% endif %}
+                    #             - type: template
+                    #               entity: automation.room_presence_baby_room
+                    #               icon: m3of:stroller
+                    #               icon_color: |-
+                    #                 {% if is_state(entity, 'on') %} 
+                    #                 {% else %}
+                    #                   var(--primary-text-color)
+                    #                 {% endif %}
+                    #               tap_action:
+                    #                 action: toggle
+                    #               content: |-
+                    #                 {% if is_state(entity, 'on') %} 
+                    #                   Baby
+                    #                 {% else %}
+                    #                 {% endif %}      
+                    #             - type: template
+                    #               entity: >-
+                    #                 automation.room_presence_single_guest_room
+                    #               icon: m3of:person-3
+                    #               icon_color: |-
+                    #                 {% if is_state(entity, 'on') %} 
+                    #                 {% else %}
+                    #                   var(--primary-text-color)
+                    #                 {% endif %}
+                    #               tap_action:
+                    #                 action: toggle
+                    #               content: |-
+                    #                 {% if is_state(entity, 'on') %} 
+                    #                   Single
+                    #                 {% else %}
+                    #                 {% endif %}
+                    #             - type: template
+                    #               entity: >-
+                    #                 automation.room_presence_multiple_guest_room
+                    #               icon: m3of:groups-2
+                    #               icon_color: |-
+                    #                 {% if is_state(entity, 'on') %} 
+                    #                 {% else %}
+                    #                   var(--primary-text-color)
+                    #                 {% endif %}
+                    #               tap_action:
+                    #                 action: toggle
+                    #               content: |-
+                    #                 {% if is_state(entity, 'on') %} 
+                    #                   Multiple
+                    #                 {% else %}
+                    #                 {% endif %}
+                    #             - type: template
+                    #               entity: automation.room_presence_office
+                    #               icon: m3of:computer
+                    #               icon_color: |-
+                    #                 {% if is_state(entity, 'on') %} 
+                    #                 {% else %}
+                    #                   var(--primary-text-color)
+                    #                 {% endif %}
+                    #               tap_action:
+                    #                 action: toggle
+                    #               content: |-
+                    #                 {% if is_state(entity, 'on') %} 
+                    #                   Office
+                    #                 {% else %}
+                    #                 {% endif %}
+                    #           alignment: center
+                    #         - type: custom:streamline-card
+                    #           template: spacer_card
+                    #           variables:
+                    #             padding: 20px
+                    #     - type: custom:vertical-stack-in-card
+                    #       cards:
+                    #         - type: custom:button-card
+                    #           entity: sensor.disabled_driveway_camera_count
+                    #           name: Driveway Security
+                    #           show_state: false
+                    #           show_icon: false
+                    #           show_label: true
+                    #           label: |-
+                    #             [[[ 
+                    #               const disabled = parseInt(entity.state);
+                    #               if (disabled === 0) return 'All cameras active';
+                    #               if (disabled === 1) return '1 camera disabled';
+                    #               return `${disabled} cameras disabled`;
+                    #             ]]]
+                    #           styles:
+                    #             card:
+                    #               - background: >-
+                    #                   var(--ha-card-background,
+                    #                   var(--card-background-color, white))
+                    #               - border-radius: var(--ha-card-border-radius, 12px)
+                    #               - padding: 12px
+                    #             name:
+                    #               - text-align: center
+                    #               - font-size: 16px
+                    #               - font-weight: bold
+                    #             label:
+                    #               - text-align: center
+                    #               - font-size: 14px
+                    #               - color: var(--secondary-text-color)
+                    #           tap_action:
+                    #             action: none
+                    #         - type: custom:mushroom-chips-card
+                    #           chips:
+                    #             - type: template
+                    #               entity: >-
+                    #                 automation.driveway_camera_person_notification
+                    #               icon: mdi:account
+                    #               icon_color: |-
+                    #                 {% if is_state(entity, 'on') %} 
+                    #                 {% else %}
+                    #                   var(--primary-text-color)
+                    #                 {% endif %}
+                    #               tap_action:
+                    #                 action: toggle
+                    #               content: |-
+                    #                 {% if is_state(entity, 'on') %} 
+                    #                   Person
+                    #                 {% else %}
+                    #                 {% endif %}
+                    #             - type: template
+                    #               entity: >-
+                    #                 automation.driveway_camera_vehicle_notification
+                    #               icon: mdi:car
+                    #               icon_color: |-
+                    #                 {% if is_state(entity, 'on') %} 
+                    #                 {% else %}
+                    #                   var(--primary-text-color)
+                    #                 {% endif %}
+                    #               tap_action:
+                    #                 action: toggle
+                    #               content: |-
+                    #                 {% if is_state(entity, 'on') %} 
+                    #                   Vehicle
+                    #                 {% else %}
+                    #                 {% endif %}
+                    #           alignment: center
+                    #         - type: custom:streamline-card
+                    #           template: spacer_card
+                    #           variables:
+                    #             padding: 20px
+                    #   card_mod:
+                    #     style: |
+                    #       :host {
+                    #         --simple-swipe-card-pagination-dot-active-color: var(--md-sys-color-primary);
+                    #         --simple-swipe-card-pagination-dot-inactive-color: var(--md-sys-color-on-primary);
+                    #         --simple-swipe-card-pagination-dot-size: 7px;
+                    #       }
+          - title: Events
+            icon: mdi:calendar
+            card:
+              type: vertical-stack
+              cards:
+                - entities:
+                    - entity: !secret justin_calendar
+                      accent_color: '#ff6a6a'
+                    # - entity: calendar.b
+                    #   accent_color: '#71c8fe'
+                    # - entity: calendar.house_maintenance
+                    #   accent_color: '#d3f37f'
+                    - entity: calendar.holidays_in_canada
+                      accent_color: '#f9da4e'
+                  days_to_show: 10
+                  compact_events_to_show: 10
+                  background_color: transparent
+                  vertical_line_width: 5px
+                  event_spacing: 6px
+                  first_day_of_week: monday
+                  show_week_numbers: iso
+                  week_number_color: var(--md-sys-color-on-primary)
+                  week_number_background_color: var(--md-sys-color-primary)
+                  month_separator_width: 1px
+                  month_separator_color: var(--md-sys-color-primary)
+                  today_indicator: pulse
+                  today_indicator_position: 10% 50%
+                  today_indicator_color: var(--md-sys-color-primary)
+                  weekday_font_size: 12px
+                  month_font_size: 10px
+                  show_countdown: true
+                  show_progress_bar: true
+                  progress_bar_color: var(--md-sys-color-primary)
+                  weather:
+                    position: event
+                    date:
+                      show_conditions: true
+                      show_high_temp: true
+                      show_low_temp: false
+                      icon_size: 14px
+                      font_size: 12px
+                      color: var(--primary-text-color)
+                    event:
+                      show_conditions: true
+                      show_temp: true
+                      icon_size: 14px
+                      font_size: 12px
+                      color: var(--primary-text-color)
+                    entity: weather.forecast_home
+                  tap_action:
+                    action: expand
+                  type: custom:calendar-card-pro
+          - title: Active
+            icon: m3of:play-circle
+            conditions:
+              - template: >-
+                  {{ is_state('light.all_lights', 'on') }}
+            card:
+              type: vertical-stack
+              cards:
+                - type: custom:streamline-card
+                  template: entity_count_card
+                  variables:
+                    - entity: light.all_lights
+                    - title: Lights
+                    - icon: mdi:lightbulb-on
+                    - color: '#FFBF00'
+                - type: custom:auto-entities
+                  card:
+                    square: false
+                    type: grid
+                    columns: 2
+                  card_param: cards
+                  filter:
+                    include:
+                      - group: light.all_lights
+                        state: 'on'
+                        options:
+                          type: custom:streamline-card
+                          template: material_light_slider_card
+                          variables:
+                            entity: this.entity_id
+                    exclude: []
+                  show_empty: false
+                  sort:
+                    method: entity_id
+                - type: custom:streamline-card
+                  template: entity_count_card
+                  variables:
+                    - entity: group.media_players
+                    - title: Media Players
+                    - icon: mdi:volume-high
+                    - color: '#FFFFFF'
+                - type: custom:auto-entities
+                  card:
+                    square: false
+                    type: grid
+                    columns: 1
+                  card_param: cards
+                  filter:
+                    include:
+                      - group: group.media_players
+                        state: 'playing'
+                        options:
+                          type: custom:streamline-card
+                          template: media_volume_tile_card
+                          variables:
+                            entity: this.entity_id
+                    exclude: []
+                  show_empty: false
+                  sort:
+                    method: entity_id
+                # - type: custom:streamline-card
+                #   template: entity_count_card
+                #   variables:
+                #     - entity: group.all_light_switches
+                #     - title: Switches
+                #     - icon: m3of:switch
+                #     - color: var(--primary-text-color)
+                # - type: custom:auto-entities
+                #   card:
+                #     square: false
+                #     type: grid
+                #     columns: 2
+                #   card_param: cards
+                #   filter:
+                #     include:
+                #       - group: group.all_light_switches
+                #         state: 'on'
+                #         options:
+                #           type: custom:streamline-card
+                #           template: material_light_button_card
+                #           variables:
+                #             entity: this.entity_id
+                #     exclude: []
+                #   show_empty: false
+                #   sort:
+                #     method: entity_id
+                # - type: custom:streamline-card
+                #   template: entity_count_card
+                #   variables:
+                #     - entity: group.all_doors
+                #     - title: Doors
+                #     - icon: m3of:door-open
+                #     - color: '#bc000a'
+                # - type: custom:auto-entities
+                #   card:
+                #     square: false
+                #     type: grid
+                #     columns: 2
+                #   card_param: cards
+                #   filter:
+                #     include:
+                #       - group: group.all_doors
+                #         state: 'on'
+                #         options:
+                #           type: custom:streamline-card
+                #           template: material_custom_icon_with_status_button_card
+                #           variables:
+                #             entity: this.entity_id
+                #             icon: m3of:door-open
+                #     exclude: []
+                #   show_empty: false
+                #   sort:
+                #     method: friendly_name
+                # - type: custom:streamline-card
+                #   template: entity_count_card
+                #   variables:
+                #     - entity: group.all_windows
+                #     - title: Windows
+                #     - icon: m3of:window-open
+                #     - color: '#ffaa00'
+                # - type: custom:auto-entities
+                #   card:
+                #     square: false
+                #     type: grid
+                #     columns: 2
+                #   card_param: cards
+                #   filter:
+                #     include:
+                #       - group: group.all_windows
+                #         state: 'on'
+                #         options:
+                #           type: custom:streamline-card
+                #           template: material_custom_icon_with_status_button_card
+                #           variables:
+                #             entity: this.entity_id
+                #             icon: m3of:window-open
+                #     exclude: []
+                #   show_empty: false
+                #   sort:
+                #     method: friendly_name
+                # - type: custom:streamline-card
+                #   template: entity_count_card
+                #   variables:
+                #     - entity: group.all_fans
+                #     - title: Fans
+                #     - icon: mdi:fan
+                #     - color: '#ADD8E6'
+                # - type: custom:auto-entities
+                #   card:
+                #     square: false
+                #     type: grid
+                #     columns: 2
+                #   card_param: cards
+                #   filter:
+                #     include:
+                #       - group: group.all_fans
+                #         state: 'on'
+                #         options:
+                #           type: custom:streamline-card
+                #           template: material_custom_icon_button_card
+                #           variables:
+                #             entity: this.entity_id
+                #             icon: mdi:fan
+                #     exclude: []
+                #   show_empty: false
+                #   sort:
+                #     method: friendly_name
+                # - type: custom:streamline-card
+                #   template: entity_count_card
+                #   variables:
+                #     entity: group.all_curtains
+                #     title: Curtains
+                #     icon: m3of:curtains
+                #     color: '#702963'
+                # - type: custom:auto-entities
+                #   card:
+                #     square: false
+                #     type: grid
+                #     columns: 2
+                #   card_param: cards
+                #   filter:
+                #     include:
+                #       - group: group.all_curtains
+                #         state: open
+                #         options:
+                #           type: custom:streamline-card
+                #           template: curtain_card
+                #           variables:
+                #             entity: this.entity_id
+                #   exclude: []
+                #   show_empty: false
+                #   sort:
+                #     method: friendly_name
+        hide_inactive_tab_titles: false
+  - type: grid
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: custom:bubble-card
+            card_type: pop-up
+            hash: '#notifications'
+            name: Notifications
+            icon: m3of:notifications
+            styles: |-
+              #root {
+                      height: unset !important;
+                      max-height: 100% !important;
+                      transition: transform var(--md-sys-motion-expressive-spatial-default) !important;
+                    }
+                    .bubble-pop-up-container {
+                      padding-bottom: 64px !important;
+                      
+                    }
+            bg_color: rgba(255, 255, 0, 0.5)
+            button_type: name
+            sub_button:
+              main: []
+              bottom: []
+          - square: false
+            type: grid
+            cards:
+              - type: conditional
+                conditions:
+                  - condition: or
+                    conditions:
+                      - condition: state
+                        entity: input_boolean.rubbish
+                        state: 'on'
+                      - condition: state
+                        entity: input_boolean.recycle
+                        state: 'on'
+                      - condition: state
+                        entity: switch.driveway_water_tap
+                        state: 'on'
+                card:
+                  type: vertical-stack
+                  cards:
+                    - type: custom:streamline-card
+                      template: title_navigation_card
+                      variables:
+                        title: Driveway
+                        navigation_path: /lovelace/camera
+                    - type: custom:streamline-card
+                      template: camera_rtsp_with_chips_card
+                      variables:
+                        camera_url: >-
+                          ffmpeg:rtsp://{user | title:password}@192.168.1.150/h265Preview_01_main#video=copy#audio=opus
+                        entity_id_light_one: switch.light_switch_drw
+                        light_one_icon: m3of:lightbulb
+                        entity_id_light_two: switch.porch_light_drw
+                        light_two_icon: m3of:lightbulb
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: group.doors_grg
+                    state: 'on'
+                card:
+                  type: vertical-stack
+                  cards:
+                    - type: horizontal-stack
+                      cards:
+                        - type: custom:streamline-card
+                          template: title_navigation_card
+                          variables:
+                            title: Garage
+                            navigation_path: /lovelace/camera
+                        - type: custom:mushroom-chips-card
+                          chips:
+                            - type: template
+                              entity: switch.fingerbot_grg
+                              icon: >
+                                {% if
+                                is_state('binary_sensor.door_sensor_grg_contact',
+                                'on') %}
+                                  mdi:garage-open-variant
+                                {% else %}
+                                  mdi:garage-variant
+                                {% endif %}
+                              icon_color: var(--primary-text-color)
+                              content: >
+                                {% if
+                                is_state('binary_sensor.door_sensor_grg_contact',
+                                'on') %}
+                                  Open
+                                {% else %}
+                                  Closed
+                                {% endif %}
+                              tap_action:
+                                action: toggle
+                              card_mod:
+                                style: |
+                                  ha-card {
+                                    --text-color: {{ 'var(--primary-text-color)' if is_state('binary_sensor.door_sensor_grg_contact', 'on') else 'none' }};
+                                    --color: {{ 'var(--primary-text-color)' if is_state('binary_sensor.door_sensor_grg_contact', 'on') else 'none' }};
+                                    --chip-background: {{ '#bc000a' if is_state('binary_sensor.door_sensor_grg_contact', 'on') else 'none' }};    
+                                  }
+                          alignment: end
+                          card_mod:
+                            style: |
+                              ha-card {
+                                margin-top: 1.7em
+                              }
+                    - type: custom:streamline-card
+                      template: camera_rtsp_with_chips_card
+                      variables:
+                        camera_url: >-
+                          ffmpeg:rtsp://{user | title:password}@192.168.1.248/h264Preview_01_main#video=copy#audio=opus
+                        entity_id_light_one: switch.light_switch_grg
+                        light_one_icon: mdi:garage-variant
+                        entity_id_light_two: switch.rear_light_switch_grg
+                        light_two_icon: mdi:outdoor-lamp
+            columns: 1
+          - type: conditional
+            conditions:
+              - condition: or
+                conditions:
+                  - condition: state
+                    entity: input_boolean.wash_cuddly
+                    state: 'on'
+                  - condition: state
+                    entity: input_boolean.wash_duvet
+                    state: 'on'
+                  - condition: numeric_state
+                    entity: sensor.average_backyard_soil_humidity
+                    below: 40
+                  - condition: state
+                    entity: sensor.house_maintenance_chip_card
+                    state: 'true'
+                  - condition: state
+                    entity: sensor.laundry_machine_state
+                    state: Delay Run
+                  - condition: state
+                    entity: sensor.laundry_machine_state
+                    state: Run
+                  - condition: numeric_state
+                    entity: sensor.dryer_switch_lr_power
+                    above: 10
+            card:
+              type: horizontal-stack
+              cards:
+                - type: custom:streamline-card
+                  template: title_card
+                  variables:
+                    title: Chores
+                - type: custom:mushroom-chips-card
+                  chips:
+                    - type: conditional
+                      conditions:
+                        - condition: numeric_state
+                          entity: sensor.average_backyard_soil_humidity
+                          below: 40
+                      chip:
+                        type: template
+                        entity: sensor.average_backyard_soil_humidity
+                        icon: mdi:water-percent
+                        content: >-
+                          {{ states('sensor.average_backyard_soil_humidity')
+                          }}% - 
+
+                          {% set moisture =
+                          states('sensor.average_backyard_soil_humidity')
+                                          | float(0) %}
+
+                                          {% if moisture < 15 %}
+                                            very dry
+                                          {% elif moisture < 25 %}
+                                            dry
+                                          {% elif moisture < 45 %}
+                                            moist
+                                          {% else %}
+                                            wet
+                                          {% endif %}
+                        icon_color: >-
+                          {% set moisture =
+                          states('sensor.average_backyard_soil_humidity')
+                                          | float(0) %} {% if moisture < 15 %}
+                                            #A9A9A9
+                                          {% elif moisture < 25 %}
+                                            #ffd34f
+                                          {% elif moisture < 45 %}
+                                            #9fe7e8
+                                          {% else %}
+                                            #36a9e2
+                                          {% endif %}
+                        tap_action:
+                          action: more-info
+                    - type: conditional
+                      conditions:
+                        - condition: state
+                          entity: sensor.house_maintenance_chip_card
+                          state: 'true'
+                      chip:
+                        type: template
+                        entity: sensor.house_maintenance_chip_card
+                        icon: |
+                          {% if is_state('input_boolean.rubbish', 'on') %}
+                            mdi:trash-can
+                          {% elif is_state('input_boolean.recycle', 'on') %}
+                            mdi:recycle
+                          {% else %} {% endif %}
+                        icon_color: |
+                          {% if is_state('input_boolean.rubbish', 'on') %}
+                            #C41E3A
+                          {% elif is_state('input_boolean.recycle', 'on') %}
+                            #50C878
+                          {% else %} {% endif %}
+                        content: |
+                          {% if is_state('input_boolean.rubbish', 'on') %}
+                            Rubbish Day
+                          {% elif is_state('input_boolean.recycle', 'on') %}
+                            Recycle Day
+                          {% else %} {% endif %}      
+                        tap_action:
+                          action: more-info
+                    - type: conditional
+                      conditions:
+                        - condition: state
+                          entity: sensor.laundry_machine_state
+                          state: Delay Run
+                      chip:
+                        type: entity
+                        entity: sensor.laundry_delay_time_remaining
+                        icon_color: blue
+                        icon: m3of:timer-arrow-down
+                        tap_action:
+                          action: more-info
+                    - type: conditional
+                      conditions:
+                        - condition: state
+                          entity: sensor.laundry_machine_state
+                          state: Run
+                      chip:
+                        type: entity
+                        entity: sensor.laundry_time_remaining
+                        icon: m3of:laundry
+                        icon_color: blue
+                        tap_action:
+                          action: more-info
+                    - type: conditional
+                      conditions:
+                        - condition: numeric_state
+                          entity: sensor.dryer_switch_lr_power
+                          above: 10
+                      chip:
+                        type: template
+                        entity: sensor.dryer_switch_lr_power
+                        tap_action:
+                          action: more-info
+                        icon: mdi:tumble-dryer
+                        icon_color: '#880808'
+                        content: Dryer Running
+                  alignment: end
+                  card_mod:
+                    style: |
+                      ha-card {
+                        margin-top: 1.6em
+                      }
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: timer.wash_cuddly
+                    state: idle
+                card:
+                  type: custom:timer-bar-card
+                  entity: timer.wash_cuddly
+                  invert: true
+                  bar_direction: ltr
+                  bar_width: 60%
+                  mushroom:
+                    layout: vertical
+                    color: '#f385bc'
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: timer.wash_duvet
+                    state: idle
+                card:
+                  type: custom:timer-bar-card
+                  entity: timer.wash_duvet
+                  invert: true
+                  bar_direction: ltr
+                  bar_width: 60%
+                  mushroom:
+                    layout: vertical
+                    color: '#AFE1AF'
+          - type: conditional
+            conditions:
+              - condition: or
+                conditions:
+                  - condition: state
+                    entity: binary_sensor.show_wash_cuddly_timer
+                    state: 'on'
+                  - condition: state
+                    entity: switch.towel_switches
+                    state: 'on'
+                  - condition: state
+                    entity: timer.exhaust_fans
+                    state: active
+                  - condition: state
+                    entity: timer.rice_cooker
+                    state: active
+                  - condition: state
+                    entity: timer.blender
+                    state: active
+                  - condition: state
+                    entity: timer.driveway_sprinkler_timer
+                    state: active
+                  - condition: state
+                    entity: timer.backyard_sprinkler_timer
+                    state: active
+                  - condition: state
+                    entity: binary_sensor.timer_wash_duvet_12h
+                    state: 'on'
+            card:
+              type: custom:streamline-card
+              template: title_card
+              variables:
+                title: Timer
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: binary_sensor.show_wash_cuddly_timer
+                    state: 'on'
+                card:
+                  type: custom:timer-bar-card
+                  entity: timer.wash_cuddly
+                  invert: true
+                  bar_direction: ltr
+                  bar_width: 60%
+                  mushroom:
+                    layout: vertical
+                    color: '#f385bc'
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: binary_sensor.show_wash_duvet_timer
+                    state: 'on'
+                card:
+                  type: custom:timer-bar-card
+                  entity: timer.wash_duvet
+                  invert: true
+                  bar_direction: ltr
+                  bar_width: 60%
+                  mushroom:
+                    layout: vertical
+                    color: '#AFE1AF'
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: timer.heated_towel_rails
+                    state: active
+                card:
+                  type: custom:timer-bar-card
+                  entity: timer.heated_towel_rails
+                  invert: true
+                  bar_direction: ltr
+                  bar_width: 60%
+                  mushroom:
+                    layout: vertical
+                    color: orange
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: timer.exhaust_fans
+                    state: active
+                card:
+                  type: custom:timer-bar-card
+                  entity: timer.exhaust_fans
+                  invert: true
+                  bar_direction: ltr
+                  bar_width: 60%
+                  mushroom:
+                    layout: vertical
+                    color: '#b5e0f7'
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: timer.rice_cooker
+                    state: active
+                card:
+                  type: custom:timer-bar-card
+                  entity: timer.rice_cooker
+                  invert: true
+                  bar_direction: ltr
+                  bar_width: 60%
+                  mushroom:
+                    layout: vertical
+                    color: '#D70040'
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: timer.blender
+                    state: active
+                card:
+                  type: custom:timer-bar-card
+                  entity: timer.blender
+                  invert: true
+                  bar_direction: ltr
+                  bar_width: 60%
+                  mushroom:
+                    layout: vertical
+                    color: '#A020F0'
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: timer.driveway_sprinkler_timer
+                    state: active
+                card:
+                  type: custom:timer-bar-card
+                  entity: timer.driveway_sprinkler_timer
+                  invert: true
+                  bar_direction: ltr
+                  bar_width: 60%
+                  mushroom:
+                    layout: vertical
+                    color: '#7393B3'
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: timer.backyard_sprinkler_timer
+                    state: active
+                card:
+                  type: custom:timer-bar-card
+                  entity: timer.backyard_sprinkler_timer
+                  invert: true
+                  bar_direction: ltr
+                  bar_width: 60%
+                  mushroom:
+                    layout: vertical
+                    color: '#899499'
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: timer.dyson_charger
+                    state: active
+                card:
+                  type: custom:timer-bar-card
+                  entity: timer.dyson_charger
+                  invert: true
+                  bar_direction: ltr
+                  bar_width: 60%
+                  mushroom:
+                    layout: vertical
+                    color: '#5D3FD3'
+          - type: conditional
+            conditions:
+              - condition: numeric_state
+                entity: sensor.low_battery_count
+                above: 0
+            card:
+              type: vertical-stack
+              cards:
+                - type: custom:streamline-card
+                  template: title_card
+                  variables:
+                    title: Devices
+                - type: custom:auto-entities
+                  card:
+                    type: grid
+                    square: false
+                    columns: 1
+                  card_param: cards
+                  filter:
+                    include:
+                      - options:
+                          type: custom:mushroom-template-card
+                          icon: |
+                            {% set v = states(entity) | default(0) | int %}
+                            {% if v < 10 %}
+                              mdi:battery-alert-variant-outline
+                            {% elif v < 25 %}
+                              mdi:battery-10
+                            {% elif v < 40 %}
+                              mdi:battery-30
+                            {% elif v < 60 %}
+                              mdi:battery-50
+                            {% endif %}
+                          primary: |
+                            {{ states(entity) }}%
+                          secondary: |
+                            {{ state_attr(entity, 'friendly_name') }} -
+                                  updated: {{ relative_time(states[entity].last_updated) }} ago
+                          icon_color: |
+                            {% set v = states(entity) | default(0) | int %}
+                            {% if v < 25 %}
+                              red
+                            {% elif v < 60 %}
+                              yellow
+                            {% endif %}
+                          card_mod:
+                            style:
+                              mushroom-shape-icon$: |
+                                .shape {
+                                  --shape-color: transparent !important;
+                                }
+                        entity_id: '*battery*'
+                        state: < 60
+                    exclude:
+                      - options: {}
+                        entity_id: '*temperature*'
+                      - options: {}
+                        entity_id: '*low*'
+                      - options: {}
+                        name: '*temperature*'
+                      - options: {}
+                        state: unavailable
+                      - options: {}
+                        state: unknown
+                  show_empty: false
+                  sort:
+                    method: friendly_name
+          - type: custom:streamline-card
+            template: spacer_card
+            variables:
+              padding: 4px
+          - type: horizontal-stack
+            cards: []
+      - type: vertical-stack
+        cards:
+          - type: custom:bubble-card
+            card_type: pop-up
+            hash: '#weather-panel'
+            name: Weather Panel
+            icon: mdi:weather-cloudy-arrow-right
+            styles: |-
+              #root {
+                      height: unset !important;
+                      max-height: 100% !important;
+                      transition: transform var(--md-sys-motion-expressive-spatial-default) !important;
+                    }
+                    .bubble-pop-up-container {
+                      padding-bottom: 64px !important;
+                      
+                    }
+            button_type: name
+            sub_button:
+              main: []
+              bottom: []
+          - type: custom:simple-tabs
+            pre-load: true
+            active-background: var(--md-sys-color-primary)
+            active-text-color: var(--md-sys-color-on-primary)
+            text-color: var(--primary-text-color)
+            tabs:
+              - title: Warning
+                icon: m3of:warning
+                conditions:
+                  - condition: template
+                    template: >
+                      {{ states('sensor.active_weather_warnings_count')
+                      not in ['unavailable', 'unknown'] }}
+                card:
+                  type: vertical-stack
+                  cards:
+                    - type: custom:streamline-card
+                      template: title_card
+                      variables:
+                        - title: Weather Warning
+                    - type: markdown
+                      content: >2-
+                        {% if (states('sensor.active_weather_warnings_count') | int) > 0 %}
+                        {% if (states('sensor.vancouver_warnings') | int) > 0 %}
+                        Warnings: {{ states('sensor.vancouver_warnings') | int }}
+                        _Issued: {{
+                        states.sensor.vancouver_warnings.last_changed.strftime('%I:%M%p
+                        %A, %d %b') }}_
+                        {% endif %}
+                        {% if (states('sensor.vancouver_watches') | int) > 0 %}
+                        Watches: {{ states('sensor.vancouver_watches') | int }}
+                        _Issued: {{
+                        states.sensor.vancouver_watches.last_changed.strftime('%I:%M%p
+                        %A, %d %b') }}_
+                        {% endif %}
+                        {% if (states('sensor.vancouver_advisories') | int) > 0 %}
+                        Advisories: {{ states('sensor.vancouver_advisories') | int }}
+                        _Issued: {{
+                        states.sensor.vancouver_advisories.last_changed.strftime('%I:%M%p
+                        %A, %d %b') }}_
+                        {% endif %}
+                        {% else %}
+                        _No Warnings_
+                        {% endif %}
+                    - type: custom:mushroom-chips-card
+                      chips:
+                        - type: template
+                          icon: mdi:weather-lightning
+                          content: Open Enviroment Canada
+                          tap_action:
+                            action: url
+                            url_path: !secret weather_gc_ca_url
+                          card_mod:
+                            style:
+                              .: |
+                                ha-card {
+                                  --text-color: {{ 'var(--primary-background-color)' }};
+                                  --color: {{ 'var(--primary-background-color)'  }};
+                                  --chip-background: {{ 'var(--md-sys-color-primary)' }};
+                                }
+                      alignment: center
+              - title: Forecast
+                icon: mdi:weather-partly-cloudy
+                card:
+                  type: vertical-stack
+                  cards:
+                    - type: horizontal-stack
+                      cards:
+                        - type: custom:stack-in-card
+                          mode: vertical
+                          cards:
+                            - type: custom:streamline-card
+                              template: title_subtitle_card
+                              variables:
+                                - title: Forecast
+                                - subtitle: >-
+                                    {{ states ('sensor.next_rain_summary')
+                                    }}
+                              card_mod:
+                                style: |
+                                  ha-card {
+                                    padding-right: 120px;
+                                  }
+                            - type: custom:mushroom-chips-card
+                              chips:
+                                - type: template
+                                  icon: mdi:weather-lightning
+                                  content: MetService
+                                  tap_action:
+                                    action: url
+                                    url_path: https://www.metservice.com/warnings/home
+                                  card_mod:
+                                    style:
+                                      .: |
+                                        ha-card {
+                                          --text-color: var(--primary-background-color);
+                                          --color: var(--primary-background-color);
+                                          --chip-background: var(--md-sys-color-primary);
+                                        }
+                              card_mod:
+                                style: |
+                                  ha-card {
+                                    position: absolute;
+                                    top: 20px;
+                                    right: 2px;
+                                  }
+                    - type: vertical-stack
+                      cards:
+                        - type: custom:weather-forecast-extended-card
+                          entity: weather.pirateweather
+                          show_header: true
+                          hourly_forecast: true
+                          daily_forecast: true
+                          daily_min_gap: 30
+                          hourly_min_gap: 16
+                          show_sun_times: true
+                          sun_use_home_coordinates: true
+                          use_night_header_backgrounds: true
+                    - type: horizontal-stack
+                      cards:
+                        - type: custom:mushroom-template-card
+                          entity: sensor.daily_weather_data_met_no
+                          icon: mdi:thermometer
+                          primary: >
+                            {% set current = state_attr('weather.pirateweather',
+                            'temperature') %}
+
+                            Temp: {{ current }} {{
+                            state_attr('weather.pirateweather', 'temperature_unit')
+                            }}
+                          secondary: >-
+                            {% set forecast =
+                            state_attr('sensor.daily_weather_data',
+                            'forecast_data') %} {% set unit =
+                            state_attr('weather.pirateweather', 'temperature_unit')
+                            %} {% if forecast is defined and
+                            forecast.temperature is defined and
+                            forecast.templow is defined %}
+                              High: {{ forecast.temperature }}{{ unit }} - Low: {{ forecast.templow }}{{ unit }}
+                            {% else %}
+                              High: N/A - Low: N/A
+                            {% endif %}
+                          color: >
+                            {% set current = state_attr('weather.pirateweather',
+                            'temperature') | float(0) %} {% if current < 16
+                            %}
+                              #CEB2F5
+                            {% elif current < 18 %}
+                              #5EBDEE
+                            {% elif current < 22 %}
+                              #9cc8b8
+                            {% elif current < 24 %}
+                              #e7b562
+                            {% elif current < 27 %}
+                              #FF564B      
+                            {% else %}
+                              #99332d
+                            {% endif %}
+                          features_position: bottom
+                          multiline_secondary: true
+                        - type: custom:mushroom-template-card
+                          entity: >-
+                            sensor.your_town_air_quality_index
+                          icon: mdi:leaf
+                          primary: Air Quality
+                          secondary: >-
+                            {% set aqi =
+                            states('sensor.your_town_air_quality_index')
+                            %} {% set pollutant =
+                            states('sensor.your_town_dominant_pollutant')
+                            %} {% if aqi not in
+                            ['unknown','unavailable','none',''] %}
+                              {% set aqi = aqi | int %}
+                              {% set level = ('Good' if aqi <= 50 else 'Moderate' if aqi <= 100 else 'Unhealthy' if aqi <= 150 else 'Very Unhealthy' if aqi <= 200 else 'Hazardous') %}
+                              {{ level }} - AQI {{ aqi }} - {{ pollutant }}
+                            {% else %}
+                              Data unavailable
+                            {% endif %}
+                          color: >
+                            {% set aqi =
+                            states('sensor.your_town_air_quality_index')
+                            %} {% if aqi not in
+                            ['unknown','unavailable','none',''] %}
+                              {% set aqi = aqi | int %}
+                              {% if aqi <= 50 %} green
+                              {% elif aqi <= 100 %} yellow
+                              {% elif aqi <= 150 %} orange
+                              {% elif aqi <= 200 %} red
+                              {% elif aqi <= 300 %} purple
+                              {% else %} brown
+                              {% endif %}
+                            {% else %}
+                              grey
+                            {% endif %}
+                          features_position: bottom
+                          multiline_secondary: true
+              - title: Rainfall
+                icon: m3of:rainy
+                card:
+                  type: vertical-stack
+                  cards:
+                    - type: custom:streamline-card
+                      template: title_subtitle_card
+                      variables:
+                        - title: Rainfall & Temperature Forecast
+                        - subtitle: '{{ states (''sensor.24h_rainfall_summary'') }}'
+                    - type: vertical-stack
+                      cards:
+                        - type: custom:apexcharts-card
+                          header:
+                            show: true
+                          graph_span: 24h
+                          span:
+                            start: hour
+                          now:
+                            show: true
+                          apex_config:
+                            chart:
+                              height: 240
+                            legend:
+                              show: true
+                            grid:
+                              yaxis:
+                                lines:
+                                  show: false
+                            xaxis:
+                              crosshairs:
+                                show: false
+                              tooltip:
+                                enabled: false
+                            yaxis:
+                              - id: rain
+                                title:
+                                  text: Rain (mm)
+                                opposite: false
+                              - id: temp
+                                title:
+                                  text: Temp (°C)
+                                opposite: true
+                                decimalsInFloat: 0
+                          series:
+                            - entity: >-
+                                sensor.weather_hourly_forecasts_full_hourly_forecast
+                              name: Rain
+                              type: column
+                              yaxis_id: rain
+                              data_generator: >
+                                return entity.attributes.forecasts.map(f =>
+                                {
+                                  let val = f.precipitation;
+                                  let color = '#9e9e9e';
+                                  if (val > 0 && val < 2.5) {
+                                    color = '#4FC3F7';
+                                  } else if (val < 7.6) {
+                                    color = '#0288D1';
+                                  } else if (val < 35) {
+                                    color = '#01579B';
+                                  } else {
+                                    color = '#311B92';
+                                  }
+                                  return {
+                                    x: new Date(f.datetime).getTime(),
+                                    y: val,
+                                    fillColor: color
+                                  };
+                                });
+                            - entity: >-
+                                sensor.weather_hourly_forecasts_full_hourly_forecast
+                              name: Temp
+                              type: line
+                              curve: smooth
+                              yaxis_id: temp
+                              stroke_width: 2
+                              color: '#E53935'
+                              data_generator: >
+                                return entity.attributes.forecasts.map(f =>
+                                {
+                                  return {
+                                    x: new Date(f.datetime).getTime(),
+                                    y: f.temperature
+                                  };
+                                });
+                        - type: horizontal-stack
+                          cards:
+                            - type: custom:mushroom-template-card
+                              entity: sensor.forecast_rainfall
+                              icon: mdi:weather-rainy
+                              primary: >
+                                {% set r =
+                                states('sensor.forecast_rainfall') %} {% if
+                                r in ['unknown', 'unavailable', None] %}
+                                  Rainfall: None
+                                {% else %}
+                                  Rainfall: {{ r }} mm
+                                {% endif %}
+                              secondary: >
+                                {% set r =
+                                states('sensor.forecast_rainfall') |
+                                float(0) %} {% if r == 0 %}
+                                  None - Dry conditions
+                                {% elif r < 1 %}
+                                  Light - Possible drizzle
+                                {% elif r < 5 %}
+                                  Moderate - Bring umbrella
+                                {% elif r < 20 %}
+                                  Heavy - Wet outdoors
+                                {% else %}
+                                  Intense - Flood risk
+                                {% endif %}
+                              color: >
+                                {% set r =
+                                states('sensor.forecast_rainfall') |
+                                float(0) %} {% if r == 0 %}
+                                  blue
+                                {% elif r < 1 %}
+                                  lightblue
+                                {% elif r < 5 %}
+                                  cyan
+                                {% elif r < 20 %}
+                                  orange
+                                {% else %}
+                                  red
+                                {% endif %}
+                              features_position: bottom
+                              multiline_secondary: true
+                            - type: custom:mushroom-template-card
+                              entity: sensor.forecast_temperature
+                              icon: mdi:thermometer
+                              primary: >
+                                Temp: {{
+                                states('sensor.forecast_temperature') }} {{
+                                state_attr('weather.pirateweather',
+                                'temperature_unit') }}
+                              secondary: >
+                                {% set t =
+                                states('sensor.forecast_temperature') |
+                                float(0) %} {% if t < 5 %}
+                                  Cold - Bundle up
+                                {% elif t < 15 %}
+                                  Cool - Light jacket
+                                {% elif t < 25 %}
+                                  Mild - Comfortable
+                                {% elif t < 32 %}
+                                  Warm - Stay hydrated
+                                {% else %}
+                                  Hot - Avoid heat
+                                {% endif %}
+                              color: >
+                                {% set current = state_attr('weather.pirateweather',
+                                'temperature') | float(0) %} {% if current <
+                                16 %}
+                                  #CEB2F5
+                                {% elif current < 18 %}
+                                  #5EBDEE
+                                {% elif current < 22 %}
+                                  #9cc8b8
+                                {% elif current < 24 %}
+                                  #e7b562
+                                {% elif current < 27 %}
+                                  #FF564B      
+                                {% else %}
+                                  #99332d
+                                {% endif %}
+                              features_position: bottom
+                              multiline_secondary: true
+              - title: UV
+                icon: m3of:sunny
+                card:
+                  type: vertical-stack
+                  cards:
+                    - type: custom:streamline-card
+                      template: title_subtitle_card
+                      variables:
+                        - title: UV Index & Cloud Coverage Forecast
+                        - subtitle: '{{ states (''sensor.uv_and_cloud_summary'') }}'
+                    - type: vertical-stack
+                      cards:
+                        - type: custom:apexcharts-card
+                          graph_span: 24h
+                          span:
+                            start: hour
+                          now:
+                            show: true
+                          apex_config:
+                            chart:
+                              height: 240
+                            legend:
+                              show: true
+                            grid:
+                              yaxis:
+                                lines:
+                                  show: false
+                            xaxis:
+                              crosshairs:
+                                show: false
+                              tooltip:
+                                enabled: false
+                            yaxis:
+                              - id: uv
+                                title:
+                                  text: UV Index
+                                opposite: false
+                                min: 0
+                                max: 11
+                              - id: cloud
+                                title:
+                                  text: Cloud Coverage (%)
+                                opposite: true
+                                min: 0
+                                max: 100
+                          series:
+                            - entity: >-
+                                sensor.weather_hourly_forecasts_full_hourly_forecast
+                              name: UV Index
+                              type: line
+                              curve: smooth
+                              yaxis_id: uv
+                              color: '#F9A825'
+                              stroke_width: 2
+                              data_generator: >
+                                return entity.attributes.forecasts.map(f =>
+                                {
+                                  if (f.uv_index == null) return null;
+                                  return { x: new Date(f.datetime).getTime(), y: f.uv_index };
+                                }).filter(x => x !== null);
+                            - entity: >-
+                                sensor.weather_hourly_forecasts_full_hourly_forecast
+                              name: Cloud Coverage
+                              type: area
+                              yaxis_id: cloud
+                              color: '#90CAF9'
+                              stroke_width: 1
+                              opacity: 0.3
+                              data_generator: >
+                                return entity.attributes.forecasts.map(f =>
+                                {
+                                  if (f.cloud_coverage == null) return null;
+                                  return { x: new Date(f.datetime).getTime(), y: f.cloud_coverage };
+                                }).filter(x => x !== null);
+                        - type: horizontal-stack
+                          cards:
+                            - type: custom:mushroom-template-card
+                              entity: sensor.forecast_uv_index
+                              icon: mdi:weather-sunny-alert
+                              primary: >
+                                UV Index: {{
+                                states('sensor.forecast_uv_index') }}
+                              secondary: >
+                                {% set uv =
+                                states('sensor.forecast_uv_index') |
+                                float(0) %} {% if uv < 3 %}
+                                  Low - Safe outdoors
+                                {% elif uv < 6 %}
+                                  Moderate - Use hat & sunglasses
+                                {% elif uv < 8 %}
+                                  High - Apply sunscreen
+                                {% elif uv < 11 %}
+                                  Very High - Seek shade
+                                {% else %}
+                                  Extreme - Stay indoors
+                                {% endif %}
+                              color: >
+                                {% set uv =
+                                states('sensor.forecast_uv_index') |
+                                float(0) %} {% if uv < 3 %}
+                                  green
+                                {% elif uv < 6 %}
+                                  yellow
+                                {% elif uv < 8 %}
+                                  orange
+                                {% elif uv < 11 %}
+                                  red
+                                {% else %}
+                                  purple
+                                {% endif %}
+                              features_position: bottom
+                              multiline_secondary: true
+                            - type: custom:mushroom-template-card
+                              entity: sensor.forecast_cloud_coverage
+                              icon: mdi:weather-cloudy
+                              primary: >
+                                Cloud: {{
+                                states('sensor.forecast_cloud_coverage') }}%
+                              secondary: >
+                                {% set c =
+                                states('sensor.forecast_cloud_coverage') |
+                                float(0) %} {% if c <= 25 %}
+                                  Clear skies - ideal visibility
+                                {% elif c <= 50 %}
+                                  Partly cloudy - some sun breaks
+                                {% elif c <= 75 %}
+                                  Mostly cloudy - limited sunshine
+                                {% else %}
+                                  Overcast - likely dull conditions
+                                {% endif %}
+                              color: >
+                                {% set c =
+                                states('sensor.forecast_cloud_coverage') |
+                                float(0) %} {% if c <= 25 %}
+                                  blue
+                                {% elif c <= 50 %}
+                                  light-blue
+                                {% elif c <= 75 %}
+                                  grey
+                                {% else %}
+                                  blue-grey
+                                {% endif %}
+                              features_position: bottom
+                              multiline_secondary: true
+              - title: Wind
+                icon: m3of:storm
+                card:
+                  type: vertical-stack
+                  cards:
+                    - type: custom:streamline-card
+                      template: title_subtitle_card
+                      variables:
+                        - title: Wind Speed & Direction Forecast
+                        - subtitle: '{{ states (''sensor.wind_summary'') }}'
+                    - type: vertical-stack
+                      cards:
+                        - type: custom:apexcharts-card
+                          graph_span: 24h
+                          span:
+                            start: hour
+                          now:
+                            show: true
+                          apex_config:
+                            chart:
+                              height: 240
+                            legend:
+                              show: true
+                            grid:
+                              yaxis:
+                                lines:
+                                  show: false
+                            xaxis:
+                              crosshairs:
+                                show: false
+                              tooltip:
+                                enabled: false
+                            yaxis:
+                              - id: speed
+                                title:
+                                  text: Wind Speed (km/h)
+                                opposite: false
+                              - id: direction
+                                title:
+                                  text: Direction (°)
+                                opposite: true
+                                min: 0
+                                max: 360
+                          series:
+                            - entity: >-
+                                sensor.weather_hourly_forecasts_full_hourly_forecast
+                              name: Speed
+                              type: line
+                              curve: smooth
+                              yaxis_id: speed
+                              color: '#0288D1'
+                              stroke_width: 2
+                              data_generator: >
+                                return entity.attributes.forecasts.map(f =>
+                                {
+                                  let speed = f.wind_speed;
+                                  speed = Math.round(speed * 10) / 10; // round to 1 decimal place
+                                  return { x: new Date(f.datetime).getTime(), y: speed };
+                                });
+                            - entity: >-
+                                sensor.weather_hourly_forecasts_full_hourly_forecast
+                              name: Direction
+                              type: line
+                              curve: smooth
+                              yaxis_id: direction
+                              color: '#8E24AA'
+                              stroke_width: 1
+                              data_generator: >
+                                return entity.attributes.forecasts.map(f =>
+                                {
+                                  let direction = Math.round(f.wind_bearing); // round to nearest integer
+                                  return { x: new Date(f.datetime).getTime(), y: direction };
+                                });
+                        - type: horizontal-stack
+                          cards:
+                            - type: custom:mushroom-template-card
+                              entity: sensor.forecast_wind_speed
+                              icon: mdi:weather-windy
+                              primary: >
+                                Wind: {{
+                                states('sensor.forecast_wind_speed') }} {{
+                                state_attr('weather.pirateweather',
+                                'wind_speed_unit') }}
+                              secondary: >
+                                {% set s =
+                                states('sensor.forecast_wind_speed') |
+                                float(0) %} {% set d =
+                                states('sensor.forecast_wind_direction') |
+                                float(0) %} {% if s < 5 %}
+                                  Calm - Smooth air
+                                {% elif s < 20 %}
+                                  Breezy - Light gusts
+                                {% elif s < 40 %}
+                                  Windy - Secure items
+                                {% elif s < 60 %}
+                                  Strong - Use caution
+                                {% else %}
+                                  Gale - Stay indoors
+                                {% endif %} ({{ d | round(0) }}°)
+                              color: >
+                                {% set s =
+                                states('sensor.forecast_wind_speed') |
+                                float(0) %} {% if s < 5 %}
+                                  green
+                                {% elif s < 20 %}
+                                  yellow
+                                {% elif s < 40 %}
+                                  orange
+                                {% elif s < 60 %}
+                                  red
+                                {% else %}
+                                  purple
+                                {% endif %}
+                              features_position: bottom
+              - title: Radar
+                icon: m3of:radar
+                card:
+                  type: vertical-stack
+                  cards:
+                    - type: custom:streamline-card
+                      template: title_subtitle_card
+                      variables:
+                        - title: Radar
+                        - subtitle: >-
+                            {% set w = states.weather.pirateweather.attributes %}
+                            {% if weather is defined %}🌡️
+                            {{ w.temperature }}{{ w.temperature_unit }} 💧
+                            Humidity: {{ w.humidity }}% 👁️ Visibility: {{
+                            w.visibility }}km ☁️ Clouds: {{ w.cloud_coverage
+                            | round }}% 💨 Wind: {{ w.wind_speed }} {{
+                            w.wind_speed_unit }} 🌤️ UV index: {{ w.uv_index
+                            }}
+                            {% else %} No data available {% endif %}
+                    - type: custom:mod-card
+                      card:
+                        type: iframe
+                        url: >-
+                          https://embed.windy.com/embed2.html?lat=x&lon=y&width=800&height=600
+                      style: |
+                        ha-card {
+                          padding: 0;
+                          height: 350px !important;   /* fix height */
+                          width: 100% !important;
+                          overflow: hidden;
+                        }
+                        iframe {
+                          width: 100% !important;
+                          height: 100% !important;
+                        }
+              - title: Lunar
+                icon: m3of:moon-stars
+                card:
+                  type: vertical-stack
+                  cards:
+                    - type: custom:streamline-card
+                      template: title_subtitle_card
+                      variables:
+                        - title: Lunar Cycle & Visibility
+                        - subtitle: '{{ states (''sensor.moon_summary'') }}'
+                    - type: custom:lunar-phase-card
+                      entity: ''
+                      12hr_format: true
+                      calendar_modal: false
+                      compact_view: true
+                      default_card: base
+                      hide_buttons: false
+                      mile_unit: false
+                      moon_position: left
+                      number_decimals: 2
+                      selected_language: en
+                      show_background: false
+                      southern_hemisphere: false
+                      use_custom: false
+                      use_default: true
+                      use_entity: false
+                      graph_config:
+                        graph_type: default
+                        y_ticks: false
+                        x_ticks: false
+                        show_time: true
+                        show_Temp: true
+                        show_highest: true
+                        y_ticks_position: left
+                        y_ticks_step_size: 30
+                        time_step_size: 30
+                      font_customize:
+                        header_font_size: medium
+                        header_font_style: capitalize
+                        label_font_size: small
+                        label_font_style: none
+                        label_font_color: ''
+                        hide_label: false
+                      latitude: x
+                      longitude: y
+                      location:
+                        city: ''
+                        country: New Zealand
+                      custom_background: >-
+                        https://cdn.jsdelivr.net/gh/ngocjohn/lunar-phase-card@1.7.3/background/moon_bg_2.png
+      - type: vertical-stack
+        cards:
+          - type: custom:bubble-card
+            card_type: pop-up
+            hash: '#music-player'
+            name: Music Player
+            icon: m3of:music-note
+            styles: |-
+              #root {
+                      height: unset !important;
+                      max-height: 100% !important;
+                      transition: transform var(--md-sys-motion-expressive-spatial-default) !important;
+                    }
+                    .bubble-pop-up-container {
+                      padding-bottom: 64px !important;
+                      
+                    }
+            button_type: name
+            sub_button:
+              main: []
+              bottom: []
+          - type: custom:mediocre-massive-media-player-card
+            entity_id: media_player.mass_home
+            ma_entity_id: media_player.mass_home
+            mode: card
+            action: {}
+            speaker_group:
+              entities:
+                - entity: media_player.backyard_speaker
+                - entity: media_player.kitchen_speaker
+                - entity: media_player.living_room_audio
+                - entity: media_player.master_bathroom_speaker
+                - entity: media_player.master_bedroom_audio
+            search:
+              enabled: true
+              show_favorites: false
+              entity_id: media_player.mass_home
+            card_mod:
+              class: filled
+  - type: grid
+    cards:
+      - type: custom:navbar-card
+        mobile:
+          show_labels: true
+        desktop:
+          show_labels: true
+          position: left
+          min_width: 768
+          show_popup_label_backgrounds: false
+        routes:
+          - url: /lovelace/overview
+            label: Home
+            icon: m3o:home
+            icon_selected: m3of:home
+          - url: /lovelace/rooms
+            label: Rooms
+            icon: m3o:chair
+            icon_selected: mdi:sofa
+          - url: /lovelace/media
+            label: Media
+            icon: m3o:music-video
+            icon_selected: m3of:music-video
+          - icon: mdi:dots-horizontal
+            label: More
+            tap_action:
+              action: open-popup
+            popup:
+              - icon: m3of:tools-wrench
+                url: /config/dashboard
+              - icon: m3of:server-person
+                url: /lovelace/server
+              - icon: m3of:colors
+                url: /material-you-configuration
+              - icon: m3of:power-settings-new
+                tap_action:
+                  action: call-service
+                  service: homeassistant.restart
+                  service_data: {}
+                  confirmation:
+                    text: Are you sure you want to restart Home Assistant?
+        styles: |
+          .navbar {
+            --navbar-primary-color: var(--md-sys-color-primary);
+          }
+          .navbar-card {
+            background: color-mix(in srgb, var(--md-sys-color-on-primary) 70%, transparent);
+            backdrop-filter: blur(50px);
+            -webkit-backdrop-filter: blur(20px) !important;
+            background-blend-mode: overlay;
+            border-radius: 20px;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 15px;
+            overflow: hidden;
+        media_player:
+          entity: |
+            [[[ return states['sensor.active_media_player'].state ]]]
+          album_cover_background: true
+          tap_action:
+            action: navigate
+            navigation_path: '#music-player'
+icon: m3o:home
+cards: []

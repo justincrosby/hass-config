@@ -23,6 +23,9 @@
     - light.living_room_lamp
     - light.leds_behind_couch
     - light.leds_behind_tv
+- platform: group
+  name: Kitchen Lights
+  entities:
     - light.kitchen_light
     - light.kitchen_hall_light
 - platform: group
@@ -32,6 +35,15 @@
 - platform: group
   name: All Lights
   entities:
-    - light.bedroom_lights
-    - light.living_room_lights
+    - light.bedroom_light_1
+    - light.bedroom_light_2
+    - light.bedroom_wall_lights
+    - light.office_light
+    - light.closet_light
+    - light.case_light_leds
+    - light.living_room_lamp
+    - light.leds_behind_couch
+    - light.leds_behind_tv
+    - light.kitchen_light
+    - light.kitchen_hall_light
     - light.dining_room_light

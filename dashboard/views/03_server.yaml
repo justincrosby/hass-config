@@ -1,0 +1,141 @@
+type: sections
+max_columns: 4
+title: Server
+path: server
+icon: m3of:server-person
+sections:
+  - type: grid
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: custom:streamline-card
+            template: title_subtitle_card
+            variables:
+              title: TrueNAS
+              subtitle: System Info
+          - type: horizontal-stack
+            cards:
+              - type: gauge
+                entity: sensor.truenas_system_temperature
+                name: Temperature
+                min: 20
+                max: 80
+                severity:
+                  green: 40
+                  yellow: 55
+                  red: 70
+                unit: °C
+              - type: gauge
+                entity: sensor.truenas_system_memory_usage
+                name: Memory Used
+                max: 100
+                severity:
+                  green: 50
+                  yellow: 70
+                  red: 100
+                unit: '%'
+  - type: grid
+    cards:
+      - type: custom:navbar-card
+        mobile:
+          show_labels: true
+        desktop:
+          show_labels: true
+          position: left
+          min_width: 768
+        routes:
+          - url: /lovelace/overview
+            label: Home
+            icon: m3o:home
+            icon_selected: m3of:home
+          - url: /lovelace/rooms
+            label: Rooms
+            icon: m3o:chair
+            icon_selected: mdi:sofa
+          - url: /lovelace/media
+            label: Media
+            icon: m3o:music-video
+            icon_selected: m3of:music-video
+          - icon: mdi:dots-horizontal
+            label: More
+            tap_action:
+              action: open-popup
+            popup:
+              - icon: m3of:tools-wrench
+                url: /config/dashboard
+        styles: |
+          .navbar {
+            --navbar-primary-color: var(--md-sys-color-primary);
+          }
+          .navbar-card {
+            background: color-mix(in srgb, var(--md-sys-color-on-primary) 70%, transparent);
+            backdrop-filter: blur(50px);
+            -webkit-backdrop-filter: blur(20px) !important;
+            background-blend-mode: overlay;
+            border-radius: 20px;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 15px;
+            overflow: hidden;
+header:
+  card:
+    type: vertical-stack
+    cards:
+      - type: custom:streamline-card
+        template: room_title_card
+        variables:
+          title: Server
+      - type: custom:paper-buttons-row
+        styles:
+          justify-content: flex-start
+          flex-wrap: wrap
+          font-size: 0.9em
+          line-height: 1.2em
+          margin: 0 0 0 6px
+          width: 100%
+        buttons:
+          - layout: name
+            name: Dockge
+            styles:
+              button:
+                flex-basis: 1
+                flex-shrink: 0
+              name:
+                color: var(--primary-text-color)
+          - layout: name
+            entity: update.truenas_apps_dockge
+            name: >-
+              {% if
+              is_state('update.truenas_apps_dockge',
+              'off') %}    ✅ Up to date {% else %} 🔔 Update available {%
+              endif %}
+            tap_action:
+              action: more-info
+            styles:
+              icon:
+                color: var(--md-sys-color-primary)
+              name:
+                color: var(--md-sys-color-primary)
+                font-weight: bold
+              button:
+                padding: 2px 8px
+                background-color: var(--md-sys-color-on-primary)
+                border-radius: 24px
+                flex-basis: 1
+                flex-shrink: 0
+  layout: responsive
+  badges_position: top
+  badges_wrap: wrap
+badges:
+  - type: custom:streamline-card
+    template: back_button_card
+    variables:
+      navigation_path: /lovelace/overview
+cards: []
+background:
+  opacity: 75
+  alignment: center
+  size: cover
+  repeat: no-repeat
+  attachment: fixed
+  image:
+    media_content_id: /local/Monochrome - Portrait.webp

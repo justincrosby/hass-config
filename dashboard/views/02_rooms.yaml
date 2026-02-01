@@ -1,0 +1,501 @@
+type: sections
+max_columns: 4
+title: Rooms
+path: rooms
+icon: m3o:chair
+sections:
+  - type: grid
+    cards:
+      - type: custom:vertical-stack-in-card
+        cards:
+          - type: horizontal-stack
+            cards:
+              - type: custom:streamline-card
+                template: room_card
+                variables:
+                  name: Bedroom
+                  icon: m3o:bed
+                  entity_id_temperature: sensor.bedroom_temperature_humidity_sensor_air_temperature
+                  entity_id_humidity: sensor.bedroom_temperature_humidity_sensor_humidity
+                  entity_id_lights: light.bedroom_lights
+                  lights_icon: mdi:light-recessed
+                  lights_count_sensor: sensor.bedroom_lights_on_count
+                  navigation_path: '#bedroom'
+              - type: custom:streamline-card
+                template: room_card
+                variables:
+                  name: Living Room
+                  icon: m3o:living
+                  entity_id_temperature: sensor.living_room_temperature_humidity_sensor_air_temperature
+                  entity_id_humidity: sensor.living_room_temperature_humidity_sensor_humidity
+                  entity_id_lights: light.living_room_lights
+                  lights_icon: mdi:light-recessed
+                  lights_count_sensor: sensor.living_room_lights_on_count
+                  navigation_path: '#livingroom'
+          - type: horizontal-stack
+            cards:
+              - type: custom:streamline-card
+                template: room_card
+                variables:
+                  name: Kicthen
+                  icon: m3o:kitchen
+                  entity_id_temperature: sensor.living_room_temperature_humidity_sensor_air_temperature
+                  entity_id_humidity: sensor.living_room_temperature_humidity_sensor_humidity
+                  entity_id_lights: light.kitchen_lights
+                  lights_icon: mdi:light-recessed
+                  lights_count_sensor: sensor.kitchen_lights_on_count
+                  navigation_path: '#kitchen'
+              - type: custom:streamline-card
+                template: room_card
+                variables:
+                  name: Dining Room
+                  icon: m3o:dining
+                  entity_id_temperature: sensor.living_room_temperature_humidity_sensor_air_temperature
+                  entity_id_humidity: sensor.living_room_temperature_humidity_sensor_humidity
+                  entity_id_lights: light.dining_room_lights
+                  lights_icon: mdi:light-recessed
+                  lights_count_sensor: sensor.dining_room_lights_on_count
+                  navigation_path: '#diningroom'
+          - type: horizontal-stack
+            cards:
+              - type: custom:streamline-card
+                template: room_card
+                variables:
+                  name: Bathroom
+                  icon: m3o:bathtub
+                  entity_id_temperature: sensor.living_room_temperature_humidity_sensor_air_temperature
+                  entity_id_humidity: sensor.living_room_temperature_humidity_sensor_humidity
+                  entity_id_lights: ''
+                  lights_icon: mdi:light-recessed
+                  lights_count_sensor: sensor.bathroom_lights_on_count
+                  navigation_path: '#bathroom'
+  - type: grid
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: custom:bubble-card
+            card_type: pop-up
+            hash: '#bedroom'
+            name: Bedroom
+            styles: |-
+              #root {
+                      height: unset !important;
+                      max-height: 100% !important;
+                      transition: transform var(--md-sys-motion-expressive-spatial-default) !important;
+                    }
+                    .bubble-pop-up-container {
+                      padding-bottom: 64px !important;
+                      
+                    }
+            button_type: state
+            entity: sensor.bedroom_temperature_humidity_sensor_air_temperature
+            show_icon: true
+            icon: m3of:bed
+            close_action:
+              action: navigate
+              navigation_path: /lovelace/rooms
+            sub_button:
+              main: []
+              bottom: []
+          - type: custom:paper-buttons-row
+            styles:
+              gap: 8px
+              justify-content: flex-start
+              overflow: scroll
+              margin: 12px 0 12px -18px
+              padding-left: 18px
+              width: 100%
+            extra_styles: |
+              ::-webkit-scrollbar {
+                display: none;
+              }
+            buttons:
+              - entity: script.bedtime
+                icon: m3of:bed
+                tap_action:
+                  action: call_service
+                  service: script.bedtime
+                styles:
+                  name:
+                    color: grey
+                  button:
+                    padding: 12px
+                    width: 76px
+                    height: 76px
+                    flex-basis: 1
+                    flex-shrink: 0
+                    display: flex
+                    background-color: var(--popupBG)
+                    border-radius: 24px
+                    color: var(--white)
+                  icon:
+                    '--mdc-icon-size': 26px
+                    color: grey
+              - entity: script.bedtime_reading
+                icon: m3of:book-ribbon
+                tap_action:
+                  action: call_service
+                  service: script.bedtime_reading
+                styles:
+                  name:
+                    color: grey
+                  button:
+                    padding: 12px
+                    width: 76px
+                    height: 76px
+                    flex-basis: 1
+                    flex-shrink: 0
+                    display: flex
+                    background-color: var(--popupBG)
+                    border-radius: 24px
+                    color: var(--white)
+                  icon:
+                    '--mdc-icon-size': 26px
+                    color: grey
+          - type: custom:simple-tabs
+            pre-load: true
+            active-background: var(--md-sys-color-primary)
+            active-text-color: var(--md-sys-color-on-primary)
+            text-color: var(--primary-text-color)
+            tabs:
+              - title: Lights
+                icon: m3of:lightbulb
+                card:
+                  type: custom:auto-entities
+                  card:
+                    square: false
+                    type: grid
+                    columns: 2
+                  card_param: cards
+                  filter:
+                    include:
+                      - group: light.bedroom_lights
+                        options:
+                          type: custom:streamline-card
+                          template: material_light_slider_card
+                          variables:
+                            entity: this.entity_id
+              - title: Media
+                icon: m3of:music-note
+                card:
+                  type: vertical-stack
+                  cards:
+                    - type: custom:mini-media-player
+                      entity: media_player.mass_master_bedroom
+                      artwork: cover
+                    - type: custom:mini-media-player
+                      entity: media_player.master_bedroom_tv
+      - type: vertical-stack
+        cards:
+          - type: custom:bubble-card
+            card_type: pop-up
+            hash: '#livingroom'
+            name: Living Room
+            styles: |-
+              #root {
+                      height: unset !important;
+                      max-height: 100% !important;
+                      transition: transform var(--md-sys-motion-expressive-spatial-default) !important;
+                    }
+                    .bubble-pop-up-container {
+                      padding-bottom: 64px !important;
+                      
+                    }
+            button_type: state
+            entity: sensor.living_room_temperature_humidity_sensor_air_temperature
+            show_icon: true
+            icon: m3of:living
+            close_action:
+              action: navigate
+              navigation_path: /lovelace/rooms
+            sub_button:
+              main: []
+              bottom: []
+          - type: custom:simple-tabs
+            pre-load: true
+            active-background: var(--md-sys-color-primary)
+            active-text-color: var(--md-sys-color-on-primary)
+            text-color: var(--primary-text-color)
+            tabs:
+              - title: Lights
+                icon: m3of:lightbulb
+                card:
+                  type: custom:auto-entities
+                  card:
+                    square: false
+                    type: grid
+                    columns: 2
+                  card_param: cards
+                  filter:
+                    include:
+                      - group: light.living_room_lights
+                        options:
+                          type: custom:streamline-card
+                          template: material_light_slider_card
+                          variables:
+                            entity: this.entity_id
+              - title: Media
+                icon: m3of:music-note
+                card:
+                  type: vertical-stack
+                  cards:
+                    - type: custom:mini-media-player
+                      entity: media_player.mass_living_room
+                      artwork: cover
+                    - type: custom:mini-media-player
+                      entity: media_player.denon_avr_x1300w
+                      icon: mdi:audio-video
+                      group: true
+                      hide:
+                        source: true
+                        play_pause: true
+                      shortcuts:
+                        buttons:
+                          - name: Music
+                            type: service
+                            id: media_player.select_source
+                            data:
+                              entity_id: media_player.denon_avr_x1300w
+                              source: CastAudio
+                          - name: PC
+                            type: service
+                            id: media_player.select_source
+                            data:
+                              entity_id: media_player.denon_avr_x1300w
+                              source: PC
+                          - name: Shield
+                            type: service
+                            id: media_player.select_source
+                            data:
+                              entity_id: media_player.denon_avr_x1300w
+                              source: Shield
+                          - name: Switch
+                            type: service
+                            id: media_player.select_source
+                            data:
+                              entity_id: media_player.denon_avr_x1300w
+                              source: Switch
+                    - type: custom:mini-media-player
+                      entity: media_player.lg_tv
+                      artwork: cover
+                      icon: mdi:television
+                      group: true
+                      toggle_power: false
+                      hide:
+                        info: true
+                        volume: true
+                        controls: true
+      - type: vertical-stack
+        cards:
+          - type: custom:bubble-card
+            card_type: pop-up
+            hash: '#kitchen'
+            name: Kitchen
+            styles: |-
+              #root {
+                      height: unset !important;
+                      max-height: 100% !important;
+                      transition: transform var(--md-sys-motion-expressive-spatial-default) !important;
+                    }
+                    .bubble-pop-up-container {
+                      padding-bottom: 64px !important;
+                      
+                    }
+            button_type: state
+            entity: sensor.living_room_temperature_humidity_sensor_air_temperature
+            show_icon: true
+            icon: m3of:kitchen
+            close_action:
+              action: navigate
+              navigation_path: /lovelace/rooms
+            sub_button:
+              main: []
+              bottom: []
+          - type: custom:simple-tabs
+            pre-load: true
+            active-background: var(--md-sys-color-primary)
+            active-text-color: var(--md-sys-color-on-primary)
+            text-color: var(--primary-text-color)
+            tabs:
+              - title: Lights
+                icon: m3of:lightbulb
+                card:
+                  type: custom:auto-entities
+                  card:
+                    square: false
+                    type: grid
+                    columns: 2
+                  card_param: cards
+                  filter:
+                    include:
+                      - group: light.kitchen_lights
+                        options:
+                          type: custom:streamline-card
+                          template: material_light_slider_card
+                          variables:
+                            entity: this.entity_id
+              - title: Media
+                icon: m3of:music-note
+                card:
+                  type: vertical-stack
+                  cards:
+                    - type: custom:mini-media-player
+                      entity: media_player.mass_kitchen
+                      artwork: cover
+      - type: vertical-stack
+        cards:
+          - type: custom:bubble-card
+            card_type: pop-up
+            hash: '#diningroom'
+            name: Dining Room
+            styles: |-
+              #root {
+                      height: unset !important;
+                      max-height: 100% !important;
+                      transition: transform var(--md-sys-motion-expressive-spatial-default) !important;
+                    }
+                    .bubble-pop-up-container {
+                      padding-bottom: 64px !important;
+                      
+                    }
+            button_type: state
+            entity: sensor.living_room_temperature_humidity_sensor_air_temperature
+            show_icon: true
+            icon: m3of:dining
+            close_action:
+              action: navigate
+              navigation_path: /lovelace/rooms
+            sub_button:
+              main: []
+              bottom: []
+          - type: custom:simple-tabs
+            pre-load: true
+            active-background: var(--md-sys-color-primary)
+            active-text-color: var(--md-sys-color-on-primary)
+            text-color: var(--primary-text-color)
+            tabs:
+              - title: Lights
+                icon: m3of:lightbulb
+                card:
+                  type: custom:auto-entities
+                  card:
+                    square: false
+                    type: grid
+                    columns: 2
+                  card_param: cards
+                  filter:
+                    include:
+                      - group: light.dining_room_lights
+                        options:
+                          type: custom:streamline-card
+                          template: material_light_slider_card
+                          variables:
+                            entity: this.entity_id
+              - title: Media
+                icon: m3of:music-note
+                card:
+                  type: vertical-stack
+                  cards:
+                    - type: custom:mini-media-player
+                      entity: media_player.mass_backyard
+                      artwork: cover            
+      - type: vertical-stack
+        cards:
+          - type: custom:bubble-card
+            card_type: pop-up
+            hash: '#bathroom'
+            name: Bathroom
+            styles: |-
+              #root {
+                      height: unset !important;
+                      max-height: 100% !important;
+                      transition: transform var(--md-sys-motion-expressive-spatial-default) !important;
+                    }
+                    .bubble-pop-up-container {
+                      padding-bottom: 64px !important;
+                      
+                    }
+            button_type: state
+            entity: sensor.living_room_temperature_humidity_sensor_air_temperature
+            show_icon: true
+            icon: m3of:bathtub
+            close_action:
+              action: navigate
+              navigation_path: /lovelace/rooms
+            sub_button:
+              main: []
+              bottom: []
+          - type: custom:simple-tabs
+            pre-load: true
+            active-background: var(--md-sys-color-primary)
+            active-text-color: var(--md-sys-color-on-primary)
+            text-color: var(--primary-text-color)
+            tabs:
+              - title: Media
+                icon: m3of:music-note
+                card:
+                  type: vertical-stack
+                  cards:
+                    - type: custom:mini-media-player
+                      entity: media_player.mass_master_bathroom
+                      artwork: cover            
+  - type: grid
+    cards:
+      - type: custom:navbar-card
+        mobile:
+          show_labels: true
+        desktop:
+          show_labels: true
+          position: left
+          min_width: 768
+        routes:
+          - url: /lovelace/overview
+            label: Home
+            icon: m3o:home
+            icon_selected: m3of:home
+          - url: /lovelace/rooms
+            label: Rooms
+            icon: m3o:chair
+            icon_selected: mdi:sofa
+          - url: /lovelace/media
+            label: Media
+            icon: m3o:music-video
+            icon_selected: m3of:music-video
+          - icon: mdi:dots-horizontal
+            label: More
+            tap_action:
+              action: open-popup
+            popup:
+              - icon: m3of:tools-wrench
+                url: /config/dashboard
+        styles: |
+          .navbar {
+            --navbar-primary-color: var(--md-sys-color-primary);
+          }
+          .navbar-card {
+            background: color-mix(in srgb, var(--md-sys-color-on-primary) 70%, transparent);
+            backdrop-filter: blur(50px);
+            -webkit-backdrop-filter: blur(20px) !important;
+            background-blend-mode: overlay;
+            border-radius: 20px;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 15px;
+            overflow: hidden;
+badges:
+  - type: custom:streamline-card
+    template: back_button_card
+    variables:
+      navigation_path: /lovelace/overview
+header:
+  layout: responsive
+  badges_position: top
+  badges_wrap: wrap
+cards: []
+background:
+  opacity: 75
+  alignment: center
+  size: cover
+  repeat: no-repeat
+  attachment: fixed
+  image:
+    media_content_id: /local/Monochrome - Portrait.webp

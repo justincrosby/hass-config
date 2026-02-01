@@ -1,5 +1,6 @@
 - sensor:
-  - default_entity_id: sensor.lights_colour
+  - name: Chosen Light Colour
+    unique_id: sensor.lights_colour
     icon: mdi:lightbulb
     state: >
       {% if states("input_boolean.bedtime") == "on" %}
@@ -7,8 +8,8 @@
       {% else %}
         [255, 255, 255]
       {% endif %}
-    name: Chosen Light Colour
-  - default_entity_id: sensor.lights_brightness
+  - name: Chosen Light Brightness
+    unique_id: sensor.lights_brightness
     icon: mdi:lightbulb
     state: >
       {% if states("input_boolean.bedtime") == "on" %}
@@ -16,4 +17,23 @@
       {% else %}
         255
       {% endif %}
-    name: Chosen Light Colour
+  - name: "Bedroom Lights On Count"
+    unique_id: bedroom_lights_on_count
+    state: >
+      {{ expand('light.bedroom_lights') | selectattr('state', 'eq', 'on') | list | count }}
+  - name: "Living Room Lights On Count"
+    unique_id: living_room_lights_on_count
+    state: >
+      {{ expand('light.living_room_lights') | selectattr('state', 'eq', 'on') | list | count }}
+  - name: "Kitchen Lights On Count"
+    unique_id: kitchen_lights_on_count
+    state: >
+      {{ expand('light.kitchen_lights') | selectattr('state', 'eq', 'on') | list | count }}
+  - name: "Dining Room Lights On Count"
+    unique_id: dining_room_lights_on_count
+    state: >
+      {{ expand('light.dining_room_lights') | selectattr('state', 'eq', 'on') | list | count }}
+  - name: "Bathroom Lights On Count"
+    unique_id: bathroom_lights_on_count
+    state: >
+      0

@@ -1,0 +1,8 @@
+- platform: min_max
+  name: "House Average Temperature"
+  unique_id: sensor.house_average_temperature
+  type: mean
+  round_digits: 1
+  entity_ids:
+    - sensor.bedroom_temperature_humidity_sensor_air_temperature
+    - sensor.living_room_temperature_humidity_sensor_air_temperature
